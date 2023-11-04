@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "shefAmmaUI",
+    "slug": "shefAmmaUI",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "myapp",
+
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shefAmma.shefAmmaUI"
+    },
+    "android": {
+      "package": "com.shefAmma.shefAmmaUI",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8e888a03-2a05-4bfb-ba7e-993053c2d58c"
+      }
+    }
+  }
+}

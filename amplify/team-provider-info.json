@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shefammas3-dev-132132-authRole",
+      "UnauthRoleArn": "arn:aws:iam::213030862295:role/amplify-shefammas3-dev-132132-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::213030862295:role/amplify-shefammas3-dev-132132-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-shefammas3-dev-132132-deployment",
+      "UnauthRoleName": "amplify-shefammas3-dev-132132-unauthRole",
+      "StackName": "amplify-shefammas3-dev-132132",
+      "StackId": "arn:aws:cloudformation:ap-south-1:213030862295:stack/amplify-shefammas3-dev-132132/c5d6d290-119a-11ee-b4eb-0223640e7e62",
+      "AmplifyAppId": "dd308smzd40y6"
+    },
+    "categories": {
+      "auth": {
+        "shefammas38cd0482c": {}
+      },
+      "storage": {
+        "s3FileStore": {}
+      }
+    }
+  }
+}
