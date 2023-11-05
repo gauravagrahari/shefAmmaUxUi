@@ -6,7 +6,7 @@ import axios from 'axios';
 import config from '../Context/constants';
 import { useNavigation } from '@react-navigation/native'; // If you're using React Navigation
 import { StyleSheet } from 'react-native';
-import { getFromSecureStore } from '../Context/SensitiveDataStorage';
+import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveDataStorage';
 import MessageCard from '../commonMethods/MessageCard';
 import CustomRadioButton from '../commonMethods/CustomRadioButton';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
@@ -21,6 +21,7 @@ export default function UpdateGuestDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState('primary');
   const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('m');
   const [street, setStreet] = useState('');
   const [houseName, setHouseName] = useState('');
@@ -36,13 +37,14 @@ export default function UpdateGuestDetails() {
   const [messageCardVisible, setMessageCardVisible] = useState(false);
   const [messageText, setMessageText] = useState('');
   const [initialData, setInitialData] = useState({});
-  const [alternatePhone, setAlternatePhone] = useState('');
+  const [alternateMobile, setAlternateMobile] = useState('');
 
   const navigation = useNavigation();
 
   const extractRelevantDetails = (data) => ({
     name: data.name,
-    alternatePhone: data.alternatePhone,
+    phone:data.phone,
+    alternateMobile: data.alternateMobile,
     addressGuest: {
       street: data.addressGuest.street,
       houseName: data.addressGuest.houseName,
@@ -88,7 +90,6 @@ export default function UpdateGuestDetails() {
     fetchDefaultAddress();
 }, []);
 
-
 const setDefaultAddress = async () => {
   const defaultAddress = await getFromAsync('defaultAddress');
   if (!defaultAddress) {
@@ -126,54 +127,69 @@ const setDefaultAddress = async () => {
       console.log("Default Adress of guest "+defaultAddress.pinCode);
     }
   };
-  
   useEffect(() => {
     const fetchGuestDetails = async () => {
+      setIsLoading(true);
       try {
-        const storedUuidGuest = await getFromSecureStore('uuidGuest');
-        const token = await getFromSecureStore('token');
+        let guestData;
+        const cachedGuestDetails = await getFromAsync('guestDetails');
+        const cachedAltPhone = await getFromSecureStore('altPhone');
+  
+        if (cachedGuestDetails  && cachedAltPhone) {
+          // Since the data is already an object, there's no need to parse it
+          guestData = cachedGuestDetails;
+          console.log("from cache");
+        } else {
+          // If not present in cache, make a server request
+          const storedUuidGuest = await getFromSecureStore('uuidGuest');
+          const token = await getFromSecureStore('token');
+          const responseConfig = {
+            headers: {
+              uuidGuest: storedUuidGuest,
+              Authorization: `Bearer ${token}`,
+            },
+          };
+          const response = await axios.get(`${URL}/guest/getGuestUsingPk`, responseConfig);
+          guestData = response.data;
+          console.log("from call");
 
-        const responseConfig = {
-          headers: {
-            uuidGuest: storedUuidGuest,
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        const response = await axios.get(`${URL}/guest/getGuestUsingPk`, responseConfig);
-        const guestData = response.data;
-        await storeInAsync('guestDetails', guestData);
-
+          // Update the cache with new data
+          await storeInAsync('guestDetails', guestData); // Make sure this is storing an object, not a string
+          await storeInSecureStore('altPhone', guestData.alternateMobile);
+        }
+        // Set states with guestData
         setInitialData(extractRelevantDetails(guestData));
-        setAlternatePhone(guestData.alternatePhone || '');
-        setFullName(guestData.name);
-        setGender(guestData.gender);
-        setStreet(guestData.addressGuest.street);
-        setHouseName(guestData.addressGuest.houseName);
-        setCity(guestData.addressGuest.city);
-        setState(guestData.addressGuest.state);
-        setPinCode(guestData.addressGuest.pinCode);
-        setOfficeStreet(guestData.officeAddress.street);
-        setOfficeHouseName(guestData.officeAddress.houseName);
-        setOfficeCity(guestData.officeAddress.city);
-        setOfficeState(guestData.officeAddress.state);
-        setOfficePinCode(guestData.officeAddress.pinCode);
-        setIsLoading(false);
-
+        setAlternateMobile(cachedAltPhone || guestData.alternateMobile || '');
+        setFullName(guestData.name || '');
+        setPhone(guestData.phone || '');
+        setGender(guestData.gender || '');
+        setStreet(guestData.addressGuest?.street || '');
+        setHouseName(guestData.addressGuest?.houseName || '');
+        setCity(guestData.addressGuest?.city || '');
+        setState(guestData.addressGuest?.state || '');
+        setPinCode(guestData.addressGuest?.pinCode || '');
+        setOfficeStreet(guestData.officeAddress?.street || '');
+        setOfficeHouseName(guestData.officeAddress?.houseName || '');
+        setOfficeCity(guestData.officeAddress?.city || '');
+        setOfficeState(guestData.officeAddress?.state || '');
+        setOfficePinCode(guestData.officeAddress?.pinCode || '');
+        
       } catch (error) {
         console.error("Failed to fetch guest details:", error);
-        setIsLoading(false);  // also stop the loader in case of error
-
+      } finally {
+        setIsLoading(false);
       }
     };
-
+  
     fetchGuestDetails();
   }, []);
+  
 
   const handleUpdate = async () => {
     const currentData = extractRelevantDetails({
       name: fullName,
-      alternatePhone: alternatePhone, 
+      phone,
+      alternateMobile: alternateMobile, 
       addressGuest: {
         street: street,
         houseName: houseName,
@@ -200,7 +216,7 @@ const setDefaultAddress = async () => {
       const guestEntity = {
         uuidGuest: await getFromSecureStore('uuidGuest'),
         ...currentData,
-        alternatePhone: alternatePhone,
+        alternateMobile: alternateMobile,
       };
 
       await axios.put(`${URL}/guest/updateDetails`, guestEntity, {
@@ -210,6 +226,8 @@ const setDefaultAddress = async () => {
         },
       });
       await storeInAsync('guestDetails', guestEntity);
+      await storeInSecureStore("altPhone", alternateMobile);
+
       let updatedAddress = {};
       if (selectedAddress === 'primary') {
           updatedAddress = {
@@ -231,6 +249,7 @@ const setDefaultAddress = async () => {
 
       // Update the default address in cache.
       await storeInAsync('defaultAddress', updatedAddress);
+     console.log("alt mobile  " +await getFromSecureStore('altPhone'));
       setMessageText('Details updated successfully!');
       setMessageCardVisible(true);
     } catch (error) {
@@ -253,14 +272,21 @@ const setDefaultAddress = async () => {
               {fullName.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join(' ')}
             </Text>
           </View>
+          {/* <View style={globalStyles.displayTextContainer}>
+            <Text style={globalStyles.displayText}>
+             {phone}
+            </Text>
+          </View> */}
+
+          <View style={styles.addressContainer}>
+          <Text style={globalStyles.textPrimary}>Alternate Mobile Number</Text>
           <TextInput 
   style={globalStyles.input}
   placeholder="Alternate Phone Number" 
-  value={alternatePhone} 
-  onChangeText={setAlternatePhone} 
-  keyboardType="phone-pad" // Ensures that the keyboard is appropriate for phone number input
-/>
-
+  value={alternateMobile} 
+  onChangeText={setAlternateMobile} 
+  keyboardType="phone-pad"/>
+</View>
           <Text style={styles.infoText}>Choose or update your delivery Address (By default it woud be delivered to the primary address)</Text>
           <View style={styles.addressContainer}>
             <View style={styles.radioPair}>

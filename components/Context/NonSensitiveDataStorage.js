@@ -13,12 +13,14 @@ export const storeInAsync = async (key, value) => {
 
 export const getFromAsync = async (key) => {
   try {
-    const jsonValue = await AsyncStorage.getItem(key);
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    const rawValue = await AsyncStorage.getItem(key);
+    console.log(`Raw value retrieved for key ${key}:`, rawValue);
+    return rawValue != null ? JSON.parse(rawValue) : null;
   } catch (error) {
     console.error(`Error getting the value for key: ${key}`, error);
   }
 };
+
 export const updateInAsync = async (key, newValue) => {
   try {
     const jsonValue = JSON.stringify(value);

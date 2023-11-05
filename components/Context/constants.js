@@ -1,9 +1,10 @@
 // config.js
-//added
+import { URL } from '@env';
+
 const config = {
-    URL: 'http://192.168.4.128:9090',
-    // Add other configuration settings as needed
-  };
-  
-  export default config;
-   
+  URL: URL || 'defaultURL', // Provide a default value if URL is not defined
+  // ... other config settings ...
+};
+console.log("  url  "+URL);
+
+export default config;

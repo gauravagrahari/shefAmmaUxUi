@@ -61,7 +61,7 @@ export default function HomeGuest({ navigation }) {
     try {
       // Fetch guestDetails from cache using the provided getFromAsync method
       const guestAddress = await getFromAsync('defaultAddress');
-      console.log('Fetching guestDetails:', JSON.stringify(guestAddress, null, 2));
+      console.log('Fetching defaultAdrres:', JSON.stringify(guestAddress, null, 2));
 
     let requestBody = null; // Initialize an empty request body
 

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Image } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { androidClientId,iosClientId,webClientId,expoClientId } from '@env';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -11,10 +12,10 @@ export default function GoogleSignInButton() {
   const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: "257634256765-c38c7sv531oo4jkptu32e9t4a4audjtr.apps.googleusercontent.com",
-    iosClientId: "257634256765-l5b4ipm3gdnk8qd7t98fbg8rqgk9gmqn.apps.googleusercontent.com",
-    webClientId: "257634256765-i77v0altenu99vllpifeb7bd2sosv4lg.apps.googleusercontent.com",
-    expoClientId: "257634256765-i77v0altenu99vllpifeb7bd2sosv4lg.apps.googleusercontent.com",
+    androidClientId,
+    iosClientId,
+    webClientId,
+    expoClientId,
   });
 
   useEffect(() => {
