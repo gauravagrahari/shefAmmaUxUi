@@ -71,10 +71,16 @@ const handleHostCardClick = async () => {
     console.log(itemList);
     console.log('host rating is -----------------' + host.ratingHost);
 
+    const mealTypes = itemList.map(item => item.mealType);
+  if (mealTypes.length > 0) {
     navigation.navigate('HostProfileMealGuest', {
       host: host,
       itemList: itemList,
     });
+  } else {
+    // Optionally handle the case when no meal types are available
+    console.log('No meals available for this host.');
+  }
   } catch (error) {
     console.error('Error fetching data:', error);
   }
