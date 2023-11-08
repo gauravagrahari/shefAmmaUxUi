@@ -2,34 +2,26 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 
-const MEAL_TYPE_DISPLAY_NAMES = {
-  l: 'Lunch',
-  b: 'Breakfast',
-  d: 'Dinner'
-};
-export default function NavBarMeals({ selectedMealType, onSelectMealType, availableMealTypes }) {
+export default function NavBarMeals({ selectedMealType, onSelectMealType })  {
   return (
     <View style={styles.navbarContainer}>
-      {availableMealTypes.map((mealTypeKey) => {
-        const isSelected = MEAL_TYPE_DISPLAY_NAMES[mealTypeKey] === selectedMealType;
-        return (
-          <TouchableOpacity
-            key={mealTypeKey}
-            style={[
-              styles.navbarItem, 
-              isSelected && styles.navbarItemSelected // apply the selected style if this meal type is selected
-            ]}
-            onPress={() => onSelectMealType(mealTypeKey)}
-          >
-            <Text style={[
-              styles.navbarItemText, 
-              isSelected && styles.navbarItemSelectedText // apply the selected text style if this meal type is selected
-            ]}>
-              {MEAL_TYPE_DISPLAY_NAMES[mealTypeKey]}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
+      {['Breakfast', 'Lunch', 'Dinner'].map(mealType => (
+        <TouchableOpacity 
+          key={mealType}
+          style={[
+            styles.navbarItem, 
+            selectedMealType === mealType && styles.navbarItemSelected
+          ]}
+          onPress={() => onSelectMealType(mealType)}
+        >
+          <Text style={[
+            styles.navbarItemText,
+            selectedMealType === mealType && styles.navbarItemSelectedText
+          ]}>
+            {mealType}
+          </Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }

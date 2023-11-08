@@ -15,12 +15,7 @@ import MessageCard from "../commonMethods/MessageCard";
 import { LinearGradient } from "expo-linear-gradient";
 
 const URL = config.URL; 
-// Mapping from meal types to display names
-const MEAL_TYPE_DISPLAY_NAMES = {
-  b: 'Breakfast',
-  l: 'Lunch',
-  d: 'Dinner',
-};
+
 export default function HostProfileMealGuest({ route }) {
   const MEAL_TYPE_MAPPING = {
       'Breakfast': 'b',
@@ -57,22 +52,10 @@ export default function HostProfileMealGuest({ route }) {
   const [capacityAttributes, setCapacityAttributes] = useState(getCurrentCapacityAttributes());
   const { capacity, currentCapacity } = capacityAttributes;
   const [defaultAddress, setDefaultAddress] = useState(null);
-  const [availableMealTypes, setAvailableMealTypes] = useState([]);
 
   useEffect(() => {
     setMealCount(0);
 }, [selectedMealType]);
-useEffect(() => {
-  // Find out which meal types are available in the itemList
-  const mealTypes = itemList.map(item => item.mealType);
-  const uniqueMealTypes = Array.from(new Set(mealTypes)); // Remove duplicates
-  setAvailableMealTypes(uniqueMealTypes);
-
-  // Set the initial selected meal type to the first available type
-  if (uniqueMealTypes.length > 0) {
-    setSelectedMealType(MEAL_TYPE_MAPPING[uniqueMealTypes[0]]);
-  }
-}, [itemList]);
 
   useEffect(() => {
     setCapacityAttributes(getCurrentCapacityAttributes());
@@ -181,16 +164,6 @@ useEffect(() => {
   const handleConfirm = () => {
     setModalVisible(true);
   };
-  const handleOrderPostHeader = (token, uuidCapacity) => {
-    return {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add your bearer token here
-        'Content-Type': 'application/json',
-        capacityUuid: uuidCapacity,
-      },
-    };
-  };
-
   const handleDateAndTimeChange = (delTimeAndDay) => {
     console.log('the time and day'+delTimeAndDay);  // You will have date and time here
     setOrderDelTimeAndDay(delTimeAndDay); 
@@ -267,11 +240,10 @@ console.log('capacity'+capacityData.capacityUuid);
 
 return (
   <View style={{ flex: 1 }}>
-    <ScrollView style={styles.container}>
-      <NavBarMeals
-        selectedMealType={Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)}
-        onSelectMealType={(mealType) => setSelectedMealType(MEAL_TYPE_MAPPING[mealType])}
-        availableMealTypes={availableMealTypes} // Pass the available meal types to NavBarMeals
+  <ScrollView style={styles.container}>
+      <NavBarMeals 
+          selectedMealType={Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} 
+          onSelectMealType={(mealType) => setSelectedMealType(MEAL_TYPE_MAPPING[mealType])} 
       />
       {getSelectedItem() && <ItemCard item={getSelectedItem()} />}
 {/* <View style={styles.capacityContainer}>
