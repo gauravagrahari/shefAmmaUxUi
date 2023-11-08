@@ -38,12 +38,14 @@ export default function UpdateGuestDetails() {
   const [messageText, setMessageText] = useState('');
   const [initialData, setInitialData] = useState({});
   const [alternateMobile, setAlternateMobile] = useState('');
+  const [geocode, setGeocode] = useState('');
 
   const navigation = useNavigation();
 
   const extractRelevantDetails = (data) => ({
     name: data.name,
     phone:data.phone,
+    geocode:data.geocode,
     alternateMobile: data.alternateMobile,
     addressGuest: {
       street: data.addressGuest.street,
@@ -161,6 +163,7 @@ const setDefaultAddress = async () => {
         setInitialData(extractRelevantDetails(guestData));
         setAlternateMobile(cachedAltPhone || guestData.alternateMobile || '');
         setFullName(guestData.name || '');
+        setGeocode(guestData.geocode || guestData.geocode);
         setPhone(guestData.phone || '');
         setGender(guestData.gender || '');
         setStreet(guestData.addressGuest?.street || '');
@@ -189,6 +192,7 @@ const setDefaultAddress = async () => {
     const currentData = extractRelevantDetails({
       name: fullName,
       phone,
+      geocode,
       alternateMobile: alternateMobile, 
       addressGuest: {
         street: street,
