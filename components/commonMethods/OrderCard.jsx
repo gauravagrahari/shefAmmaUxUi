@@ -4,7 +4,12 @@ import ReviewInput from '../GuestSubComponent/ReviewInput';
 import StarRatingInput from '../GuestSubComponent/StarRatingInput';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Modal } from 'react-native-paper';
+import { getFromSecureStore } from '../Context/SensitiveDataStorage';
+import axios from 'axios';
+import config from '../Context/constants';
 
+const URL = config.URL;
 export default function OrderCard({ order, navigation }) {
   const statusMappings = {
     new:"New",
@@ -35,7 +40,8 @@ export default function OrderCard({ order, navigation }) {
   }else if (fullStatus === "On the Way") {
     statusStyle = styles.inProgress;
   }
-
+  const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const [isModalVisible, setModalVisible] = React.useState(false);
   const options = {
     year: 'numeric', 
     month: 'short', 
@@ -57,37 +63,170 @@ export default function OrderCard({ order, navigation }) {
     l: "Lunch",
     d: "Dinner"
   };
+  const getCutoffTime = (delTimeAndDay) => {
+    if (!delTimeAndDay) {
+      return null;
+    }
+  
+    try {
+      const parts = delTimeAndDay.split(', '); // Split by comma and space
+      if (parts.length < 3) {
+        return null;
+      }
+      
+      // Extract the day and month part, and the time part (before 'and')
+      const dayMonthPart = parts[1]; // This is "8 November"
+      const timePart = parts[2].split(' and ')[0]; // This is "19:00"
+  console.log("time ------ " + timePart);
+      // Assuming the year is the current year. You may need to adjust this if the dates can be for the next year
+      const year = new Date().getFullYear();
+// Split the day and month for reordering
+const [day, month] = dayMonthPart.split(' ');
+
+// Map the month from name to number, assuming the name is in English and in full (e.g., 'November' -> '11')
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthNumber = monthNames.indexOf(month) + 1;
+
+// Pad the month number with a zero if it is a single digit
+const monthPadded = monthNumber.toString().padStart(2, '0');
+
+// Construct the full date string in ISO 8601 format "YYYY-MM-DDTHH:mm:ss.sssZ"
+// Since the original time doesn't contain seconds or timezone, we'll assume it's local time and add 'T' between date and time
+const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
+      console.log("dateString ------ " + dateString);
+
+      // Create the Date object from the dateString
+      const dateTime = new Date(dateString);
+      console.log("dateTime ------ " + dateTime);
+
+      if (isNaN(dateTime)) {
+        return null;
+      }
+      
+      // Subtract 3 hours to get the cutoff time
+      const cutoffTime = new Date(dateTime.setHours(dateTime.getHours() - 3));
+      console.log(" cutoff time ------ "+ cutoffTime);
+      
+      return cutoffTime;
+    } catch (error) {
+      console.error('Error parsing date:', error);
+      return null;
+    }
+  };
+  const handleConfirm = () => {
+    setModalVisible(true);
+  };
+  const canCancel = (order) => {
+    console.log('Checking canCancel for order:', order);
+
+    if (!order.delTimeAndDay || (order.status !== 'new' && order.status !== 'pkd')) {
+      return false;
+    }
+
+    const currentTime = new Date();
+    const cutoffTime = getCutoffTime(order.delTimeAndDay);
+
+    if (!cutoffTime) {
+      return false;
+    }
+
+    return currentTime < cutoffTime;
+  };
+  const handleCancelOrderButton = async () => {
+    try {
+      const currentTimestamp = new Date().toISOString(); // Assuming you want to send the current timestamp
+      const attributeName = "status"; // Assuming you're updating the 'status' attribute
+      const token = await getFromSecureStore('token');
+      const attributeName2 = "cancelledTime";
+
+      const orderEntity = {
+      status: "can", // or whatever status value you want to set
+      uuidOrder:order.uuidOrder,
+      timeStamp: order.timeStamp,
+      cancelledTime: currentTimestamp,
+      };
+  
+      const response = await axios.put(
+        `${URL}/devBoy/updateOrder?attributeName=${attributeName}&attributeName2=${attributeName2}`,
+        orderEntity,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+  
+      if (response.data === "Order updated successfully") {
+        order.status='can';
+        setShowConfirmation(false); // Hide confirmation prompt after action
+      } else {
+        console.error("Unexpected response:", response.data);
+      }
+    } catch (error) {
+      console.error("Error cancelling the order:", error);
+    }
+  };
 //   const shouldShowRatingOptions = () => {
 //     return order.status === 'com' && order.rating === null && order.review === null;
 // };
   return (
     <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
-    <View style={styles.orderDetails}>
+   <View style={styles.orderDetails}>
 
-      <View style={styles.leftSide}>
-        <TouchableOpacity onPress={navigateToHostProfile}>
-          <Text style={[styles.itemName, styles.linkText]}>{order.nameHost}</Text>
-        </TouchableOpacity>
-        <Text style={styles.details}>{mealMapping[order.mealType]}</Text>
-        <Text style={styles.details}>{order.noOfServing} servings</Text>
-        <Text style={styles.details}>{formattedDateTime}</Text>
-      </View>
+<View style={styles.leftSide}>
+  <TouchableOpacity onPress={navigateToHostProfile}>
+    <Text style={[styles.itemName, styles.linkText]}>{order.nameHost}</Text>
+  </TouchableOpacity>
+  <Text style={styles.detailsMealType}>{mealMapping[order.mealType]}</Text>
+  <Text style={styles.details}>Quantity - {order.noOfServing}</Text>
+  <Text style={styles.details}>Booked on - {formattedDateTime}</Text>
+</View>
 
-      <View style={styles.rightSide}>
-        <Text style={styles.amount}>{order.amount}</Text>
-        <Text style={statusStyle}>{fullStatus}</Text>
-      </View>
-      </View>
-      {order.status === 'com' && (
-               <View style={styles.ratingReviewSection}>
-               {order.rating === null && <StarRatingInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp} uuidHost={order.uuidHost} geoHost={order.geoHost} />}
-               {order.review === null && <ReviewInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp}/>}
-           </View>
-            )}
-  </LinearGradient>
-  );
+<View style={styles.rightSide}>
+  <Text style={styles.amount}>{order.amount}</Text>
+  <Text style={statusStyle}>{fullStatus}</Text>
+</View>
+
+</View>
+{['new', 'ip'].includes(order.status) ? (
+        canCancel(order) ? (
+          showConfirmation ? (
+            // Inline confirmation prompt
+            <View style={styles.confirmationPrompt}>
+              <Text style={styles.confirmationText}>
+                We feel sad! Do you really want to cancel this order?
+              </Text>
+              <TouchableOpacity style={styles.yesButton} onPress={handleCancelOrderButton}>
+                <Text style={styles.btnText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.noButton} onPress={() => setShowConfirmation(false)}>
+                <Text style={styles.btnText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (<>
+            <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
+
+            <View style={globalStyles.centralisingContainer}>
+            <TouchableOpacity style={styles.orderButton} onPress={() => setShowConfirmation(true)}>
+              <Text style={styles.btnText}>Cancel Order</Text>
+            </TouchableOpacity>
+            </View>
+            </>
+          )
+        ) : (
+          // Message when the order can't be cancelled
+          <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
+        )
+      ) : null }
+{order.status === 'com' && order.rating === null && (
+<View style={styles.ratingReviewSection}>
+  <StarRatingInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp} uuidHost={order.uuidHost} geoHost={order.geoHost} />
+  <ReviewInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp}/>
+</View>
+)}
+</LinearGradient>
+);
 }
-
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',  // Change row to column
@@ -106,6 +245,18 @@ const styles = StyleSheet.create({
     borderBottomColor:colors.pink,
     borderBottomWidth:4,
 },
+orderButton: {
+  width: '50%',
+  height: 35,
+  marginTop: 9,
+  marginBottom: 5,
+  borderRadius: 10,
+  borderColor: colors.pink,
+  borderWidth: 1,
+  backgroundColor: 'rgba(0, 150, 136, 0.15)', // 80% opacity of #009688
+  justifyContent: 'center',
+  alignItems: 'center',
+},
 orderDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -119,7 +270,7 @@ orderDetails: {
     alignItems: 'flex-end',
   },
   linkText: {
-    color: colors.primaryText,
+    color: colors.deepBlue,
     // textDecorationLine: 'underline',
     fontWeight: 'bold',
     fontSize: 17,
@@ -146,11 +297,17 @@ orderDetails: {
     fontSize: 16,
     // backgroundColor: "#e0e0e0", // Specify the background color for new orders
   },
+  detailsMealType: {
+    fontSize: 16,
+    marginBottom: 6,
+    color: colors.pink,
+    fontWeight: 'bold',
+  },
   details: {
     fontSize: 14,
     marginBottom: 6,
-    color: colors.deepBlue,
-    fontWeight: 'bold',
+    color: colors.pink,
+    // fontWeight: 'bold',
   },
   itemName: {
     fontSize: 15,
@@ -158,7 +315,7 @@ orderDetails: {
   },
   amount: {
     fontSize: 18,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginBottom: 10,
     // color: colors.pink,
     color: 'purple',
@@ -168,7 +325,48 @@ orderDetails: {
     // flex: 1,
     // width: '100%',           // To occupy full width
     marginTop: 10,  // Add space between the order details and the rating/review section
-
-}
+},
+confirmationPrompt: {
+  flexDirection: 'row', // Aligns children horizontally
+  alignItems: 'center', // Centers children vertically in the cross axis
+  justifyContent: 'center', // Centers children horizontally in the main axis
+  padding: 10, // Add some padding for spacing
+  marginTop: 10, // Give some space from the above element
+},
+confirmationText: {
+  flex: 1, // Takes up as much space as possible
+  marginRight: 10, // Add some margin to the right of the text
+  fontSize: 16, // Standard readable size
+  color: colors.matBlack, // Assuming a light background, otherwise choose a contrasting color
+},
+yesButton: {
+  backgroundColor: 'rgba(0, 150, 136, 0.05)', // 80% opacity of #009688
+  paddingVertical: 8, // Modest padding for touch area
+  paddingHorizontal: 16, // Horizontal padding
+  borderRadius: 5, // Rounded corners
+  marginRight: 10, // Space between the Yes and No buttons
+  borderRadius: 10,
+  borderColor: colors.pink,
+  borderWidth: 1.5,
+},
+noButton: {
+  backgroundColor: 'rgba(0, 150, 136, 0.15)', // 80% opacity of #009688
+  paddingVertical: 8,
+  paddingHorizontal: 16,
+  borderRadius: 5,
+  borderRadius: 10,
+  borderColor: colors.pink,
+  borderWidth: 2,
+},
+btnText: {
+  color: colors.deepBlue, // Text color that stands out on the buttons
+  fontSize: 16, // Matching font size with the confirmation text
+  textAlign: 'center', // Center text inside the button
+},
 
 });
+
+
+//when cancelled then the currentcapacity should get increased by 1 in db.
+//add timestamps in db when del part picks up the order and also when delivers order 
+//when calling the updateattibute method in db twice, instead update the complete item at once

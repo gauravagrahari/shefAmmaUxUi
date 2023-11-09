@@ -507,3 +507,45 @@ arrowIcon: {
     // textDecorationLine: 'underline' // Underline the text for added indication
   }
 });
+// const updateOrderStatus = async (statusKey, timestampKey, statusValue) => {
+//   try {
+//     const currentTimestamp = new Date().toISOString();
+//     const token = await getFromSecureStore('token');
+    
+//     const orderEntity = {
+//       status: statusValue,
+//       uuidOrder: orderData.uuidOrder,
+//       timeStamp: orderData.timeStamp,
+//     };
+//     orderEntity[timestampKey] = currentTimestamp;
+
+//     const response = await axios.put(
+//       `${URL}/devBoy/updateOrder?attributeName=status&attributeName2=${timestampKey}`,
+//       orderEntity,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         }
+//       }
+//     );
+
+//     if (response.data === "Order updated successfully") {
+//       console.log(`Order ${statusValue} successfully!`);
+//       orderData.status = statusValue;
+//       setModalVisible(false);
+//     } else {
+//       console.error("Unexpected response:", response.data);
+//     }
+//   } catch (error) {
+//     console.error(`Error updating order status to ${statusValue}:`, error);
+//   }
+// };
+
+// const handleOrderPickup = async () => {
+//   await updateOrderStatus('pickUpTime', 'pkd');
+// };
+
+// const handleOrderCompletion = async () => {
+//   await updateOrderStatus('deliverTime', 'com');
+// };
+

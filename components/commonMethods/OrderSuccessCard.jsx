@@ -38,6 +38,8 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
             opacity: fadeAnim,
             transform: [{ translateY }]
         }}>
+  
+
             <AntDesign name="checkcircle" size={50} color={colors.darkBlue} />
             <Text style={styles.successText}>Order Successful</Text>
             <Text style={styles.thankYouText}>Thank You!</Text>
@@ -49,6 +51,7 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
 >
     <Text style={styles.closeButton}>×</Text>
 </TouchableOpacity>
+
 
         </Animated.View>
     );
@@ -74,6 +77,7 @@ const styles = {
         shadowRadius: 4,
         elevation: 5,
     },
+ 
     successText: {
         fontSize: 20,
         fontWeight: 'bold',
