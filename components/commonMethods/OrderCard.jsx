@@ -138,12 +138,15 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
       const attributeName = "status"; // Assuming you're updating the 'status' attribute
       const token = await getFromSecureStore('token');
       const attributeName2 = "cancelledTime";
+      
 
       const orderEntity = {
       status: "can", // or whatever status value you want to set
       uuidOrder:order.uuidOrder,
       timeStamp: order.timeStamp,
       cancelledTime: currentTimestamp,
+      noOfServing:order.noOfServing,
+      mealType:order.mealType
       };
   
       const response = await axios.put(
@@ -365,8 +368,5 @@ btnText: {
 },
 
 });
-
-
-//when cancelled then the currentcapacity should get increased by 1 in db.
-//add timestamps in db when del part picks up the order and also when delivers order 
+//when cancelled then the currentcapacity should get increased by nOfserving in db.
 //when calling the updateattibute method in db twice, instead update the complete item at once
