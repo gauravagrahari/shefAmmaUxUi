@@ -47,19 +47,16 @@ export default function LoginDevBoy() {
             console.log('token retrieved from Secure Store:', token);
 
             navigation.navigate('HomeDevBoy');
-        } else {
-            setMessage(response.data);
-            Alert.alert("Error", message);
-        }
+        }else {
+          const errorMessage = response.data || 'Unexpected error occurred';
+          Alert.alert("Login Failed", errorMessage);
+      }
     })
     .catch(error => {
-        setIsLoading(false);
-
-        console.error("API Call Error:", error);
-
-        setMessage("Request failed");
-        Alert.alert("Error", message);
-    });
+      setIsLoading(false);
+      const errorMessage = error.response?.data || "Request failed";
+      Alert.alert("Login Error", errorMessage);
+  });
   };
 
   return (
