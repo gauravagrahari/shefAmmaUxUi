@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; // for the check-circle icon
 import { useNavigation } from '@react-navigation/native';
-import {globalStyles,colors} from '../commonMethods/globalStyles';
+import {colors} from '../commonMethods/globalStyles';
 
 export default function OrderSuccessCard({ isVisible, onClose }) {
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -34,25 +34,23 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
 
     return (
         <Animated.View style={{
-            ...styles.container,
-            opacity: fadeAnim,
-            transform: [{ translateY }]
+            ...styles.overlay,
+            opacity: fadeAnim // Use the existing fade animation for the overlay
         }}>
-  
-
-            <AntDesign name="checkcircle" size={50} color={colors.darkBlue} />
-            <Text style={styles.successText}>Order Successful</Text>
-            <Text style={styles.thankYouText}>Thank You!</Text>
-            <TouchableOpacity 
-    onPress={() => {
-        onClose(); // Call the passed-in onClose function first
-        navigation.navigate('HomeGuest'); // Then navigate to HomeGuest
-    }}
->
-    <Text style={styles.closeButton}>×</Text>
-</TouchableOpacity>
-
-
+            <Animated.View style={{
+                ...styles.container,
+                transform: [{ translateY }]
+            }}>
+                <AntDesign name="checkcircle" size={50} color={colors.darkBlue} />
+                <Text style={styles.successText}>Order Successful</Text>
+                <Text style={styles.thankYouText}>Thank You!</Text>
+                <TouchableOpacity onPress={() => {
+                    onClose();
+                    navigation.navigate('HomeGuest');
+                }}>
+                    <Text style={styles.closeButton}>×</Text>
+                </TouchableOpacity>
+            </Animated.View>
         </Animated.View>
     );
 }
@@ -73,11 +71,21 @@ const styles = {
             width: 0,
             height: 2,
         },
+
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
     },
- 
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     successText: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -94,6 +102,6 @@ const styles = {
         fontSize: 30,
         fontWeight: 'bold',
         marginTop: 15,
-        color: colors.deepBlue // dark gray to keep it subtle
+        color: "white" // dark gray to keep it subtle
     }
 };

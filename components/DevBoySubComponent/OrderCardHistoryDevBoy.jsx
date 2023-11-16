@@ -74,7 +74,7 @@ export default function OrderCardHistoryDevBoy({ orderData, navigation }) {
       {/* Meal Type and Number of Servings Row */}
       <View style={styles.mealServingContainer}>
         <Text style={styles.details}>{mealMapping[orderData.mealType]}</Text>
-        <Text style={styles.details}>{orderData.noOfServing} servings</Text>
+        <Text style={styles.details}>Items : {orderData.noOfServing}</Text>
       </View>
 
       {/* Amount and Status Row */}

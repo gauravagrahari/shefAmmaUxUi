@@ -88,7 +88,9 @@ const options = {
   hour12: true // Use 12-hour time (remove this line if you want 24-hour time)
 };
   const formattedDateTime = new Date(orderData.timeStamp).toLocaleString('en-IN', options);
- 
+  const copyToClipboard = (text) => {
+    Clipboard.setString(text);
+  };
   const mealMapping = {
     b: "Breakfast",
     l: "Lunch",
@@ -248,10 +250,13 @@ const options = {
         <Text style={styles.details}>{mealMapping[orderData.mealType]}</Text>
         <Text style={styles.details}>{orderData.noOfServing} servings</Text>
       </View>
-  
+      <View style={styles.mealServingContainer}>
+        <Text style={styles.details}>Preferred time to deliver : </Text>
+        <Text style={styles.details}>{orderData.preferredTime}</Text>
+      </View>
       {/* Amount and Status Row */}
       <View style={styles.amountStatusContainer}>
-        <Text style={styles.amount}>Amount to be collected - {orderData.amount}</Text>
+        <Text style={styles.amount}>Collect : Rs {orderData.amount}</Text>
         <Text style={statusStyle}>{fullStatus}</Text>
       </View>
    {/* Amount and Status Row */}
@@ -271,18 +276,18 @@ const options = {
                 <View style={globalStyles.centralisingContainer}>
 
       <TouchableOpacity style={styles.completeOrderButton} onPress={() => setModalVisible(true)}>
-        <Text style={styles.completeOrderText}>Complete Order</Text>
+        <Text style={styles.completeOrderText}>Order Delivered</Text>
       </TouchableOpacity>
       </View>
     )}
-       {orderData.status === 'pkd' || orderData.status === 'undel' ? (
+       {/* {orderData.status === 'pkd' || orderData.status === 'undel' ? (
         <Dropdown
           items={dropdownItems}
           selectedValue={selectedStatus}
           onValueChange={onDropdownValueChange}
           placeholder="Select Status"
         />
-      ) : null}
+      ) : null} */}
       <Modal
     animationType="slide"
     transparent={true}
@@ -293,7 +298,7 @@ const options = {
     <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
             <Text style={styles.modalText}>
-              {orderData.status === "ip" ? "Are you sure you want to mark the order as picked up?" : "Are you sure you want to mark the order as completed?"}
+              {orderData.status === "ip" ? "Are you sure you want to mark the order as picked up?" : "Are you sure you want to mark the order as delivered?"}
             </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity 
