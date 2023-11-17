@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View, ScrollView, TouchableOpacity,Modal } from "react-native";
+import { Button, StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
 import HostDetailCard from "../GuestSubComponent/HostDetailCard";
 import ItemCard from "../GuestSubComponent/ItemCard";
 import NavBarMeals from "../GuestSubComponent/NavBarMeals";
@@ -52,6 +52,7 @@ export default function HostProfileMealGuest({ route }) {
   const [capacityAttributes, setCapacityAttributes] = useState(getCurrentCapacityAttributes());
   const { capacity, currentCapacity } = capacityAttributes;
   const [defaultAddress, setDefaultAddress] = useState(null);
+  const [preferredTime, setPreferredTime] = useState('');
 
   useEffect(() => {
     setMealCount(0);
@@ -207,6 +208,7 @@ useEffect(() => {
       itemPrice: selectedItem.amount,  // Assuming the price is stored in either 'amount' or 'price' property
       delTimeAndDay: orderDelTimeAndDay,
       delAddress:defaultAddress,
+      preferredTime,
   };
 
   try {
@@ -318,7 +320,17 @@ return (
     </Text>
   </LinearGradient>
 )}
-
+{mealCount > 0 && (
+  <View style={styles.preferredTimeContainer}>
+    <Text style={styles.preferredTimeLabel}>Preferred Delivery Time:</Text>
+    <TextInput
+      style={styles.preferredTimeInput}
+      placeholder="e.g., 6:30 PM"
+      value={preferredTime}
+      onChangeText={setPreferredTime}
+    />
+  </View>
+)}
 <View style={globalStyles.centralisingContainer}>
 {mealCount > 0 && (
 <TouchableOpacity style={styles.orderButton} onPress={handleConfirm}>
@@ -411,7 +423,23 @@ orderPlacedText: {
     fontWeight: '600',
     color: '#FFF',
 },
-
+preferredTimeContainer: {
+  marginVertical: 10,
+  alignItems: 'center',
+},
+preferredTimeLabel: {
+  fontSize: 16,
+  fontWeight: '600',
+  color: colors.deepBlue, // Adjust as needed
+},
+preferredTimeInput: {
+  borderWidth: 2,
+  borderColor: colors.pink,
+  borderRadius: 3,
+  padding: 7,
+  width: '30%',
+  marginTop: 5,
+},
 closeButton: {
     fontSize: 24,
     color: '#FFF',
@@ -472,8 +500,8 @@ closeButton: {
     marginTop: 15, // space between text and buttons
   },
   confirmButton: {
-    // backgroundColor: 'rgba(0, 150, 136, 0.2)', // 80% opacity of #009688
-    paddingVertical: 10,
+    backgroundColor: 'rgba(0, 150, 136, 0.15)',
+     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 7,
     marginRight: 10,
@@ -483,7 +511,6 @@ closeButton: {
     borderWidth: 2,
   },
   cancelButton: {
-    backgroundColor: 'rgba(0, 150, 136, 0.15)', // 80% opacity of #009688
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 7,

@@ -250,10 +250,14 @@ const options = {
         <Text style={styles.details}>{mealMapping[orderData.mealType]}</Text>
         <Text style={styles.details}>{orderData.noOfServing} servings</Text>
       </View>
-      <View style={styles.mealServingContainer}>
-        <Text style={styles.details}>Preferred time to deliver : </Text>
-        <Text style={styles.details}>{orderData.preferredTime}</Text>
-      </View>
+      {
+  orderData.preferredTime &&
+  <View style={styles.mealServingContainer}>
+    <Text style={styles.details}>Preferred time to deliver : </Text>
+    <Text style={styles.details}>{orderData.preferredTime}</Text>
+  </View>
+}
+
       {/* Amount and Status Row */}
       <View style={styles.amountStatusContainer}>
         <Text style={styles.amount}>Collect : Rs {orderData.amount}</Text>

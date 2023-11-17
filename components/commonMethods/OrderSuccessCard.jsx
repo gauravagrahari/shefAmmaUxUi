@@ -31,7 +31,9 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
             }).start();
         }
     }, [isVisible]);
-
+    if (!isVisible) {
+        return null;
+    }
     return (
         <Animated.View style={{
             ...styles.overlay,
