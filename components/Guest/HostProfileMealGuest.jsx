@@ -53,11 +53,24 @@ export default function HostProfileMealGuest({ route }) {
   const { capacity, currentCapacity } = capacityAttributes;
   const [defaultAddress, setDefaultAddress] = useState(null);
   const [preferredTime, setPreferredTime] = useState('');
+  const [servedMeals, setServedMeals] = useState([]);
+  const [isOrdering, setIsOrdering] = useState(false);
 
   useEffect(() => {
     setMealCount(0);
 }, [selectedMealType]);
+useEffect(() => {
+  if (itemList && itemList.length > 0) {
+    const meals = itemList.map(item => item.mealType) // Assuming mealType is the full meal name
+                      .filter((value, index, self) => self.indexOf(value) === index);
+    setServedMeals(meals);
 
+    // Set default selected meal
+    if (meals.length > 0) {
+      setSelectedMealType(meals[0]);
+    }
+  }
+}, [itemList]);
   useEffect(() => {
     setCapacityAttributes(getCurrentCapacityAttributes());
   }, [selectedMealType]);
@@ -170,6 +183,11 @@ useEffect(() => {
     setOrderDelTimeAndDay(delTimeAndDay); 
 };
   const handleOrderButton = async () => {
+    if (isOrdering) {
+      return;
+    }
+  
+    setIsOrdering(true);
     const selectedItem = getSelectedItem();
     if (!selectedItem) {
         console.error("No selected item found");
@@ -238,15 +256,19 @@ console.log('capacity'+capacityData.capacityUuid);
         console.error('Request made by client:', error.request);
     }
 }
+finally {
+  setIsOrdering(false); // Reset isOrdering after order process is complete
+}
 };
 
 return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container}>
-      <NavBarMeals 
-          selectedMealType={Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} 
-          onSelectMealType={(mealType) => setSelectedMealType(MEAL_TYPE_MAPPING[mealType])} 
-      />
+        <NavBarMeals 
+          selectedMealType={selectedMealType} 
+          onSelectMealType={setSelectedMealType} 
+          servedMeals={servedMeals} 
+        />
       {getSelectedItem() && <ItemCard item={getSelectedItem()} />}
 {/* <View style={styles.capacityContainer}>
 
@@ -333,10 +355,14 @@ return (
 )}
 <View style={globalStyles.centralisingContainer}>
 {mealCount > 0 && (
-<TouchableOpacity style={styles.orderButton} onPress={handleConfirm}>
-{/* <TouchableOpacity style={styles.orderButton} onPress={handleOrderButton}> */}
-          <Text style={styles.buttonText}>Order</Text>
-      </TouchableOpacity>)}
+  <TouchableOpacity 
+  style={styles.orderButton} 
+  onPress={handleConfirm} 
+  disabled={isOrdering}
+>
+  <Text style={styles.buttonText}>{isOrdering ? 'Processing...' : 'Order'}</Text>
+</TouchableOpacity>
+)}
       </View>
       <Modal
 transparent={true}
@@ -350,8 +376,9 @@ onRequestClose={() => {
   <View style={styles.modalContainer}>
     <Text style={styles.modalText}>Click confirm button to place order</Text>
     <View style={styles.modalButtons}>
-      <TouchableOpacity style={styles.confirmButton} onPress={handleOrderButton}>
-        <Text style={{ color: colors.pink }}>Confirm</Text>
+      <TouchableOpacity style={styles.confirmButton} onPress={handleOrderButton}  disabled={isOrdering}
+>
+        <Text style={{ color: colors.pink }}>{isOrdering ? 'Processing...' : 'Confirm'}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
         <Text style={{ color:  colors.pink  }}>Cancel</Text>

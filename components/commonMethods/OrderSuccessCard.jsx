@@ -64,8 +64,8 @@ const styles = {
         left: '10%',
         right: '10%',
         padding: 30,
-        backgroundColor: '#f5f5f5', // light gray background for a subtle look
-        backgroundColor: colors.lightOlive, // light gray background for a subtle look
+        // backgroundColor: '#f5f5f5', // light gray background for a subtle look
+        backgroundColor: colors.pink, // light gray background for a subtle look
         borderRadius: 10,
         alignItems: 'center',
         shadowColor: '#000',
@@ -84,7 +84,7 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black
+        backgroundColor: 'rgba(f, f, f, 0.5)', // Semi-transparent black
         justifyContent: 'center',
         alignItems: 'center',
     },

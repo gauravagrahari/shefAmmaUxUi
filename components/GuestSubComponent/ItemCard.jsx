@@ -15,6 +15,7 @@ function ItemCard({ item }) {
   const fetchImage = async () => {
     const imageKey = item.dp;
     const imageUrl = await Storage.get(imageKey);
+    console.log("Image", imageUrl);
     setImageUri(imageUrl);
   };
   console.log("item names"+item.nameItem);

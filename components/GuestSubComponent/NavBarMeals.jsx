@@ -2,29 +2,48 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 
-export default function NavBarMeals({ selectedMealType, onSelectMealType })  {
+export default function NavBarMeals({ selectedMealType, onSelectMealType, servedMeals }) {
   return (
     <View style={styles.navbarContainer}>
-      {['Breakfast', 'Lunch', 'Dinner'].map(mealType => (
-        <TouchableOpacity 
-          key={mealType}
-          style={[
-            styles.navbarItem, 
-            selectedMealType === mealType && styles.navbarItemSelected
-          ]}
-          onPress={() => onSelectMealType(mealType)}
-        >
-          <Text style={[
-            styles.navbarItemText,
-            selectedMealType === mealType && styles.navbarItemSelectedText
-          ]}>
-            {mealType}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      {servedMeals.map(mealType => {
+        let fullMealName;
+        switch(mealType) {
+          case 'b':
+            fullMealName = 'Breakfast';
+            break;
+          case 'l':
+            fullMealName = 'Lunch';
+            break;
+          case 'd':
+            fullMealName = 'Dinner';
+            break;
+          default:
+            fullMealName = mealType; // In case it's already a full name
+        }
+
+        return (
+          <TouchableOpacity 
+            key={mealType}
+            style={[
+              styles.navbarItem, 
+              selectedMealType === mealType && styles.navbarItemSelected
+            ]}
+            onPress={() => onSelectMealType(mealType)}
+          >
+            <Text style={[
+              styles.navbarItemText,
+              selectedMealType === mealType && styles.navbarItemSelectedText
+            ]}>
+              {fullMealName}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   navbarContainer: {
