@@ -10,30 +10,30 @@ import SettingsGuest from "./components/Guest/SettingsGuest";
 import SearchGuest from "./components/Guest/SearchGuest";
 import OrderHistoryGuest from "./components/Guest/OrderHistoryGuest";
 import DetailsGuest from "./components/Guest/DetailsGuest";
-import TestImage from "./components/commonMethods/TestImage";
-import AddItemHost from "./components/Host/AddItemHost";
-import SignupHost from "./components/Host/SignupHost";
-import HostAddDetailsFormTest from "./components/Host/HostAddDetailsFormTest";
-import DetailsHost from "./components/Host/DetailsHost";
-import AddTimeSlot from "./components/Host/AddTimeSlot";
-import ItemCardTest from "./components/test/ItemCardTest";
-import TestProfileHost from "./components/test/TestProfileHost";
-import SlotCardTest from "./components/test/SlotCardTest";
-import TestEditableText from "./components/test/TestEditableText";
+// import TestImage from "./components/commonMethods/TestImage";
+// import AddItemHost from "./components/Host/AddItemHost";
+// import SignupHost from "./components/Host/SignupHost";
+// import HostAddDetailsFormTest from "./components/Host/HostAddDetailsFormTest";
+// import DetailsHost from "./components/Host/DetailsHost";
+// import AddTimeSlot from "./components/Host/AddTimeSlot";
+// import ItemCardTest from "./components/test/ItemCardTest";
+// import TestProfileHost from "./components/test/TestProfileHost";
+// import SlotCardTest from "./components/test/SlotCardTest";
+// import TestEditableText from "./components/test/TestEditableText";
 import NavBarGuest from "./components/GuestSubComponent/NavBarGuest";
 // import NavBarHost from "./components/HostSubComponent/NavBarHost";
-import Dashboard from "./components/Host/Dashboard";
-import SettingsHost from "./components/Host/SettingsHost";
-import LoginHost from "./components/Host/LoginHost";
+// import Dashboard from "./components/Host/Dashboard";
+// import SettingsHost from "./components/Host/SettingsHost";
+// import LoginHost from "./components/Host/LoginHost";
 import LoginGuest from "./components/Guest/LoginGuest";
-import NavHost from "./components/HostSubComponent/NavHost";
+// import NavHost from "./components/HostSubComponent/NavHost";
 import ProfileGuest from "./components/Guest/ProfileGuest";
 import UpdateGuestDetails from "./components/Guest/UpdateGuestDetails";
 import S3Image from "./components/commonMethods/S3Image";
-import ProfileHost from "./components/Host/ProfileHost";
-import EditTimeSlot from "./components/Host/EditTimeSlot";
-import EditItemHost from "./components/Host/EditItemHost";
-import EditDetailsHost from "./components/Host/EditDetailsHost";
+// import ProfileHost from "./components/Host/ProfileHost";
+// import EditTimeSlot from "./components/Host/EditTimeSlot";
+// import EditItemHost from "./components/Host/EditItemHost";
+// import EditDetailsHost from "./components/Host/EditDetailsHost";
 import LoginDevBoy from "./components/DevBoy/LoginDevBoy";
 import SettingsDevBoy from "./components/DevBoy/SettingsDevBoy";
 import HomeDevBoy from "./components/DevBoy/HomeDevBoy";
@@ -104,32 +104,32 @@ export default function App() {
         <Stack.Screen name="SettingsGuest" component={SettingsGuest}/>
         <Stack.Screen name="HostProfileMealGuest" component={HostProfileMealGuest}/>
         <Stack.Screen name="HostProfileGuest" component={HostProfileGuest}/>
-        <Stack.Screen name="AddItemHost" component={AddItemHost}/>
-        <Stack.Screen name="ItemCardTest" component={ItemCardTest}/>
-        <Stack.Screen name="SignupHost" component={SignupHost}/>
+        {/* <Stack.Screen name="AddItemHost" component={AddItemHost}/> */}
+        {/* <Stack.Screen name="ItemCardTest" component={ItemCardTest}/> */}
+        {/* <Stack.Screen name="SignupHost" component={SignupHost}/> */}
         <Stack.Screen name="SignupGuest" component={SignupGuest}/>
-        <Stack.Screen name="LoginHost" component={LoginHost}/>
+        {/* <Stack.Screen name="LoginHost" component={LoginHost}/> */}
         <Stack.Screen name="LoginGuest" component={LoginGuest}/>
         <Stack.Screen name="LoginDevBoy" component={LoginDevBoy}/>
         <Stack.Screen name="SettingsDevBoy" component={SettingsDevBoy}/>
         <Stack.Screen name="HomeDevBoy" component={HomeDevBoy}/>
         <Stack.Screen name="OrderHistoryDevBoy" component={OrderHistoryDevBoy}/>
-        <Stack.Screen name="DetailsHost" component={DetailsHost}/>
+        {/* <Stack.Screen name="DetailsHost" component={DetailsHost}/>
         <Stack.Screen name="TestImage" component={TestImage}/>
         <Stack.Screen name="HostAddDetailsFormTest" component={HostAddDetailsFormTest}/>
         <Stack.Screen name="AddTimeSlot" component={AddTimeSlot}/>
-        <Stack.Screen name="SlotCardTest" component={SlotCardTest}/>
+        <Stack.Screen name="SlotCardTest" component={SlotCardTest}/> */}
         <Stack.Screen name="NavBarGuest" component={NavBarGuest}/>
-        <Stack.Screen name="Dashboard" component={Dashboard}/>
-        <Stack.Screen name="SettingsHost" component={SettingsHost}/>
-        <Stack.Screen name="ProfileHost" component={ProfileHost}/>
+        {/* <Stack.Screen name="Dashboard" component={Dashboard}/>
+        {/* <Stack.Screen name="SettingsHost" component={SettingsHost}/>
+        <Stack.Screen name="ProfileHost" component={ProfileHost}/> */}
         <Stack.Screen name="ProfileGuest" component={ProfileGuest}/>
         <Stack.Screen name="S3Image" component={S3Image}/>
-        <Stack.Screen name="TestProfileHost" component={TestProfileHost}/>
-        <Stack.Screen name="TestEditableText" component={TestEditableText}/>
+        {/* <Stack.Screen name="TestProfileHost" component={TestProfileHost}/> */}
+        {/* <Stack.Screen name="TestEditableText" component={TestEditableText}/>
         <Stack.Screen name="EditTimeSlot" component={EditTimeSlot}/>
-        <Stack.Screen name="EditItemHost" component={EditItemHost}/>
-        <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/>
+        <Stack.Screen name="EditItemHost" component={EditItemHost}/> */}
+        {/* <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/> */}
       </Stack.Navigator>
     </NavigationContainer>
     </HostProvider>
