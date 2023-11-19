@@ -8,15 +8,15 @@ import { Storage } from '@aws-amplify/storage';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
-import Swiper from 'react-native-swiper';
+import Carousel from 'react-native-snap-carousel';
 
 const URL = config.URL;
 
 export default function HostCard({ host, itemNames,imageMeal }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [imageUrl, setImageUrl] = useState(null); // State to hold the fetched image URL
-const [isTruncated, setIsTruncated] = useState(true);
-const truncatedDescription = isTruncated ? `${host.descriptionHost.split(' ').slice(0, -3).join(' ')}...` : host.descriptionHost;
+  const [isTruncated, setIsTruncated] = useState(true);
+   const truncatedDescription = isTruncated ? `${host.descriptionHost.split(' ').slice(0, -3).join(' ')}...` : host.descriptionHost;
 
   const navigation = useNavigation();
   const toggleDescription = () => {
@@ -24,36 +24,29 @@ const truncatedDescription = isTruncated ? `${host.descriptionHost.split(' ').sl
   };
   useEffect(() => {
     const fetchImages = async () => {
-        try {
-            // If imageMeal is undefined, default to an empty array
-            const imagePathArray = Array.isArray(imageMeal) ? imageMeal : [];
-
-            const imageUrls = [];
-            for (const imgPath of imagePathArray) {
-                // Ensure imgPath is a string before using it
-                if (typeof imgPath === "string") {
-                    const signedUrl = await Storage.get(imgPath);
-                    imageUrls.push(signedUrl);
-                    console.log(host.nameHost);
-                    if (host.nameHost === "Eden garden") {
-                        console.log('imgPath:', imgPath); // Log the imgPath for debugging
-                    }
-                } else {
-                    if (host.nameHost === "Eden garden") {
-                        console.error('Expected imgPath to be a string but received:', typeof imgPath, imgPath); // Log the object for debugging
-                    }
-                }
+      try {
+        const imagePathArray = Array.isArray(imageMeal) ? imageMeal : [];
+        const imageUrls = [];
+  
+        for (const imgPath of imagePathArray) {
+          if (typeof imgPath === "string") {
+            try {
+              const signedUrl = await Storage.get(imgPath);
+              imageUrls.push(signedUrl);
+              console.log(`Host: ${host.nameHost}----->>>>>>>> Image Path: ${imgPath}`);
+            } catch (error) {
+              console.error('Error fetching image URL for:', imgPath, error);
             }
-            setImageUrl(imageUrls);
-        } catch (error) {
-            console.error('Error fetching images:', error);
+          }
         }
+        setImageUrl(imageUrls);
+        console.log("Image Urls for Host:", host.nameHost, imageUrls);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
     };
-    
-    fetchImages();
-}, [imageMeal, host.name]);
-
-
+  fetchImages();
+  }, [imageMeal, host.nameHost]);
   
 const handleHostCardClick = async () => {
   try {
@@ -79,43 +72,41 @@ const handleHostCardClick = async () => {
     console.error('Error fetching data:', error);
   }
 };
+const renderItem = ({ item }) => {
+  return (
+      <View style={styles.carouselItemContainer}>
+          <Image
+              style={styles.carouselImage}
+              source={{ uri: item }}
+              onError={(error) => console.error("Image Error", error)}
+          />
+      </View>
+  );
+};
 
 return (
   <TouchableOpacity onPress={handleHostCardClick}>
-        <LinearGradient colors={[colors.darkBlue,'#fcfddd']} style={styles.container}>
-    {/* <View style={styles.container}> */}
-    <View style={styles.host}>
-    <View style={styles.imageContainer}>
-     {imageUrl && imageUrl.length > 0 ? (
-      <Swiper 
-      autoplay={true}
-      loop={true}
-      autoplayTimeout={2.1}
-      showsPagination={true}
-      dot={<View style={{backgroundColor:'rgba(255,255,255,.3)', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-      activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />}
-      paginationStyle={{position: 'absolute', bottom: 10}}
-      style={styles.DP}
-  >
-          {imageUrl.map((img, index) => (
-              <View key={index} style={{flex: 1}}>
-                  <Image 
-                      style={styles.DP} 
-                      source={{ uri: img }} 
+  <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.container}>
+      <View style={styles.host}>
+          <View style={styles.carouselContainer}>
+              {imageUrl && imageUrl.length > 0 ? (
+                  <Carousel
+                      data={imageUrl}
+                      renderItem={renderItem}
+                      sliderWidth={dpDimension} // Set to the width of the image
+                      itemWidth={dpDimension} // Same as the width of the image
+                      loop={true}
+                      autoplay={true}
+                      autoplayInterval={3000}
+                  />
+              ) : (
+                  <Image
+                      style={styles.carouselImage}
+                      source={{ uri: 'YOUR_DEFAULT_IMAGE_URL' }}
                       onError={(error) => console.error("Image Error", error)}
                   />
-              </View>
-          ))}
-      </Swiper>
-      
-        ) : (
-            <Image 
-                style={styles.DP} 
-                source={{ uri: 'YOUR_DEFAULT_IMAGE_URL' }} 
-                onError={(error) => console.error("Image Error", error)}
-            />
-        )}
-    </View>
+              )}
+          </View>
         <View style={styles.hostInfo}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Text style={globalStyles.textSecondary} numberOfLines={1}>
@@ -149,14 +140,16 @@ return (
     </View>
     </LinearGradient>
   </TouchableOpacity>
-);}
+);
+}
+const itemWidth='20';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const hostHeight = screenHeight * 0.13; // You can adjust this value according to your needs
 const bgColor = '#fcfddd'; 
 // const bgColor = colors.darkBlue; 
 
-const dpDimension = screenWidth * 0.23;
+const dpDimension = screenWidth * 0.25  ;
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: bgColor,
@@ -180,17 +173,33 @@ imageContainer: {
     width: hostHeight, // Giving it a fixed width 
     marginRight: 10, // Space between image and info
 },
-DP: {
-    width: '100%',  // takes the full width of imageContainer
-    height: hostHeight,
-    resizeMode: 'cover',
-},
+   DP: {
+        width: itemWidth,
+        height: 200, // Adjust the height as needed
+        resizeMode: 'cover',
+    },
 hostInfo: {
     flex: 1,
     flexDirection: 'column',
     padding: screenWidth * 0.02,
 },
-
+carouselContainer: {
+  width: dpDimension,
+  height: dpDimension,
+  marginRight: 10,
+  overflow: 'hidden', // This prevents adjacent images from showing
+},
+carouselItemContainer: {
+  width: dpDimension,
+  height: dpDimension,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+carouselImage: {
+  width: dpDimension,
+  height: dpDimension,
+  resizeMode: 'cover',
+},
   descriptionContainer: {
     // paddingTop: 5,
     // paddingHorizontal: 2,
@@ -256,3 +265,4 @@ hostInfo: {
     marginLeft: 12,
   },
 });
+    

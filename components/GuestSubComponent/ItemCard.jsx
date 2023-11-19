@@ -10,14 +10,18 @@ function ItemCard({ item }) {
 
   useEffect(() => {
     fetchImage().catch((error) => console.error('Error fetching image:', error));
-  }, []);
+  }, [item]); // Add 'item' as a dependency
 
   const fetchImage = async () => {
-    const imageKey = item.dp;
-    const imageUrl = await Storage.get(imageKey);
-    console.log("Image", imageUrl);
-    setImageUri(imageUrl);
+    const imageKey = item.dp; // Ensure 'dp' is a unique key for each item
+    try {
+      const imageUrl = await Storage.get(imageKey);
+      setImageUri(imageUrl);
+    } catch (error) {
+      console.error('Error fetching image for item:', item.id, error); // Assuming 'id' is a unique identifier for the item
+    }
   };
+
   console.log("item names"+item.nameItem);
   return (
     <View style={styles.container}>

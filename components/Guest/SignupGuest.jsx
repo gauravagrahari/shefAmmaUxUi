@@ -1,12 +1,12 @@
-import { Button, StyleSheet, TextInput, TouchableOpacity,Text, View, ScrollView } from 'react-native';
+import { Button, StyleSheet, TextInput, TouchableOpacity, Text, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import OtpVerification from '../commonMethods/OtpVerification';
 import { useNavigation } from '@react-navigation/native';
-import {storeInSecureStore} from '../Context/SensitiveDataStorage';
+import { storeInSecureStore } from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
 import { LinearGradient } from 'expo-linear-gradient';
-import {globalStyles,colors} from '../commonMethods/globalStyles';
+import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 
 const URL = config.URL;
@@ -15,7 +15,6 @@ export default function SignupGuest() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneVerified, setPhoneVerified] = useState({ verified: false, value: null });
-  const [emailVerified, setEmailVerified] = useState({ verified: false, value: null });
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigation = useNavigation();
@@ -26,15 +25,14 @@ export default function SignupGuest() {
       return;
     }
 
-    if (!phoneVerified.verified || !emailVerified.verified) {
-      console.log('Phone or Email not verified');
+    if (!phoneVerified.verified) {
+      console.log('Phone not verified');
       return;
     }
 
     const data = {
       password: password,
       phone: phoneVerified.value,
-      email: emailVerified.value,
       timeStamp: new Date().toISOString()
     };
 
@@ -57,7 +55,6 @@ export default function SignupGuest() {
         });
       })
       .catch((error) => {
-        // Check if the error response has data and a message
         if (error.response && error.response.data) {
           setErrorMessage(error.response.data);
         } else {
@@ -65,6 +62,7 @@ export default function SignupGuest() {
         }
       });
   };
+
   return (
     <LinearGradient colors={['white', colors.darkBlue]} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -74,7 +72,6 @@ export default function SignupGuest() {
 
         <View style={styles.innerContainer}>
           <OtpVerification type="phone" onVerify={setPhoneVerified} />
-          <OtpVerification type="email" onVerify={setEmailVerified} />
 
           <View style={styles.inputContainer}>
             <Ionicons name="lock-closed-outline" size={24} color="black" />
@@ -113,13 +110,18 @@ export default function SignupGuest() {
   );
 }
 
+// Add your styles here
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center', // Aligns children vertically in the center
     paddingHorizontal: 20,
+    paddingTop: 20, // Adjust as needed for spacing at the top
   },
   scrollContent: {
+    flexGrow: 1, // Ensures the ScrollView content grows to fill the space
+    justifyContent: 'center', // Center content vertically inside the ScrollView
     alignItems: 'center',
     paddingBottom: 30,
   },
