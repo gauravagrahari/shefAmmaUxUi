@@ -7,7 +7,6 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 
 const URL = config.URL;
-
 const ReviewInput = ({ uuidOrder, timeStamp }) => {
   const [reviewText, setReviewText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,6 +14,13 @@ const ReviewInput = ({ uuidOrder, timeStamp }) => {
   const [showMessage, setShowMessage] = useState(false);
 
   const submitReview = async () => {
+    // Check if the review text is empty
+    if (!reviewText.trim()) {
+      setMessage('No review added! Please write a review.');
+      setShowMessage(true);
+      return; // Exit the function if review is empty
+    }
+
     console.log('uuid: ' + uuidOrder);
     const token = await getFromSecureStore('token');
 
@@ -59,13 +65,14 @@ const ReviewInput = ({ uuidOrder, timeStamp }) => {
           value={reviewText}
           onChangeText={setReviewText}
         />
-        <TouchableOpacity title="Submit" style={globalStyles.centralisingContainer} onPress={submitReview} disabled={isSubmitting} >
-       <Text style={styles.postText}>Post</Text>
+        <TouchableOpacity title="Submit" style={globalStyles.centralisingContainer} onPress={submitReview} disabled={isSubmitting}>
+          <Text style={styles.postText}>Submit</Text>
         </TouchableOpacity>
       </View>
     </>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -92,8 +99,7 @@ const styles = StyleSheet.create({
   postText:{
 padding: 5,
 fontWeight:'bold',
-// color:colors.pink,
-color:colors.darkestBlue,
+color: colors.darkBlue,  
 fontSize: 16,
  }
 });
