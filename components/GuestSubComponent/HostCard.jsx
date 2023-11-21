@@ -33,14 +33,14 @@ export default function HostCard({ host, itemNames,imageMeal }) {
             try {
               const signedUrl = await Storage.get(imgPath);
               imageUrls.push(signedUrl);
-              console.log(`Host: ${host.nameHost}----->>>>>>>> Image Path: ${imgPath}`);
+            
             } catch (error) {
               console.error('Error fetching image URL for:', imgPath, error);
             }
           }
         }
         setImageUrl(imageUrls);
-        console.log("Image Urls for Host:", host.nameHost, imageUrls);
+       
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -51,7 +51,6 @@ export default function HostCard({ host, itemNames,imageMeal }) {
 const handleHostCardClick = async () => {
   try {
     const token = await getFromSecureStore('token');
-     console.log(host.uuidHost);
     const itemListRequest = axios.get(`${URL}/guest/host/mealItems`, {
       headers: {
         Authorization: `Bearer ${token}`, // Add your bearer token here
@@ -61,8 +60,6 @@ const handleHostCardClick = async () => {
     const [itemListResponse] = await Promise.all([itemListRequest]);
 
     const itemList = itemListResponse.data;
-    console.log(itemList);
-    console.log('host rating is -----------------' + host.ratingHost);
 
     navigation.navigate('HostProfileMealGuest', {
       host: host,

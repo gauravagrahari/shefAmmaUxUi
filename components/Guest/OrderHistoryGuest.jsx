@@ -1,82 +1,143 @@
-import { StyleSheet, Text, View, ActivityIndicator, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import OrderCard from '../commonMethods/OrderCard';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import axios from 'axios';
+import OrderCard from '../commonMethods/OrderCard';
 import config from '../Context/constants';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
-import {globalStyles,colors} from '../commonMethods/globalStyles';
+import { globalStyles, colors } from '../commonMethods/globalStyles';
 import Loader from '../commonMethods/Loader';
 
 const URL = config.URL;
+const pageSize = 6; // Adjust as needed
 
 export default function OrderHistoryGuest({ navigation }) {
   const [orderList, setOrderList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true); // New state for initial loading
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [lastEvaluatedKey, setLastEvaluatedKey] = useState(null);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
+  
+  const fetchOrders = async () => {
+    if (!hasNextPage || loading) return;
+
+    if (initialLoading) {
       setLoading(true);
-      setError(null);
+    }
 
-      try {
-        const storedUuidGuest = await getFromSecureStore('uuidGuest');
-        const token = await getFromSecureStore('token');
+    setError(null);
 
-        const responseConfig = {
-          headers: {
-            uuidOrder: storedUuidGuest,
-            // Uncomment the following line if you have a JWT token for authentication
-            Authorization: `Bearer ${token}`,
-          },
-        };
+    try {
+      const storedUuidGuest = await getFromSecureStore('uuidGuest');
+      const token = await getFromSecureStore('token');
 
-        const response = await axios.get(`${URL}/guest/orders`, responseConfig);
-        setOrderList(response.data);
-        console.log(response.data);
-        console.log('orderlis is :'+orderList);
-      } catch (error) {
-        console.error(error);
-        setError(error);
-      } finally { 
-        setLoading(false);
-      }
-    };
 
+      let sk, pk,lastEvaluatedKeyObj,sks,sksval;
+if (lastEvaluatedKey) {
+     lastEvaluatedKeyObj = JSON.parse(lastEvaluatedKey);
+    sk = lastEvaluatedKeyObj.sk?.s;
+    pk = lastEvaluatedKeyObj.pk?.s;
+    sks=lastEvaluatedKeyObj.sk;
+console.log("sks----->"+ sks);
+ sksval=lastEvaluatedKeyObj.sk.s;
+console.log("sks----->"+ sksval);
+      console.log("LastEvaluatedKey sk:", sk, "pk:", pk, "LastEvaluatedKey: ",lastEvaluatedKeyObj);
+}
+// sks=lastEvaluatedKeyObj.sk;
+// console.log("sks----->"+ sks);
+//  sksval=lastEvaluatedKeyObj.sk.s;
+// console.log("sks----->"+ sksval);
+//       console.log("LastEvaluatedKey sk:", sk, "pk:", pk, "LastEvaluatedKey: ",lastEvaluatedKeyObj);
+
+      const responseConfig = {
+        headers: {
+          uuidOrder: storedUuidGuest,
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          sk: sk,
+          pk: pk,
+          pageSize: pageSize,
+        },
+      };
+
+      console.log(`Making request to: ${URL}/guest/orders with config:`, responseConfig);
+
+      const response = await axios.get(`${URL}/guest/orders`, responseConfig);
+      const newOrders = response.data.content || [];
+      const newLastEvaluatedKey = response.data.lastEvaluatedKey || null;
+
+      console.log("Received new LastEvaluatedKey:", newLastEvaluatedKey);
+
+      setOrderList(prevOrders => [...prevOrders, ...newOrders]);
+      setLastEvaluatedKey(newLastEvaluatedKey);
+      setHasNextPage(response.data.hasNextPage);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setError(error);
+    } finally {
+      setLoading(false);
+      setInitialLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchOrders();
   }, []);
+  const handleScroll = ({ nativeEvent }) => {
+    if (isCloseToBottom(nativeEvent) && hasNextPage && !loading) {
+      fetchOrders();
+    }
+  };
 
-  if (loading) {
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+  };
+
+  // if (error) {
+  //   // Error handling
+  //   return (
+  //     <View style={styles.centered}>
+  //       <Text>Error fetching orders. Please try again.</Text>
+  //     </View>
+  //   );
+  // }
+
+  if (initialLoading) {
+    // Display loader during initial loading
     return <Loader />;
-}
-  if (error) {
+  }
+
+  // Logic for displaying orders or the "No orders available" message
+  if (orderList.length > 0) {
+    return (
+      <ScrollView
+        style={globalStyles.containerPrimary}
+        onScroll={handleScroll}
+        scrollEventThrottle={400}
+      >
+        <NavBarGuest navigation={navigation} />
+        {orderList.map((eachOrder) => (
+          <OrderCard key={eachOrder.timeStamp} order={eachOrder} isHost={false} />
+        ))}
+        {loading && (
+          <View style={styles.loader}>
+            <Loader />
+          </View>
+        )}
+      </ScrollView>
+    );
+  } else {
+    // Display "No orders available" if the list is empty after initial loading
     return (
       <View style={styles.centered}>
-        <Text>Error fetching orders. Please try again.</Text>
+        <Text style={styles.centered}>No orders available to display.</Text>
       </View>
     );
   }
-
-  return (
-    <ScrollView style={globalStyles.containerPrimary}>
-      <NavBarGuest navigation={navigation} />
-      {orderList.length === 0 ? (
-        <View style={styles.centered}>
-          <Text style={styles.centered}>No orders available to display.</Text>
-        </View>
-      ) : (
-        orderList
-          .sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
-          .map((eachOrder) => (
-            <OrderCard key={eachOrder.timeStamp} order={eachOrder} isHost={false} />
-          ))
-      )}
-    </ScrollView> 
-  );
-  
 }
-
 const styles = StyleSheet.create({
   centered: {
     fontSize: 20,
@@ -84,5 +145,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20, 
     marginTop: 100,
+  },
+  loader: {
+    marginVertical: 20,
   },
 });
