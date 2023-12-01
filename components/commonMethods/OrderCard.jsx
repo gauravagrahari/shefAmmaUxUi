@@ -4,7 +4,6 @@ import ReviewInput from '../GuestSubComponent/ReviewInput';
 import StarRatingInput from '../GuestSubComponent/StarRatingInput';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Modal } from 'react-native-paper';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import axios from 'axios';
 import config from '../Context/constants';
@@ -73,39 +72,25 @@ export default function OrderCard({ order, navigation }) {
       if (parts.length < 3) {
         return null;
       }
-      
-      // Extract the day and month part, and the time part (before 'and')
-      const dayMonthPart = parts[1]; // This is "8 November"
-      const timePart = parts[2].split(' and ')[0]; // This is "19:00"
-  console.log("time ------ " + timePart);
-      // Assuming the year is the current year. You may need to adjust this if the dates can be for the next year
+const dayMonthPart = parts[1]; 
+      const timePart = parts[2].split(' and ')[0]; 
       const year = new Date().getFullYear();
-// Split the day and month for reordering
 const [day, month] = dayMonthPart.split(' ');
 
-// Map the month from name to number, assuming the name is in English and in full (e.g., 'November' -> '11')
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthNumber = monthNames.indexOf(month) + 1;
 
-// Pad the month number with a zero if it is a single digit
 const monthPadded = monthNumber.toString().padStart(2, '0');
 
-// Construct the full date string in ISO 8601 format "YYYY-MM-DDTHH:mm:ss.sssZ"
-// Since the original time doesn't contain seconds or timezone, we'll assume it's local time and add 'T' between date and time
 const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
-      console.log("dateString ------ " + dateString);
-
       // Create the Date object from the dateString
       const dateTime = new Date(dateString);
-      console.log("dateTime ------ " + dateTime);
-
       if (isNaN(dateTime)) {
         return null;
       }
       
       // Subtract 3 hours to get the cutoff time
       const cutoffTime = new Date(dateTime.setHours(dateTime.getHours() - 3));
-      console.log(" cutoff time ------ "+ cutoffTime);
       
       return cutoffTime;
     } catch (error) {
@@ -117,8 +102,6 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
     setModalVisible(true);
   };
   const canCancel = (order) => {
-    console.log('Checking canCancel for order:', order);
-
     if (!order.delTimeAndDay || (order.status !== 'new' && order.status !== 'pkd')) {
       return false;
     }
