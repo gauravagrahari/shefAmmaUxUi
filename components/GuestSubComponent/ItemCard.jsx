@@ -2,6 +2,8 @@ import React, { useEffect, useState, memo } from 'react';
 import { View, Button, Text, Image, StyleSheet } from 'react-native';
 import { Storage } from 'aws-amplify';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
+import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
+import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 
 function ItemCard({ item }) {
   const [imageUri, setImageUri] = useState(null);
@@ -12,15 +14,25 @@ function ItemCard({ item }) {
     fetchImage().catch((error) => console.error('Error fetching image:', error));
   }, [item]); // Add 'item' as a dependency
 
-  const fetchImage = async () => {
-    const imageKey = item.dp; // Ensure 'dp' is a unique key for each item
-    try {
-      const imageUrl = await Storage.get(imageKey);
-      setImageUri(imageUrl);
-    } catch (error) {
-      console.error('Error fetching image for item:', item.id, error); // Assuming 'id' is a unique identifier for the item
+ // Modify this in your ItemCard component
+const fetchImage = async () => {
+  const imageKey = item.dp;
+  try {
+    let imageUrl = await getImageUrl(imageKey);
+    if (!imageUrl) {
+      imageUrl = await Storage.get(imageKey);
+      await storeImageUrl(imageKey, imageUrl);
+      console.log('Fetched and cached image URL for', imageKey);
     }
-  };
+    else{
+      console.log('Fetched from sqlit----------->', imageKey);
+    }
+    setImageUri(imageUrl);
+  } catch (error) {
+    console.error('Error fetching image for item:', item.id, error);
+  }
+};
+
 
   console.log("item names"+item.nameItem);
   return (

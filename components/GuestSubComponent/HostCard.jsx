@@ -1,18 +1,22 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import StarRating from '../commonMethods/StarRating';
 import config from '../Context/constants';
 import { Storage } from '@aws-amplify/storage';
+import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
+import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 
 const URL = config.URL;
 
-export default function HostCard({ host, itemNames,imageMeal }) {
+export default function HostCard({ host, meals }) {
+  const itemNames = meals.map(meal => meal.nameItem);
+  const imageMeal = useMemo(() => meals.map(meal => meal.dp), [meals]);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [imageUrl, setImageUrl] = useState(null); // State to hold the fetched image URL
   const [isTruncated, setIsTruncated] = useState(true);
@@ -22,53 +26,56 @@ export default function HostCard({ host, itemNames,imageMeal }) {
   const toggleDescription = () => {
     setShowFullDescription(prevState => !prevState);
   };
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const imagePathArray = Array.isArray(imageMeal) ? imageMeal : [];
-        const imageUrls = [];
-  
-        for (const imgPath of imagePathArray) {
-          if (typeof imgPath === "string") {
+ // Modify this in your component where fetchImages is defined
+useEffect(() => {
+  const fetchImages = async () => {
+    try {
+      const imagePathArray = Array.isArray(imageMeal) ? imageMeal : [];
+      const imageUrls = [];
+
+      for (const imgPath of imagePathArray) {
+        console.log('Processing image path:', imgPath);
+        if (typeof imgPath === "string") {
+          let signedUrl = await getImageUrl(imgPath);
+          if (!signedUrl) {
             try {
-              const signedUrl = await Storage.get(imgPath);
-              imageUrls.push(signedUrl);
-            
+              signedUrl = await Storage.get(imgPath);
+              await storeImageUrl(imgPath, signedUrl);
+              console.log('Fetched and cached signed URL for', imgPath);
             } catch (error) {
               console.error('Error fetching image URL for:', imgPath, error);
             }
           }
+          if (signedUrl) {
+            imageUrls.push(signedUrl);
+          }
         }
-        setImageUrl(imageUrls);
-       
-      } catch (error) {
-        console.error('Error fetching images:', error);
       }
-    };
-  fetchImages();
-  }, [imageMeal, host.nameHost]);
-  
-const handleHostCardClick = async () => {
-  try {
-    const token = await getFromSecureStore('token');
-    const itemListRequest = axios.get(`${URL}/guest/host/mealItems`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add your bearer token here
-        id: host.uuidHost,
-      },
-    });
-    const [itemListResponse] = await Promise.all([itemListRequest]);
-
-    const itemList = itemListResponse.data;
-
-    navigation.navigate('HostProfileMealGuest', {
-      host: host,
-      itemList: itemList,
-    });
-  } catch (error) {
-    console.error('Error fetching data:', error);
+      setImageUrl(imageUrls);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  };
+  if (imageMeal.length > 0 && (!imageUrl || imageUrl.length === 0)) {
+    fetchImages();
+  } else {
+    console.log('Skipping image fetch for', host.nameHost);
   }
-};
+}, [imageMeal, host.nameHost]);
+
+  
+  
+  const handleHostCardClick = () => {
+    try {
+      navigation.navigate('HostProfileMealGuest', {
+        host: host,
+        itemList: meals, 
+      });
+    } catch (error) {
+      console.error('Error while navigating:', error);
+    }
+  };
+  
 const renderItem = ({ item }) => {
   return (
       <View style={styles.carouselItemContainer}>
@@ -99,7 +106,7 @@ return (
               ) : (
                   <Image
                       style={styles.carouselImage}
-                      source={{ uri: 'YOUR_DEFAULT_IMAGE_URL' }}
+                      source={{ uri: 'images/ShefAmma (1).jpg' }}
                       onError={(error) => console.error("Image Error", error)}
                   />
               )}
@@ -129,12 +136,11 @@ return (
           <View style={styles.readMoreContainer}>
             <Text style={styles.readMoreText} onPress={toggleDescription}>
               {showFullDescription ? '' : '...read more'}
-              {/* {showFullDescription ? 'Read less' : '...read more'} */}
+            
             </Text>
           </View>
         )}
-      {/* </View> */}
-    </View>
+    </View>  
     </LinearGradient>
   </TouchableOpacity>
 );

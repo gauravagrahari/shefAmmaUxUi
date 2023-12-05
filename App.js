@@ -12,7 +12,7 @@ import OrderHistoryGuest from "./components/Guest/OrderHistoryGuest";
 import DetailsGuest from "./components/Guest/DetailsGuest";
 import TestImage from "./components/commonMethods/TestImage";
 import AddItemHost from "./components/Host/AddItemHost";
-import SignupHost from "./components/Host/SignupHost";
+// import SignupHost from "./components/Host/SignupHost";
 import HostAddDetailsFormTest from "./components/Host/HostAddDetailsFormTest";
 import DetailsHost from "./components/Host/DetailsHost";
 import AddTimeSlot from "./components/Host/AddTimeSlot";
@@ -23,7 +23,7 @@ import TestEditableText from "./components/test/TestEditableText";
 import NavBarGuest from "./components/GuestSubComponent/NavBarGuest";
 // import NavBarHost from "./components/HostSubComponent/NavBarHost";
 import Dashboard from "./components/Host/Dashboard";
-import SettingsHost from "./components/Host/SettingsHost";
+// import SettingsHost from "./components/Host/SettingsHost";
 import LoginHost from "./components/Host/LoginHost";
 import LoginGuest from "./components/Guest/LoginGuest";
 import NavHost from "./components/HostSubComponent/NavHost";
@@ -42,6 +42,7 @@ import React, { useEffect, useState } from 'react';
 import { getFromSecureStore } from "./components/Context/SensitiveDataStorage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
+import { init } from "./components/Context/sqLiteDB";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -49,7 +50,11 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [hostList, setHostList] = React.useState([]);
   const [hasFetchedHosts, setHasFetchedHosts] = React.useState(false);
-
+  useEffect(() => {
+    init()
+      .then(() => console.log('Database initialized'))
+      .catch((err) => console.error('Database initialization failed:', err));
+  }, []);
   useEffect(() => {
       const checkCredentials = async () => {
         const token = await getFromSecureStore('token');
@@ -106,7 +111,7 @@ export default function App() {
         <Stack.Screen name="HostProfileGuest" component={HostProfileGuest}/>
         <Stack.Screen name="AddItemHost" component={AddItemHost}/>
         <Stack.Screen name="ItemCardTest" component={ItemCardTest}/>
-        <Stack.Screen name="SignupHost" component={SignupHost}/>
+        {/* <Stack.Screen name="SignupHost" component={SignupHost}/> */}
         <Stack.Screen name="SignupGuest" component={SignupGuest}/>
         <Stack.Screen name="LoginHost" component={LoginHost}/>
         <Stack.Screen name="LoginGuest" component={LoginGuest}/>
@@ -121,7 +126,7 @@ export default function App() {
         <Stack.Screen name="SlotCardTest" component={SlotCardTest}/>
         <Stack.Screen name="NavBarGuest" component={NavBarGuest}/>
         <Stack.Screen name="Dashboard" component={Dashboard}/>
-        <Stack.Screen name="SettingsHost" component={SettingsHost}/>
+        {/* <Stack.Screen name="SettingsHost" component={SettingsHost}/> */}
         <Stack.Screen name="ProfileHost" component={ProfileHost}/>
         <Stack.Screen name="ProfileGuest" component={ProfileGuest}/>
         <Stack.Screen name="S3Image" component={S3Image}/>
