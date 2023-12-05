@@ -121,7 +121,7 @@ export default function LoginGuest() {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <View >
-          <GoogleSignInButton />
+          {/* <GoogleSignInButton /> */}
           {/* <GoogleSignIn /> */}
 
           </View>

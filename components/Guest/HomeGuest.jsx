@@ -156,15 +156,18 @@ const onRefresh = React.useCallback(() => {
 
   const filterHostsByMealType = () => {
     return hostList.filter((host) => {
-      return (
-        (selectedMealTypes.breakfast && host.mealTypes.includes('b')) ||
-        (selectedMealTypes.lunch && host.mealTypes.includes('l')) ||
-        (selectedMealTypes.dinner && host.mealTypes.includes('d'))||
-        (selectedMealTypes.dinner && host.mealTypes.includes(null))
-
-      );
+      return host.meals.some(meal => {
+        return (
+          (selectedMealTypes.breakfast && meal.mealType === 'b') ||
+          (selectedMealTypes.lunch && meal.mealType === 'l') ||
+          (selectedMealTypes.dinner && meal.mealType === 'd')
+          // (selectedMealTypes.dinner && meal.mealType === 'null')
+        );
+      });
     });
   };
+  
+        
 
   const filteredHosts = filterHostsByMealType();
   if (loading) {
@@ -178,19 +181,21 @@ const onRefresh = React.useCallback(() => {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-        />
-      }>
-     <ScrollView>
-        {filteredHosts.length === 0 && !showPincodeChecker ? (
+        />}
+        >
+     <View>
+        {
+        filteredHosts.length === 0 && !showPincodeChecker ? (
           <View style={styles.emptyHostMessageContainer}>
             <Text style={styles.emptyHostMessage}>No cooks available in your region! Try updating your Address.</Text>
           </View>
         ) : (
           filteredHosts.map((host, index) => (
-            <HostCard key={index} host={host.hostEntity} itemNames={host.itemNames} imageMeal={host.imageMeal}/>
-          ))
+            <HostCard key={index} host={host.hostEntity} meals={host.meals} />
+          //  <Text key={index}>hey{host.nameHost}</Text>
+            ))
         )}
-      </ScrollView>
+      </View>
     </ScrollView>
      <View style={styles.mealTypeFilter}>
     {['breakfast', 'lunch', 'dinner'].map((mealType) => (

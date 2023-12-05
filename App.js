@@ -42,6 +42,7 @@ import React, { useEffect, useState } from 'react';
 import { getFromSecureStore } from "./components/Context/SensitiveDataStorage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
+import { init } from "./components/Context/sqLiteDB";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -49,7 +50,11 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [hostList, setHostList] = React.useState([]);
   const [hasFetchedHosts, setHasFetchedHosts] = React.useState(false);
-
+  useEffect(() => {
+    init()
+      .then(() => console.log('Database initialized'))
+      .catch((err) => console.error('Database initialization failed:', err));
+  }, []);
   useEffect(() => {
       const checkCredentials = async () => {
         const token = await getFromSecureStore('token');
