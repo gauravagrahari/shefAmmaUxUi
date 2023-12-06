@@ -9,6 +9,7 @@ import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import { useNavigation } from '@react-navigation/native'; // If you're using React Navigation
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export default function ItemListGuest() {
   const { hostList } = useContext(HostContext);
@@ -33,6 +34,10 @@ export default function ItemListGuest() {
   };
 
   const toggleMealType = (mealTypeKey) => {
+    const isOnlyOneSelected = Object.values(selectedMealTypes).filter(val => val).length === 1;
+    const isCurrentTypeSelected = selectedMealTypes[mealTypeKey];
+    if (isOnlyOneSelected && isCurrentTypeSelected) return;
+
     setSelectedMealTypes({
       ...selectedMealTypes,
       [mealTypeKey]: !selectedMealTypes[mealTypeKey],
@@ -51,6 +56,7 @@ export default function ItemListGuest() {
     <View style={globalStyles.containerPrimary}>
       <NavBarGuest navigation={navigation} />
 
+
       <ScrollView>
         {hostList.map((host, index) => (
           host.meals
@@ -66,56 +72,81 @@ export default function ItemListGuest() {
         ))}
       </ScrollView>
 
-      {/* Meal Type Filter UI */}
+      
       <View style={styles.mealTypeFilter}>
-        {Object.entries(selectedMealTypes).map(([mealTypeKey, isSelected]) => (
-          <TouchableOpacity
-            key={mealTypeKey}
-            onPress={() => toggleMealType(mealTypeKey)}
+    {['breakfast', 'lunch', 'dinner'].map((mealType) => (
+      <TouchableOpacity
+        key={mealType}
+        onPress={() => toggleMealType(mealType)}
+        style={[
+          styles.mealTypeItem,
+          selectedMealTypes[mealType] ? styles.activeItem : null,
+        ]}
+      >
+        <View style={styles.mealTypeContent}>
+          {selectedMealTypes[mealType] && (
+            <View style={styles.iconWrapper}>
+              <Icon name="check" size={12} color="white" />
+            </View>
+          )}
+          <Text
             style={[
-              styles.mealTypeItem,
-              isSelected ? styles.activeItem : null,
+              styles.mealTypeText,
+              selectedMealTypes[mealType] ? styles.activeText : null,
             ]}
           >
-            <Text
-              style={[
-                styles.mealTypeText,
-                isSelected ? styles.activeText : null,
-              ]}
-            >
-              {mealTypeKey.charAt(0).toUpperCase() + mealTypeKey.slice(1)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+            {capitalize(mealType)}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    ))}
+  </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // Add styles for mealTypeFilter, mealTypeItem, mealTypeText, activeItem, activeText
   mealTypeFilter: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10,
-    backgroundColor: colors.lightGray, // Use appropriate color
-  },
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // borderTopWidth: 1,
+    // borderBottomWidth: 1,
+    // borderColor: colors.primaryText,
+  }, 
   mealTypeItem: {
-    marginHorizontal: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
+    flex: 1,
+    height: 40,
+    justifyContent: 'center',
+    backgroundColor: colors.pink, // Updated color
     borderWidth: 1,
-    borderColor: colors.darkGray, // Use appropriate color
+    borderColor: 'transparent',
   },
-  activeItem: {
-    backgroundColor: colors.pink, // Use appropriate color for active state
+  mealTypeContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconWrapper: {
+    position: 'absolute',
+    left: 8,
+    top: 8,
   },
   mealTypeText: {
-    color: colors.darkBlue, // Use appropriate text color
     fontSize: 16,
+    color: colors.darkestBlue,
+    textAlign: 'center',
+  },
+  activeItem: {
+    backgroundColor: colors.pink, // Updated color
   },
   activeText: {
-    color: colors.white, // Use appropriate text color for active state
+    fontWeight:'bold',
+    // color: '#12486B',
+    color: colors.darkestBlue,
   },
 });
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
