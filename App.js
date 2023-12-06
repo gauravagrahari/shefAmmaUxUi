@@ -30,7 +30,7 @@ import NavHost from "./components/HostSubComponent/NavHost";
 import ProfileGuest from "./components/Guest/ProfileGuest";
 import UpdateGuestDetails from "./components/Guest/UpdateGuestDetails";
 import S3Image from "./components/commonMethods/S3Image";
-import ProfileHost from "./components/Host/ProfileHost";
+// import ProfileHost from "./components/Host/ProfileHost";
 import EditTimeSlot from "./components/Host/EditTimeSlot";
 import EditItemHost from "./components/Host/EditItemHost";
 import EditDetailsHost from "./components/Host/EditDetailsHost";
@@ -43,6 +43,7 @@ import { getFromSecureStore } from "./components/Context/SensitiveDataStorage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
 import { init } from "./components/Context/sqLiteDB";
+import ItemListGuest from "./components/Guest/ItemListGuest";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [hostList, setHostList] = React.useState([]);
   const [hasFetchedHosts, setHasFetchedHosts] = React.useState(false);
+  
   useEffect(() => {
     init()
       .then(() => console.log('Database initialized'))
@@ -127,7 +129,7 @@ export default function App() {
         <Stack.Screen name="NavBarGuest" component={NavBarGuest}/>
         <Stack.Screen name="Dashboard" component={Dashboard}/>
         {/* <Stack.Screen name="SettingsHost" component={SettingsHost}/> */}
-        <Stack.Screen name="ProfileHost" component={ProfileHost}/>
+        {/* <Stack.Screen name="ProfileHost" component={ProfileHost}/> */}
         <Stack.Screen name="ProfileGuest" component={ProfileGuest}/>
         <Stack.Screen name="S3Image" component={S3Image}/>
         <Stack.Screen name="TestProfileHost" component={TestProfileHost}/>
@@ -135,6 +137,7 @@ export default function App() {
         <Stack.Screen name="EditTimeSlot" component={EditTimeSlot}/>
         <Stack.Screen name="EditItemHost" component={EditItemHost}/>
         <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/>
+        <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
       </Stack.Navigator>
     </NavigationContainer>
     </HostProvider>

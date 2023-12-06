@@ -226,7 +226,6 @@ const onRefresh = React.useCallback(() => {
     ))}
   </View>
   {showPincodeChecker && <CheckPincode onClose={() => setShowPincodeChecker(false)} />}
-
      </View>
   );
 }

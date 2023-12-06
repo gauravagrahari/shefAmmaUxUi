@@ -2,7 +2,7 @@
 import { URL } from '@env';
 
 const config = {
-  URL: 'http://192.168.63.128:9090', // Provide a default value if URL is not defined
+  URL: 'http://192.168.233.128:9090', // Provide a default value if URL is not defined
   // URL: URL || 'http://192.168.54.128:9090', // Provide a default value if URL is not defined
   // ... other config settings ...
 };

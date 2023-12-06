@@ -1,0 +1,202 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { globalStyles, colors } from '../commonMethods/globalStyles'; // Update path as needed
+import { useNavigation } from '@react-navigation/native';
+import StarRating from '../commonMethods/StarRating';
+import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
+
+const screenWidth = Dimensions.get('window').width;
+const dpDimension = screenWidth * 0.25; 
+  
+const ItemListCard = ({ item, host }) => {
+    const [imageUri, setImageUri] = useState(null);
+    const navigation = useNavigation();
+  
+    useEffect(() => {
+        const fetchImage = async () => {
+          let url = await getImageUrl(item.dp);
+          if (!url) {
+            url = await Storage.get(item.dp);
+            await storeImageUrl(item.dp, url);
+          }
+          setImageUri(url);
+        };
+    
+        fetchImage();
+      }, [item.dp]);
+  
+    const getMealTypeFullText = (type) => {
+      switch (type) {
+        case 'b': return 'Breakfast';
+        case 'l': return 'Lunch';
+        case 'd': return 'Dinner';
+        default: return type;
+      }
+    };
+  
+    const handleHostCardClick = () => {
+        // Navigate to HostProfileGuest
+        navigation.navigate('HostProfileMealGuest', {
+          host: host,
+          itemList: item,
+        });
+      };
+    return (
+        <TouchableOpacity onPress={handleHostCardClick}>
+        <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={{marginBottom:4}}>
+      <View style={styles.containerVertical}>
+            <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.itemImage}
+              source={{ uri: imageUri }}
+              onError={(error) => console.error("Image Error", error)}
+            />
+          </View>
+          <View style={styles.hostInfo}>
+          <View style={styles.nameAndIndicator}>
+            <Text style={globalStyles.textPrimary}>{item.nameItem}</Text>
+            <View style={[styles.indicatorBox, item.vegetarian ? styles.vegBox : styles.nonVegBox]}>
+            <View style={[styles.vegIndicator, item.vegetarian ? styles.veg : styles.nonVeg]} />
+            </View>
+          </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={globalStyles.textSecondary} numberOfLines={1}>
+                {host.nameHost}
+              </Text>
+              {host.ratingHost && <StarRating style={styles.rating} rating={host.ratingHost} />}
+            </View>
+
+          <View style={styles.mealTypeAndAmount}>
+            <Text style={styles.mealType}>{getMealTypeFullText(item.mealType)}</Text>
+            <Text style={styles.highlightedText}>{`${item.amount}`}/-</Text>
+          </View>
+          </View>
+          </View>
+
+          <View style={styles.detailConatiner}>
+         <Text style={styles.detail}>{item.description}</Text>
+           </View>
+           </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
+
+
+const styles = StyleSheet.create({
+    container: {
+        // marginBottom: 4,
+        // shadowColor: colors.pink,
+        // shadowOffset: { width: 0, height: 3 },
+        // shadowOpacity: 0.2,
+        // shadowRadius: 3,
+        elevation: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 5,
+    },
+    containerVertical: {
+        flexDirection: 'column',
+        // alignItems: 'center',
+        // padding: 1,
+    },
+    mealTypeAndAmount: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      mealType:{
+          fontSize: screenWidth * 0.035,
+  color: colors.deepBlue,
+  marginBottom: 3,
+      },
+    imageContainer: {
+        width: dpDimension,
+        height: dpDimension,
+        marginRight: 10,
+    },
+    indicatorBox: {
+        width: 14,
+        height: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 5,
+      },
+      vegIndicator: {
+        width: 9,
+        height: 9,
+        borderRadius: 5,
+      },
+      vegBox: {
+        backgroundColor: 'transparent',
+        borderWidth:1,
+        borderColor: 'green',
+      },
+      nonVegBox: {
+        backgroundColor: 'transparent',
+        borderWidth:1,
+        borderColor: 'red',
+      },
+      veg: {
+        backgroundColor: 'green',
+      },
+      nonVeg: {
+        backgroundColor: 'red',
+      },
+      highlightedText: {
+        fontWeight: 'bold',
+        color: colors.darkPink,
+        fontSize:16
+      },
+    itemImage: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+        marginLeft: 5,
+    },
+    nameAndIndicator: {
+        flexDirection: 'row',
+        alignItems: 'center',
+      },
+    hostInfo: {
+        flex: 1,
+        flexDirection: 'column',
+        padding: screenWidth * 0.02,
+    },
+    name: {
+        fontSize: screenWidth * 0.04,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    nameItem: {
+        color: "#1BCCBA",
+        fontSize: screenWidth * 0.045,
+        marginBottom: 5,
+    },
+    address: {
+        fontSize: screenWidth * 0.033,
+        color: colors.deepBlue,
+        marginBottom: 3,
+    },
+
+    detailConatiner:{
+        marginLeft: 15,
+margin:5,
+// borderTopColor: colors.deepBlue,
+// borderTopWidth: 1,
+paddingTop: 5,
+    },
+
+    detail: {
+        fontSize: screenWidth * 0.035,
+        marginBottom: 2,
+        color:colors.pink,
+        // Additional styling for other details
+    },
+    // Add other styles as needed
+});
+
+export default ItemListCard;
