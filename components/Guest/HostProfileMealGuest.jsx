@@ -264,11 +264,16 @@ finally {
 return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container}>
+  <Text style={styles.descriptionHost}>
+          {host.descriptionHost}
+        </Text>
         <NavBarMeals 
           selectedMealType={selectedMealType} 
           onSelectMealType={setSelectedMealType} 
           servedMeals={servedMeals} 
         />
+
+      
       {getSelectedItem() && <ItemCard item={getSelectedItem()} />}
 {/* <View style={styles.capacityContainer}>
 
@@ -402,10 +407,19 @@ onRequestClose={() => {
 
 const styles = StyleSheet.create({
   container: {
+  
       flex: 1,
       // padding: 10,
       // backgroundColor: colors.darkestBlue,
       backgroundColor: colors.primaryLight, // Slightly off-white for a more professional look
+  },
+  descriptionHost: {
+    // backgroundColor: bgColor,
+    fontSize: 14,
+    padding: 10,
+    fontFamily: 'sans-serif', // Use a system font
+    color: colors.darkPink, 
+    
   },
   title: {
       fontSize: 20,

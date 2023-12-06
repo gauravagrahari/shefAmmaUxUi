@@ -9,22 +9,34 @@ import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 const screenWidth = Dimensions.get('window').width;
 const dpDimension = screenWidth * 0.25; 
   
-const ItemListCard = ({ item, host }) => {
+const ItemListCard = ({ item, host,handleHostCardClick  }) => {
     const [imageUri, setImageUri] = useState(null);
     const navigation = useNavigation();
   
     useEffect(() => {
-        const fetchImage = async () => {
+      const fetchImage = async () => {
+        if (!item.dp) {
+          console.error('No image path provided for item:', item);
+          return;
+        }
+    
+        try {
           let url = await getImageUrl(item.dp);
           if (!url) {
             url = await Storage.get(item.dp);
             await storeImageUrl(item.dp, url);
           }
           setImageUri(url);
-        };
+        } catch (error) {
+          console.error('Error fetching image:', error);
+        }
+      };
     
+      if (item.dp) {
         fetchImage();
-      }, [item.dp]);
+      }
+    }, [item.dp]);
+    
   
     const getMealTypeFullText = (type) => {
       switch (type) {
@@ -35,13 +47,6 @@ const ItemListCard = ({ item, host }) => {
       }
     };
   
-    const handleHostCardClick = () => {
-        // Navigate to HostProfileGuest
-        navigation.navigate('HostProfileMealGuest', {
-          host: host,
-          itemList: item,
-        });
-      };
     return (
         <TouchableOpacity onPress={handleHostCardClick}>
         <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={{marginBottom:4}}>
@@ -57,8 +62,8 @@ const ItemListCard = ({ item, host }) => {
           <View style={styles.hostInfo}>
           <View style={styles.nameAndIndicator}>
             <Text style={globalStyles.textPrimary}>{item.nameItem}</Text>
-            <View style={[styles.indicatorBox, item.vegetarian ? styles.vegBox : styles.nonVegBox]}>
-            <View style={[styles.vegIndicator, item.vegetarian ? styles.veg : styles.nonVeg]} />
+            <View style={[styles.indicatorBox, item.vegetarian==="true" ? styles.vegBox : styles.nonVegBox]}>
+            <View style={[styles.vegIndicator, item.vegetarian==="true" ? styles.veg : styles.nonVeg]} />
             </View>
           </View>
 
@@ -191,7 +196,7 @@ paddingTop: 5,
     },
 
     detail: {
-        fontSize: screenWidth * 0.035,
+        fontSize: screenWidth * 0.036,
         marginBottom: 2,
         color:colors.pink,
         // Additional styling for other details
