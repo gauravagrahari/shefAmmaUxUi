@@ -14,6 +14,7 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Loader from "../commonMethods/Loader";
 import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView, RefreshControl } from "react-native";
+import MealTypeFilter from "../commonMethods/MealTypeFilter";
 
 const URL = config.URL;
 const windowWidth = Dimensions.get('window').width;
@@ -197,34 +198,10 @@ const onRefresh = React.useCallback(() => {
         )}
       </View>
     </ScrollView>
-     <View style={styles.mealTypeFilter}>
-    {['breakfast', 'lunch', 'dinner'].map((mealType) => (
-      <TouchableOpacity
-        key={mealType}
-        onPress={() => toggleMealType(mealType)}
-        style={[
-          styles.mealTypeItem,
-          selectedMealTypes[mealType] ? styles.activeItem : null,
-        ]}
-      >
-        <View style={styles.mealTypeContent}>
-          {selectedMealTypes[mealType] && (
-            <View style={styles.iconWrapper}>
-              <Icon name="check" size={12} color="white" />
-            </View>
-          )}
-          <Text
-            style={[
-              styles.mealTypeText,
-              selectedMealTypes[mealType] ? styles.activeText : null,
-            ]}
-          >
-            {capitalize(mealType)}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    ))}
-  </View>
+    <MealTypeFilter
+      selectedMealTypes={selectedMealTypes}
+      toggleMealType={toggleMealType}
+    />
   {showPincodeChecker && <CheckPincode onClose={() => setShowPincodeChecker(false)} />}
      </View>
   );

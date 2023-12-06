@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native'; // If you're using Rea
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import MealTypeFilter from '../commonMethods/MealTypeFilter';
 
 export default function ItemListGuest() {
   const { hostList } = useContext(HostContext);
@@ -73,34 +74,10 @@ export default function ItemListGuest() {
       </ScrollView>
 
       
-      <View style={styles.mealTypeFilter}>
-    {['breakfast', 'lunch', 'dinner'].map((mealType) => (
-      <TouchableOpacity
-        key={mealType}
-        onPress={() => toggleMealType(mealType)}
-        style={[
-          styles.mealTypeItem,
-          selectedMealTypes[mealType] ? styles.activeItem : null,
-        ]}
-      >
-        <View style={styles.mealTypeContent}>
-          {selectedMealTypes[mealType] && (
-            <View style={styles.iconWrapper}>
-              <Icon name="check" size={12} color="white" />
-            </View>
-          )}
-          <Text
-            style={[
-              styles.mealTypeText,
-              selectedMealTypes[mealType] ? styles.activeText : null,
-            ]}
-          >
-            {capitalize(mealType)}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    ))}
-  </View>
+      <MealTypeFilter
+      selectedMealTypes={selectedMealTypes}
+      toggleMealType={toggleMealType}
+    />
     </View>
   );
 }
