@@ -75,7 +75,7 @@ justifyContent: 'center',
     fontSize: screenWidth * 0.047,
     // fontWeight: 'bold',
     marginBottom: 1,
-    marginLeft:3,
+    marginLeft:2,
   },
   textSecondary: {
     // color:"#820000",

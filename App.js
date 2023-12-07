@@ -43,6 +43,7 @@ import { getFromSecureStore } from "./components/Context/SensitiveDataStorage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
 import { init } from "./components/Context/sqLiteDB";
+import ItemListGuest from "./components/Guest/ItemListGuest";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [hostList, setHostList] = React.useState([]);
   const [hasFetchedHosts, setHasFetchedHosts] = React.useState(false);
+  
   useEffect(() => {
     init()
       .then(() => console.log('Database initialized'))
@@ -133,8 +135,9 @@ export default function App() {
         {/* <Stack.Screen name="TestProfileHost" component={TestProfileHost}/> */}
         {/* <Stack.Screen name="TestEditableText" component={TestEditableText}/>
         <Stack.Screen name="EditTimeSlot" component={EditTimeSlot}/>
-        <Stack.Screen name="EditItemHost" component={EditItemHost}/> */}
-        {/* <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/> */}
+        <Stack.Screen name="EditItemHost" component={EditItemHost}/>
+        <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/>*/}
+        <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
       </Stack.Navigator>
     </NavigationContainer>
     </HostProvider>

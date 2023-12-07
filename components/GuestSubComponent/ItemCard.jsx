@@ -41,14 +41,10 @@ const fetchImage = async () => {
     <View style={styles.details}>
       <View style={styles.nameItemContainer}>
         <Text style={styles.nameItem}>{item.nameItem}</Text>
-        <View
-          style={[
-            styles.vegetarianIndicatorContainer,
-            item.vegetarian ? styles.vegetarianTrue : styles.vegetarianFalse,
-          ]}
-        >
-          <View style={styles.vegetarianIndicator} />
-        </View>
+        <View style={[styles.indicatorBox, item.vegetarian==="true" ? styles.vegBox : styles.nonVegBox]}>
+            <View style={[styles.vegIndicator, item.vegetarian==="true" ? styles.veg : styles.nonVeg]} />
+            </View>
+
       </View>
       {/* <Text style={styles.specialIngredient}>{item.specialIngredient}</Text>
       <Text style={styles.dishCategory}>{item.dishCategory}</Text> */}
@@ -87,6 +83,34 @@ const styles = StyleSheet.create({
      // borderTopWidth: 1,
     // borderTopColor: '#ccc',
   },
+  indicatorBox: {
+    width: 14,
+    height: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 5,
+  },
+  vegIndicator: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+  },
+  vegBox: {
+    backgroundColor: 'transparent',
+    borderWidth:1,
+    borderColor: 'green',
+  },
+  nonVegBox: {
+    backgroundColor: 'transparent',
+    borderWidth:1,
+    borderColor: 'red',
+  },
+  veg: {
+    backgroundColor: 'green',
+  },
+  nonVeg: {
+    backgroundColor: 'red',
+  },
   nameItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -115,28 +139,7 @@ const styles = StyleSheet.create({
 color:colors.deepBlue,
 
   },
-  vegetarianIndicatorContainer: {
-    marginLeft: 8, // spacing between name and indicator
-    width: 13,
-    height: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4, // slight rounding of corners
-    borderWidth: 1, // width of the hollow square border
-  },
-  vegetarianIndicator: {
-    width: 5,
-    height: 5,
-    borderRadius: 1,
-  },
-  vegetarianTrue: {
-    backgroundColor: 'green',
-    borderColor: 'green', // color of the hollow square border for vegetarian
-  },
-  vegetarianFalse: {
-    backgroundColor: 'red',
-    borderColor: 'red', // color of the hollow square border for non-vegetarian
-  },
+ 
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',

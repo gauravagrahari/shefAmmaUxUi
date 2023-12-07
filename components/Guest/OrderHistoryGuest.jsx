@@ -59,25 +59,36 @@ export default function OrderHistoryGuest({ navigation }) {
   }
 
   return (
-    <ScrollView style={globalStyles.containerPrimary}>
-      <NavBarGuest navigation={navigation} />
-      {orderList.length === 0 ? (
-        <View style={styles.centered}>
-          <Text style={styles.centered}>No orders available to display.</Text>
-        </View>
-      ) : (
-        orderList
-          .sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
-          .map((eachOrder) => (
-            <OrderCard key={eachOrder.timeStamp} order={eachOrder} isHost={false} />
-          ))
-      )}
-    </ScrollView> 
+    <View style={styles.container}>
+      <NavBarGuest style={styles.navbar} />
+      <ScrollView style={globalStyles.containerPrimary}>
+        {orderList.length === 0 ? (
+          <View style={styles.centered}>
+            <Text>No orders available to display.</Text>
+          </View>
+        ) : (
+          orderList
+            .sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
+            .map((eachOrder) => (
+              <OrderCard key={eachOrder.timeStamp} order={eachOrder} isHost={false} />
+            ))
+        )}
+      </ScrollView> 
+    </View>
   );
-  
-}
+};
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  navbar: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  },
   centered: {
     fontSize: 20,
     color: colors.darkestBlue,

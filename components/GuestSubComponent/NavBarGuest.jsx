@@ -13,9 +13,11 @@ export default function NavBarGuest() {
   return (
     <View style={styles.navbar}>
       {renderIcon('HomeGuest', 'home-outline', Ionicons, 25)}
-      {renderIcon('SearchGuest', 'search', Ionicons, 24)}
-      {renderIcon('UpdateGuestDetails', 'person-outline', Ionicons, 25)}
-      {renderIcon('OrderHistoryGuest', 'list-outline', Ionicons, 25)}
+      {/* {renderIcon('SearchGuest', 'search', Ionicons, 24)} */}
+      {renderIcon('ItemListGuest', 'restaurant-menu', MaterialIcons, 25)} 
+      {renderIcon('UpdateGuestDetails', 'person-circle-outline', Ionicons, 25)}
+{renderIcon('OrderHistoryGuest', 'receipt-long', MaterialIcons, 25)}
+
       {renderIcon('SettingsGuest', 'settings-outline', Ionicons, 25)}
     </View>
   );
