@@ -210,9 +210,9 @@ const options = {
         <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneGuest}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => dialNumber(orderData.phoneGuest)} style={styles.phoneContainer}>
+        <TouchableOpacity onPress={() => dialNumber(orderData.phoneGuestAlt)} style={styles.phoneContainer}>
         <Icon name="call-outline" size={20} color={colors.primaryText} />
-        <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.alternateMobile}</Text>
+        <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneGuestAlt}</Text>
         </TouchableOpacity>
  
         <TouchableOpacity 
@@ -271,7 +271,7 @@ const options = {
      {orderData.status === "ip" && (
                 <View style={globalStyles.centralisingContainer}>
       <TouchableOpacity style={styles.completeOrderButton} onPress={() => setModalVisible(true)}>
-        <Text style={styles.pickupOrderText}>Order Picked Up</Text>
+        <Text style={styles.completeOrderText}>Order Picked Up</Text>
       </TouchableOpacity>
       </View>
     )}
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     padding: 12,
-    marginBottom: 5,
+    marginBottom: 7,
     backgroundColor: colors.darkBlue,
     borderRadius: 8,
     shadowColor: '#aaa',

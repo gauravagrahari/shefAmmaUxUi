@@ -55,7 +55,6 @@ export default function HostProfileMealGuest({ route }) {
   const [preferredTime, setPreferredTime] = useState('');
   const [servedMeals, setServedMeals] = useState([]);
   const [isOrdering, setIsOrdering] = useState(false);
-
   useEffect(() => {
     setMealCount(0);
 }, [selectedMealType]);
@@ -129,45 +128,44 @@ useEffect(() => {
   fetchCapacityData();
 }, []);
 
+const fetchCharges = async () => {
+  try {
+    const token = await getFromSecureStore('token');
+    const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const chargesData = chargesResponse.data;
+    setDeliveryCharge(parseFloat(chargesData.deliveryCharges));
+    console.log('fetched------------------->');
+    setPackagingCharge(parseFloat(chargesData.packagingCharges) + parseFloat(chargesData.handlingCharges));
+    setDiscount(parseFloat(chargesData.discount));
+    await storeInSecureStore('charges', chargesData);
+  } catch (error) {
+    console.error('Failed to fetch charges:', error);
+    throw error;
+  }
+};
 
 useEffect(() => {
-    const fetchChargesFromStore = async () => {
-      let charges = await getFromSecureStore('charges');
-      const token = await getFromSecureStore('token');
-
-      
-//   setCharges(charges);
-      if (!charges) {
-        try {
-          const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add your bearer token here
-            },
-          });          console.log('Received charges from server:', chargesResponse.data);
-          charges = chargesResponse.data;
-  
-          // Storing the received charges data in SecureStore for future uses
-          await storeInSecureStore('charges', charges);
-        } catch (error) {
-          console.error('Failed to fetch charges from the server:', error);
-        }
-      }
-  
-      if (charges) {
-        setDeliveryCharge(parseFloat(charges.deliveryCharges));
-        setPackagingCharge(parseFloat(charges.packagingCharges) + parseFloat(charges.handlingCharges));
-        setDiscount(parseFloat(charges.discount));
-      }
-    };
-  
-    fetchChargesFromStore();
-  }, []);  
+  const fetchChargesFromStore = async () => {
+    const charges = await getFromSecureStore('charges');
+    if (!charges) {
+      await fetchCharges();
+    } else {
+      setDeliveryCharge(parseFloat(charges.deliveryCharges));
+      setPackagingCharge(parseFloat(charges.packagingCharges) + parseFloat(charges.handlingCharges));
+      setDiscount(parseFloat(charges.discount));
+    }
+  };
+  fetchChargesFromStore();
+}, []); 
 
   useEffect(() => {
     const selectedItem = getSelectedItem();
     if (selectedItem) {
       //  setMealCount(1);
         const newMealTotal = parseFloat(selectedItem.amount) * mealCount;
+
         setMealTotal(newMealTotal);
 
         const overallTotal = newMealTotal + deliveryCharge + packagingCharge - discount;
@@ -188,6 +186,21 @@ useEffect(() => {
     }
   
     setIsOrdering(true);
+   
+    if (!deliveryCharge || !packagingCharge) {
+      try {
+        await fetchCharges();
+        if (!deliveryCharge || !packagingCharge) {
+          alert("Unable to fetch delivery and packaging charges. Please try again.");
+          setIsOrdering(false);
+          return;
+        }
+      } catch (error) {
+        alert("An error occurred while fetching charges. Please try again.");
+        setIsOrdering(false);
+        return;
+      }
+    }
     const selectedItem = getSelectedItem();
     if (!selectedItem) {
         console.error("No selected item found");
@@ -215,6 +228,7 @@ useEffect(() => {
       geoGuest: guestDetails.geocode,
       nameHost:host.nameHost,
       phoneGuest:phone,
+      phoneGuestAlt:altPhone,
       phoneHost:host.phone,
       geoHost:host.geocode,
       uuidHost:host.uuidHost,
@@ -227,6 +241,9 @@ useEffect(() => {
       delTimeAndDay: orderDelTimeAndDay,
       delAddress:defaultAddress,
       preferredTime,
+      amtDelivery:deliveryCharge,
+      amtPackaging:packagingCharge,
+      amtCook:mealTotal,
   };
 
   try {
