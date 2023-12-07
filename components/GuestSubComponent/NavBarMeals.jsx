@@ -53,12 +53,14 @@ const styles = StyleSheet.create({
     // padding: 5,
     backgroundColor: colors.darkBlue, // dark blue-gray
     // borderRadius:10,
-    marginBottom:1
+    marginBottom:1,
+    margin:1,
+    borderRadius: 10,
   },
   navbarItem: {
     paddingVertical: 13,
     paddingHorizontal: 20,
-    // borderRadius: 20,
+  
     // backgroundColor: '#34495E', // light blue-gray
   },
   navbarItemSelected: {

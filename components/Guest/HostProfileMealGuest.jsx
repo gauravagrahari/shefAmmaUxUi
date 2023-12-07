@@ -13,6 +13,7 @@ import MealTimeMessage from "../GuestSubComponent/MealTimeMessage";
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import MessageCard from "../commonMethods/MessageCard";
 import { LinearGradient } from "expo-linear-gradient";
+import StarRating from "../commonMethods/StarRating";
 
 const URL = config.URL; 
 
@@ -281,9 +282,19 @@ finally {
 return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container}>
-  <Text style={styles.descriptionHost}>
-          {host.descriptionHost}
-        </Text>
+
+  <View style={styles.hostInfoContainer}>
+  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+
+        <Text style={styles.hostName}>{host.nameHost}</Text>
+        {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}
+        </View>
+        <Text style={styles.address}>
+            {host.addressHost.city}, {host.addressHost.state}
+          </Text>
+        <Text style={styles.descriptionHost}>{host.descriptionHost}</Text>
+      </View>
+
         <NavBarMeals 
           selectedMealType={selectedMealType} 
           onSelectMealType={setSelectedMealType} 
@@ -325,17 +336,17 @@ return (
   )}
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Meal Price:</Text>
-      <Text style={styles.costValueText}>{mealTotal.toFixed(2)}</Text>
+      <Text style={styles.costValueText}>{mealTotal.toFixed(2)}/-</Text>
   </View>
 
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Delivery Charges:</Text>
-      <Text style={styles.costValueText}>{deliveryCharge.toFixed(2)}</Text>
+      <Text style={styles.costValueText}>{deliveryCharge.toFixed(2)}/-</Text>
   </View>
 
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Packaging and Handling Charges:</Text>
-      <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}</Text>
+      <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}/-</Text>
   </View>
   {mealCount > 0 && (
   <View style={styles.costRow}>
@@ -345,12 +356,12 @@ return (
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Total Amount:</Text>
-      <Text style={styles.finalAmountText}>{totalAmount.toFixed(2)}</Text>
+      <Text style={styles.finalAmountText}>{totalAmount.toFixed(2)}/-</Text>
   </View>)}
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Payment:</Text>
-      <Text style={styles.finalAmountText}>Cash On Delivery</Text>
+      <Text style={styles.finalAmountText}>Pay On Delivery</Text>
   </View>)}
 </View>
 <MealTimeMessage
@@ -430,13 +441,38 @@ const styles = StyleSheet.create({
       // backgroundColor: colors.darkestBlue,
       backgroundColor: colors.primaryLight, // Slightly off-white for a more professional look
   },
-  descriptionHost: {
-    // backgroundColor: bgColor,
-    fontSize: 14,
-    padding: 10,
-    fontFamily: 'sans-serif', // Use a system font
-    color: colors.darkPink, 
+  // descriptionHost: {
+  //   // backgroundColor: bgColor,
+  //   fontSize: 14,
+  //   padding: 10,
+  //   fontFamily: 'sans-serif', // Use a system font
+  //   color: colors.darkPink, 
     
+  // },
+  hostInfoContainer: {
+    margin:1,
+    // marginBottom:5,
+    padding: 10,
+    backgroundColor: colors.pink, // Light grey background
+    borderRadius:5,
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#e1e1e1', // Light border for separation
+  },
+  address: {
+    fontSize: 14,
+    color: 'lightgray',
+    marginBottom: 6,
+  },
+  hostName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.primaryLight, // Dark text for the name
+    // marginBottom: 5, // Space between name and description
+  },
+  descriptionHost: {
+    fontSize: 15,
+    color: 'white', // Slightly lighter text for the description
+    lineHeight: 18, // For better readability in multi-line text
   },
   title: {
       fontSize: 20,
