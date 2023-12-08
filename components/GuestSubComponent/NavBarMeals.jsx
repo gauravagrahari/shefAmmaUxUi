@@ -54,8 +54,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkBlue, // dark blue-gray
     // borderRadius:10,
     marginBottom:1,
-    margin:1,
+    // margin:1,
     borderRadius: 10,
+    borderTopWidth:3,
+borderTopColor:colors.pink,
   },
   navbarItem: {
     paddingVertical: 13,

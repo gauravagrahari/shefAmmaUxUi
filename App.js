@@ -44,6 +44,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
 import { init } from "./components/Context/sqLiteDB";
 import ItemListGuest from "./components/Guest/ItemListGuest";
+import { AddressProvider } from "./components/Context/AddressContext";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -98,6 +99,7 @@ export default function App() {
 
   return (
     <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>
+         <AddressProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="HomeGuest" component={HomeGuest}/>
@@ -140,6 +142,7 @@ export default function App() {
         <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
       </Stack.Navigator>
     </NavigationContainer>
+    </AddressProvider>
     </HostProvider>
   );
 }

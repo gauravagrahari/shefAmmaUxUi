@@ -19,8 +19,8 @@ export default function HostCard({ host, meals }) {
   const imageMeal = useMemo(() => meals.map(meal => meal.dp), [meals]);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [imageUrl, setImageUrl] = useState(null); // State to hold the fetched image URL
-  const [isTruncated, setIsTruncated] = useState(true);
-   const truncatedDescription = isTruncated ? `${host.descriptionHost.split(' ').slice(0, -3).join(' ')}...` : host.descriptionHost;
+  // const [isTruncated, setIsTruncated] = useState(true);
+  //  const truncatedDescription = isTruncated ? `${host.descriptionHost.split(' ').slice(0, -3).join(' ')}...` : host.descriptionHost;
 
   const navigation = useNavigation();
   const toggleDescription = () => {

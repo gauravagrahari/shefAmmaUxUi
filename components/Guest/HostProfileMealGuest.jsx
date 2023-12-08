@@ -14,6 +14,7 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import MessageCard from "../commonMethods/MessageCard";
 import { LinearGradient } from "expo-linear-gradient";
 import StarRating from "../commonMethods/StarRating";
+// import { LinearGradient } from 'expo-linear-gradient';
 
 const URL = config.URL; 
 
@@ -249,31 +250,42 @@ useEffect(() => {
 
   try {
     const token = await getFromSecureStore('token');
-
     console.log(`Order sent was: ${JSON.stringify(orderData)}`);
-console.log('capacity'+capacityData.capacityUuid);
-      const response = await axios.post(`${URL}/guest/order`, orderData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add your bearer token here
-      capacityUuid:capacityData.uuidCapacity,
-        },
-      });
-      // const response = await axios.post("http://192.168.79.128:9090/guest/order", orderData);
+    console.log('capacity', capacityData.capacityUuid);
+
+    const response = await axios.post(`${URL}/guest/order`, orderData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        capacityUuid:capacityData.uuidCapacity,
+            },
+    });
+
+    if (response.status === 200) {
+      // Order placed successfully
       console.log(response.data);
       setOrderPlaced(true);
       setModalVisible(false);
-
-  } catch (error) {
-    console.error('Error:', error.message);
-    if (error.response) {
-        console.error('Server Response:', error.response.data);
-        console.error('Server Status:', error.response.status);
-        console.error('Server Headers:', error.response.headers);
-    } else if (error.request) {
-        console.error('Request made by client:', error.request);
+    } else {
+      // Handle other successful responses with different status codes if needed
     }
-}
+  } catch (error) {
+    if (error.response) {
+      console.error('Server Response:', error.response.data);
+      console.error('Server Status:', error.response.status);
+      console.error('Server Headers:', error.response.headers);
+      console.log('Complete Server Response:', error.response);
+
+      // Display error message from the server
+      alert(error.response.data); // This will display the custom error message from your controller
+    } else if (error.request) {
+      console.error('Request made by client:', error.request);
+      // Display a generic error message
+      alert("An error occurred while placing the order. Please try again.");
+    } else {
+      console.error('Error:', error.message);
+      alert("An unexpected error occurred.");
+    }
+  } 
 finally {
   setIsOrdering(false); // Reset isOrdering after order process is complete
 }
@@ -283,7 +295,8 @@ return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container}>
 
-  <View style={styles.hostInfoContainer}>
+
+  <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 
         <Text style={styles.hostName}>{host.nameHost}</Text>
@@ -293,7 +306,9 @@ return (
             {host.addressHost.city}, {host.addressHost.state}
           </Text>
         <Text style={styles.descriptionHost}>{host.descriptionHost}</Text>
-      </View>
+      </LinearGradient>
+
+
 
         <NavBarMeals 
           selectedMealType={selectedMealType} 
@@ -450,28 +465,28 @@ const styles = StyleSheet.create({
     
   // },
   hostInfoContainer: {
-    margin:1,
+    // margin:1,
     // marginBottom:5,
     padding: 10,
-    backgroundColor: colors.pink, // Light grey background
+    // backgroundColor: colors.prima, // Light grey background
     borderRadius:5,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#e1e1e1', // Light border for separation
+    // borderBottomWidth: 3,
+    // borderBottomColor: colors.pink, // Light border for separation
   },
   address: {
     fontSize: 14,
-    color: 'lightgray',
+    color: 'gray',
     marginBottom: 6,
   },
   hostName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: colors.primaryLight, // Dark text for the name
+    color: colors.pink, // Dark text for the name
     // marginBottom: 5, // Space between name and description
   },
   descriptionHost: {
-    fontSize: 15,
-    color: 'white', // Slightly lighter text for the description
+    fontSize: 14,
+    color: colors.deepBlue, // Slightly lighter text for the description
     lineHeight: 18, // For better readability in multi-line text
   },
   title: {

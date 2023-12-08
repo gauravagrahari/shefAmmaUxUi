@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView, Dimensions
 } from 'react-native';
@@ -15,9 +15,12 @@ import Loader from '../commonMethods/Loader';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
 import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { AddressContext } from '../Context/AddressContext';
 
 const URL = config.URL;
 export default function UpdateGuestDetails() {
+  const { updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
+
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState('primary');
   const [fullName, setFullName] = useState('');
@@ -92,43 +95,46 @@ export default function UpdateGuestDetails() {
     fetchDefaultAddress();
 }, []);
 
-const setDefaultAddress = async () => {
-  const defaultAddress = await getFromAsync('defaultAddress');
-  if (!defaultAddress) {
-    setMessageText("You have not added or updated your address. Please update it.");
-    setMessageCardVisible(true);
-    await storeInAsync('defaultAddress', 'primary');
+const handleRadioChange = async (value) => {
+  setSelectedAddress(value);
+  console.log("UpdateGuestDetails: Radio button selected", value);
+
+  let updatedAddress = {}; // Initialize an empty object
+
+  if (value === 'primary') {
+      updatedAddress = {
+          street: street || '',
+          houseName: houseName || '',
+          city: city || '',
+          state: state || '',
+          pinCode: pinCode || ''
+      };
+      setMessageText("Refresh the Home Screen to find meals near this Default Address!");
+      setMessageCardVisible(true);
+      // Update context
+      updateAddressInContext('primary', updatedAddress);
+  } else if (value === 'office') {
+      updatedAddress = {
+          street: officeStreet || '',
+          houseName: officeHouseName || '',
+          city: officeCity || '',
+          state: officeState || '',
+          pinCode: officePinCode || ''
+      };
+      setMessageText("Refresh the Home Screen to find meals near this Default Address!");
+      setMessageCardVisible(true);
+      // Update context
+      updateAddressInContext('secondary', updatedAddress);
   }
-  setSelectedAddress(defaultAddress || 'primary');
+
+  console.log("UpdateGuestDetails: Updating context with", value, updatedAddress);
+  updateAddressInContext(value === 'primary' ? 'primary' : 'secondary', updatedAddress);
+  setDefaultAddressInContext(value);
+
+  // Store in Async Storage (if needed)
+  await storeInAsync('defaultAddress', updatedAddress);
 };
 
-  
-  const handleRadioChange = async (value) => {
-    setSelectedAddress(value);
-    if (value === 'primary') {
-      const address = {
-        street: street || '',
-        houseName: houseName || '',
-        city: city || '',
-        state: state || '',
-        pinCode: pinCode || ''
-      };
-      await storeInAsync('defaultAddress', address);
-      const defaultAddress= await  getFromAsync('defaultAddress');
-      console.log("Default Adress of guest "+defaultAddress.pinCode);
-    } else if (value === 'office') {
-      const address = {
-        street: officeStreet || '',
-        houseName: officeHouseName || '',
-        city: officeCity || '',
-        state: officeState || '',
-        pinCode: officePinCode || ''
-      };
-      await storeInAsync('defaultAddress', address);
-      const defaultAddress= await  getFromAsync('defaultAddress');
-      console.log("Default Adress of guest "+defaultAddress.pinCode);
-    }
-  };
   useEffect(() => {
     const fetchGuestDetails = async () => {
       setIsLoading(true);
@@ -140,7 +146,6 @@ const setDefaultAddress = async () => {
         if (cachedGuestDetails  && cachedAltPhone) {
           // Since the data is already an object, there's no need to parse it
           guestData = cachedGuestDetails;
-          console.log("from cache");
         } else {
           // If not present in cache, make a server request
           const storedUuidGuest = await getFromSecureStore('uuidGuest');
@@ -153,7 +158,6 @@ const setDefaultAddress = async () => {
           };
           const response = await axios.get(`${URL}/guest/getGuestUsingPk`, responseConfig);
           guestData = response.data;
-          console.log("from call");
 
           // Update the cache with new data
           await storeInAsync('guestDetails', guestData); // Make sure this is storing an object, not a string
@@ -253,9 +257,13 @@ const setDefaultAddress = async () => {
 
       // Update the default address in cache.
       await storeInAsync('defaultAddress', updatedAddress);
-     console.log("alt mobile  " +await getFromSecureStore('altPhone'));
       setMessageText('Details updated successfully!');
       setMessageCardVisible(true);
+
+      console.log('Updating context with:', selectedAddress, updatedAddress);
+      updateAddressInContext(selectedAddress, updatedAddress); // updatedAddress is the full address object
+      setDefaultAddressInContext(selectedAddress); // selectedAddress should be 'primary' or 'secondary'
+      
     } catch (error) {
         console.error("Failed to update guest details:", error);
         setMessageText('Failed to update details. Please try again later.');
@@ -377,10 +385,12 @@ const setDefaultAddress = async () => {
           <MessageCard 
             message={messageText} 
             isVisible={messageCardVisible} 
+            style={styles.messageCardFixed}
             onClose={() => setMessageCardVisible(false)} 
           />
           <MessageCard 
           message={messageText} 
+          style={styles.messageCardFixed}
           isVisible={messageCardVisible || firstTime}  // Updated this line
           onClose={() => {
           setMessageCardVisible(false);
@@ -426,6 +436,13 @@ const styles = StyleSheet.create({
     color: colors.deepBlue,
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  messageCardFixed: {
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    right: 0,
+    zIndex: 1000 // Ensure it's above other elements
   },
   addressContainer: {
     // backgroundColor: colors.darkBlue,

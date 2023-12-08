@@ -10,9 +10,6 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import MessageCard from '../commonMethods/MessageCard';
-import GoogleSignIn from '../GuestSubComponent/GoogleSignIn';
-import GoogleSignInButton from '../GuestSubComponent/GoogleSignInButton';
-
 
 const URL = config.URL;
 
