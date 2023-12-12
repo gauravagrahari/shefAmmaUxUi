@@ -11,6 +11,7 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
+import * as Animatable from 'react-native-animatable';
 
 const URL = config.URL;
 
@@ -118,10 +119,17 @@ return (
             </Text>
             {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}
           </View>
-          
+          <Animatable.Text
+            iterationDelay={1000}
+          easing="ease-out"
+                animation="pulse"
+                useNativeDriver 
+                iterationCount='infinite'>
+
           <Text style={globalStyles.textPrimary}>
             {itemNames.join(' | ')}
           </Text>
+                </Animatable.Text>
           <Text style={styles.address}>
             {host.addressHost.city}, {host.addressHost.state}
           </Text>

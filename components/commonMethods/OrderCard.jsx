@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import axios from 'axios';
 import config from '../Context/constants';
+import * as Animatable from 'react-native-animatable';
 
 const URL = config.URL;
 export default function OrderCard({ order, navigation }) {
@@ -53,9 +54,7 @@ export default function OrderCard({ order, navigation }) {
 
   const formattedDateTime = new Date(order.timeStamp).toLocaleString('en-IN', options);
   
-  const navigateToHostProfile = () => {
-    navigation.navigate('HostProfileMealGuest');
-  };
+ 
 
   const mealMapping = {
     b: "Breakfast",
@@ -160,9 +159,9 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
    <View style={styles.orderDetails}>
 
 <View style={styles.leftSide}>
-  <TouchableOpacity onPress={navigateToHostProfile}>
-    <Text style={[styles.itemName, styles.linkText]}>{order.nameHost}</Text>
-  </TouchableOpacity>
+  {/* <TouchableOpacity > */}
+    <Text style={[styles.itemName]}>{order.nameHost}</Text>
+  {/* </TouchableOpacity> */}
   <Text style={styles.detailsMealType}>{mealMapping[order.mealType]}</Text>
   <Text style={styles.details}>Quantity - {order.noOfServing}</Text>
   <Text style={styles.details}>Booked on - {formattedDateTime}</Text>
@@ -170,7 +169,14 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
 
 <View style={styles.rightSide}>
   <Text style={styles.amount}>{order.amount}</Text>
+  <Animatable.Text
+            iterationDelay={2400}
+          easing="ease-out"
+                animation="rubberBand"
+                useNativeDriver 
+                iterationCount='infinite'>
   <Text style={statusStyle}>{fullStatus}</Text>
+  </Animatable.Text>
 </View>
 
 </View>
@@ -186,7 +192,14 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
                 <Text style={styles.btnText}>Yes</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.noButton} onPress={() => setShowConfirmation(false)}>
+              <Animatable.Text
+            // iterationDelay={1000}
+          easing="ease-out"
+                animation="pulse"
+                useNativeDriver 
+                iterationCount='infinite'>
                 <Text style={styles.btnText}>No</Text>
+                </Animatable.Text>
               </TouchableOpacity>
             </View>
           ) : (<>
@@ -265,28 +278,28 @@ orderDetails: {
   cancelled: {
     color: "red",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   },
   completed: {
     color: "green",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   }, 
   inProgress: {
     color: "#FFA500",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   },
   newOrder: {
     color: colors.primaryText,
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
     // backgroundColor: "#e0e0e0", // Specify the background color for new orders
   },
   detailsMealType: {
     fontSize: 16,
     marginBottom: 6,
-    color: colors.pink,
+    color: colors.deepBlue,
     fontWeight: 'bold',
   },
   details: {
@@ -296,8 +309,10 @@ orderDetails: {
     // fontWeight: 'bold',
   },
   itemName: {
-    fontSize: 15,
+    fontSize: 17,
     marginBottom: 6,
+     fontWeight: 'bold',
+     color: colors.pink,
   },
   amount: {
     fontSize: 18,

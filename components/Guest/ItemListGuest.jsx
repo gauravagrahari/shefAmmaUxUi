@@ -1,8 +1,7 @@
 // ItemListGuest.js
-import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useContext, useState, useRef } from 'react';
+import {Animated,View, Text, TouchableOpacity } from 'react-native';
 import HostContext from '../Context/HostContext';
-import ItemCard from '../GuestSubComponent/ItemCard';
 import ItemListCard from '../GuestSubComponent/ItemListCard';
 import { ScrollView } from 'react-native';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
@@ -20,6 +19,8 @@ export default function ItemListGuest() {
     lunch: true, 
     dinner: true,
   });
+  const cardHeight = 120;
+  const padding = 10;   
   const handleHostCardClick = (selectedMeal, hostEntity) => {
     // Find the complete set of meals for the host
     const host = hostList.find(h => h.hostEntity.uuidHost === hostEntity.uuidHost);
@@ -53,34 +54,60 @@ export default function ItemListGuest() {
     );
   };
 
-  return (
-    <View style={globalStyles.containerPrimary}>
-      <NavBarGuest navigation={navigation} />
+  const scrollY = useRef(new Animated.Value(0)).current;
 
+    const renderItem = ({ item, index }) => {
+        // Calculate animated styles based on scroll position
+        const inputRange = [
+            (cardHeight + padding) * index,
+            (cardHeight + padding) * (index + 1)
+        ];
+        const opacity = scrollY.interpolate({
+            inputRange,
+            outputRange: [1, 0],
+            extrapolate: 'clamp',
+        });
+        const translateY = scrollY.interpolate({
+            inputRange,
+            outputRange: [0, -50], // Adjust as needed
+            extrapolate: 'clamp',
+        });
 
-      <ScrollView>
-        {hostList.map((host, index) => (
-          host.meals
-            .filter(filterMealsByType)
-            .map((meal, mealIndex) => (
-              <ItemListCard 
-                key={`${index}-${mealIndex}`} 
-                item={meal} 
-                host={host.hostEntity}
-                handleHostCardClick={() => handleHostCardClick(meal, host.hostEntity)}
-              />
-            ))
-        ))}
-      </ScrollView>
+        // Filter meals and render ItemListCard with animated style
+        return item.meals.filter(filterMealsByType).map((meal, mealIndex) => (
+            <Animated.View key={`${index}-${mealIndex}`} style={{ opacity, transform: [{ translateY }] }}>
+                <ItemListCard 
+                    item={meal}
+                    host={item.hostEntity}
+                    handleHostCardClick={() => handleHostCardClick(meal, item.hostEntity)}
+                />
+            </Animated.View>
+        ));
+    };
 
-      
-      <MealTypeFilter
-      selectedMealTypes={selectedMealTypes}
-      toggleMealType={toggleMealType}
-    />
-    </View>
-  );
+    return (
+        <View style={globalStyles.containerPrimary}>
+            <NavBarGuest navigation={navigation} />
+
+            <Animated.FlatList
+                showsVerticalScrollIndicator={false}
+                data={hostList}
+                keyExtractor={(item, index) => String(index)}
+                renderItem={renderItem}
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    { useNativeDriver: true }
+                )}
+            />
+
+            <MealTypeFilter
+                selectedMealTypes={selectedMealTypes}
+                toggleMealType={toggleMealType}
+            />
+        </View>
+    );
 }
+
 
 const styles = StyleSheet.create({
   mealTypeFilter: {

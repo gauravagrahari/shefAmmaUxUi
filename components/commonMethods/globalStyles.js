@@ -123,7 +123,7 @@ justifyContent: 'center',
   },
   // Button Styles
   button: {
-    backgroundColor: '#25D366',
+    backgroundColor: 'whitesmoke',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

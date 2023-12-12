@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     // borderRadius:10,
     marginBottom:1,
     // margin:1,
-    borderRadius: 10,
+    borderRadius: 20,
     borderTopWidth:3,
 borderTopColor:colors.pink,
   },
@@ -68,18 +68,20 @@ borderTopColor:colors.pink,
   navbarItemSelected: {
     // borderBottomColor: colors.primaryText, 
     borderBottomColor:colors.primaryText, 
-    borderBottomWidth:2,
+    borderBottomWidth:3,
   },
   navbarItemText: {
     color: colors.pink, // almost white
     // color: colors.darkPink, // almost white
     fontWeight: 'bold',
     fontSize: 16,
+    
   },
   navbarItemSelectedText: {
     // color: colors.primaryText, // almost white
     color: colors.primaryText, // almost white
     fontWeight: 'bold',
     fontSize: 17,
+  
   },
 });

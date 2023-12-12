@@ -62,12 +62,15 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.darkBlue,
     // padding: 1,
     marginBottom: 10,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2,
+    borderRadius: 20,
+    borderBottomColor: colors.pink,
+    borderBottomWidth:3,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 2,
+
+    // elevation: 2,
   },
   DP: {
     width: '100%', // Make image as wide as the container
@@ -152,7 +155,7 @@ color:colors.deepBlue,
     marginTop: 4,
     fontWeight: '700',
     color:colors.deepBlue,
-    fontSize: 16,
+    fontSize: 17,
 
   },
 });

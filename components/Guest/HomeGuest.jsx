@@ -16,6 +16,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView, RefreshControl } from "react-native";
 import MealTypeFilter from "../commonMethods/MealTypeFilter";
 import { AddressContext } from "../Context/AddressContext";
+import { Button } from "react-native-paper";
 
 const URL = config.URL;
 const windowWidth = Dimensions.get('window').width;
@@ -44,7 +45,7 @@ export default function HomeGuest({ navigation }) {
 
   
     if (JSON.stringify(defaultAddress) !== JSON.stringify(lastFetchedAddress)) {
-      setLoading(true);
+      // setLoading(true);
       fetchUuidAndHosts(defaultAddress);
       setLastFetchedAddress(defaultAddress);
     } else if (defaultAddressType !== lastDefaultAddressType) {
@@ -150,8 +151,6 @@ useFocusEffect(
   useCallback(() => {
     // Only fetch if it hasn't been fetched this session
     if (!hasFetchedHosts) {
-      setLoading(false);
-
       fetchUuidAndHosts();
     } else {
       setLoading(false);
@@ -210,7 +209,7 @@ const onRefresh = React.useCallback(() => {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-        />}
+        />} showsVerticalScrollIndicator={false}
         >
      <View>
         {
@@ -226,6 +225,9 @@ const onRefresh = React.useCallback(() => {
         )}
       </View>
     </ScrollView>
+    {/* {!showPincodeChecker &&  <TouchableOpacity onPress={() => setShowPincodeChecker(true)} style={globalStyles.centralisingContainer}>
+      <Text style={globalStyles.button}>Check Pincode</Text></TouchableOpacity>} */}
+
     <MealTypeFilter
       selectedMealTypes={selectedMealTypes}
       toggleMealType={toggleMealType}

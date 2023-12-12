@@ -6,7 +6,7 @@ import config from '../Context/constants';
 import MessageCard from '../commonMethods/MessageCard';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
-
+import * as Animatable from 'react-native-animatable';
 const URL = config.URL;
 
 const StarRatingInput = ({ uuidOrder, timeStamp, uuidHost, geoHost }) => {
@@ -61,7 +61,15 @@ const StarRatingInput = ({ uuidOrder, timeStamp, uuidHost, geoHost }) => {
   
   const renderStar = (index) => (
     <TouchableOpacity key={index} onPress={() => setRating(index + 1)} style={styles.star}>
+           <Animatable.Text
+            iterationDelay={2000}
+          easing="ease-in-out"
+                animation="bounce"
+                useNativeDriver 
+                iterationCount='infinite'>
+
       <Icon name={index < currentRating ? 'star' : 'star-o'} size={26} color={colors.darkestBlue} />
+                </Animatable.Text>
       {/* <Icon name={index < currentRating ? 'star' : 'star-o'} size={26} color={'#d3df68'} /> */}
     </TouchableOpacity>
   );

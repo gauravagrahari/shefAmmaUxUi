@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
-import HostDetailCard from "../GuestSubComponent/HostDetailCard";
 import ItemCard from "../GuestSubComponent/ItemCard";
 import NavBarMeals from "../GuestSubComponent/NavBarMeals";
-// import { Modal, RadioButton } from "react-native-paper";
 import axios from "axios";
 import { getFromSecureStore } from "../Context/SensitiveDataStorage";
 import config from '../Context/constants';
@@ -14,7 +12,8 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import MessageCard from "../commonMethods/MessageCard";
 import { LinearGradient } from "expo-linear-gradient";
 import StarRating from "../commonMethods/StarRating";
-// import { LinearGradient } from 'expo-linear-gradient';
+import * as Animatable from 'react-native-animatable';
+
 
 const URL = config.URL; 
 
@@ -293,7 +292,7 @@ finally {
 
 return (
   <View style={{ flex: 1 }}>
-  <ScrollView style={styles.container}>
+  <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
 
   <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
@@ -308,15 +307,11 @@ return (
         <Text style={styles.descriptionHost}>{host.descriptionHost}</Text>
       </LinearGradient>
 
-
-
         <NavBarMeals 
           selectedMealType={selectedMealType} 
           onSelectMealType={setSelectedMealType} 
           servedMeals={servedMeals} 
         />
-
-      
       {getSelectedItem() && <ItemCard item={getSelectedItem()} />}
 {/* <View style={styles.capacityContainer}>
 
@@ -329,9 +324,17 @@ return (
       <Text style={styles.counterText}>-</Text>
   </TouchableOpacity>
   <Text style={styles.noOfGuest}>{mealCount}</Text>
+  <Animatable.View
+            iterationDelay={1000}
+            easing="ease-out"
+            animation="rubberBand"
+            useNativeDriver
+            iterationCount='infinite'
+          >
   <TouchableOpacity style={styles.counterButton} onPress={increaseMealCount}>
       <Text style={styles.counterText}>+</Text>
   </TouchableOpacity>
+  </Animatable.View>
 </View>
 
 <View style={styles.costsContainer}>
@@ -376,7 +379,15 @@ return (
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Payment:</Text>
+      <Animatable.Text
+            iterationDelay={3000}
+          easing="ease-out"
+                animation="tada"
+                useNativeDriver 
+                iterationCount='infinite'>
+
       <Text style={styles.finalAmountText}>Pay On Delivery</Text>
+                </Animatable.Text>
   </View>)}
 </View>
 <MealTimeMessage
@@ -403,12 +414,19 @@ return (
 )}
 <View style={globalStyles.centralisingContainer}>
 {mealCount > 0 && (
+
   <TouchableOpacity 
   style={styles.orderButton} 
   onPress={handleConfirm} 
   disabled={isOrdering}
->
+><Animatable.Text
+            iterationDelay={4000}
+          easing="ease-out"
+                animation="rotate"
+                useNativeDriver 
+                iterationCount='infinite'>
   <Text style={styles.buttonText}>{isOrdering ? 'Processing...' : 'Order'}</Text>
+  </Animatable.Text>
 </TouchableOpacity>
 )}
       </View>
@@ -476,18 +494,19 @@ const styles = StyleSheet.create({
   address: {
     fontSize: 14,
     color: 'gray',
-    marginBottom: 6,
+    marginBottom: 10,
   },
   hostName: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
-    color: colors.pink, // Dark text for the name
+    color: colors.deepBlue, // Dark text for the name
     // marginBottom: 5, // Space between name and description
   },
   descriptionHost: {
     fontSize: 14,
-    color: colors.deepBlue, // Slightly lighter text for the description
+    color: colors.pink, // Slightly lighter text for the description
     lineHeight: 18, // For better readability in multi-line text
+    marginBottom: 10,
   },
   title: {
       fontSize: 20,
@@ -504,7 +523,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: 10,
+      marginVertical: 10,
       marginHorizontal: 10,
       justifyContent: 'center',
       backgroundColor: colors.primaryText,
