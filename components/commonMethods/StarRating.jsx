@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {globalStyles,colors} from './globalStyles';
+import * as Animatable from 'react-native-animatable';
+
 
 const StarRating = ({ rating }) => {
   const parsedRating = parseFloat(rating);
@@ -25,7 +27,15 @@ const StarRating = ({ rating }) => {
       <Text style={styles.ratingText}>
         {parsedRating.toFixed(2)}
       </Text>
+      <Animatable.Text
+          easing="ease-in-out-back"
+          iterationDelay={1500}
+                animation="rotate"
+                useNativeDriver 
+                iterationCount='infinite'
+                >
       <Icon name={starType === 'full' ? 'star' : starType === 'half' ? 'star-half-full' : 'star-o'} size={20} color={colors.primaryText} />
+                </Animatable.Text>
     </View>
   );
 };

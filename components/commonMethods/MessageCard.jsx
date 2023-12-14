@@ -9,7 +9,7 @@ const MessageCard = ({ message, isVisible, onClose }) => {
             // Fade in animation
             Animated.timing(fadeAnim, {
                 toValue: 1,
-                duration: 150,
+                duration: 300,
                 useNativeDriver: true
             }).start(() => {
                 // Fade out after 3 seconds

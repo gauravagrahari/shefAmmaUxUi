@@ -117,13 +117,13 @@ justifyContent: 'center',
     
   },
   displayText:{
-    fontSize: 20,
+    fontSize: 19,
     color: colors.pink,
     fontWeight: 'bold',
   },
   // Button Styles
   button: {
-    backgroundColor: '#25D366',
+    backgroundColor: 'whitesmoke',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

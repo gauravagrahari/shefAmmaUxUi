@@ -53,29 +53,35 @@ const styles = StyleSheet.create({
     // padding: 5,
     backgroundColor: colors.darkBlue, // dark blue-gray
     // borderRadius:10,
-    marginBottom:1
+    marginBottom:1,
+    // margin:1,
+    borderRadius: 20,
+    borderTopWidth:3,
+borderTopColor:colors.pink,
   },
   navbarItem: {
     paddingVertical: 13,
     paddingHorizontal: 20,
-    // borderRadius: 20,
+  
     // backgroundColor: '#34495E', // light blue-gray
   },
   navbarItemSelected: {
     // borderBottomColor: colors.primaryText, 
     borderBottomColor:colors.primaryText, 
-    borderBottomWidth:2,
+    borderBottomWidth:3,
   },
   navbarItemText: {
     color: colors.pink, // almost white
     // color: colors.darkPink, // almost white
     fontWeight: 'bold',
     fontSize: 16,
+    
   },
   navbarItemSelectedText: {
     // color: colors.primaryText, // almost white
     color: colors.primaryText, // almost white
     fontWeight: 'bold',
     fontSize: 17,
+  
   },
 });

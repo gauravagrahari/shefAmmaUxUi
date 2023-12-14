@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext, useState, useCallback, useEffect } from 'react';
 import HostCard from "../GuestSubComponent/HostCard";
 import axios from "axios";
 import NavBarGuest from "../GuestSubComponent/NavBarGuest";
@@ -15,28 +15,53 @@ import Loader from "../commonMethods/Loader";
 import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView, RefreshControl } from "react-native";
 import MealTypeFilter from "../commonMethods/MealTypeFilter";
+import { AddressContext } from "../Context/AddressContext";
 
 const URL = config.URL;
 const windowWidth = Dimensions.get('window').width;
 
 export default function HomeGuest({ navigation }) {
+  const [lastDefaultAddressType, setLastDefaultAddressType] = useState(addresses?.default);
+  const { addresses } = useContext(AddressContext);
   const [lastFetchedAddress, setLastFetchedAddress] = React.useState(null);
   const [showPincodeChecker, setShowPincodeChecker] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [isReLoading, setIsReLoading] = useState(false);
+
   const { hostList, setHostList, hasFetchedHosts, setHasFetchedHosts } = useContext(HostContext);
-  const [refreshing, setRefreshing] = React.useState(false); // NEW: For pull-to-refresh
+  const [refreshing, setRefreshing] = React.useState(false); 
   const [selectedMealTypes, setSelectedMealTypes] = React.useState({
     breakfast: true,
     lunch: true, 
     dinner: true,
   }); 
 
+  useEffect(() => {
+    if (!addresses) {
+      console.log("HomeGuest: Addresses context is not defined yet.");
+      return; // Exit the useEffect if addresses is not defined
+    }
+    const defaultAddressType = addresses.default;
+    const defaultAddress = addresses[defaultAddressType];
+
+  
+    if (JSON.stringify(defaultAddress) !== JSON.stringify(lastFetchedAddress)) {
+      // setLoading(true);
+      fetchUuidAndHosts(defaultAddress);
+      setLastFetchedAddress(defaultAddress);
+      setIsReLoading(true);
+    } else if (defaultAddressType !== lastDefaultAddressType) {
+      setLastFetchedAddress(null);
+    }
+    setLastDefaultAddressType(addresses.default);
+  }, [addresses?.default, JSON.stringify(addresses?.[addresses?.default])]);
+  
   const fetchUuidAndHosts = async () => {
     // Fetch the UUID from Secure Store
     const storedUuidGuest = await getFromSecureStore('uuidGuest');
     const token = await getFromSecureStore('token');
-    console.log('UUID retrieved from Secure Store in Home:', storedUuidGuest);
-
+ 
+   console.log("value of loadinf is------->"+loading);
     try {
       // Fetch charges from the API
       const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {
@@ -44,7 +69,6 @@ export default function HomeGuest({ navigation }) {
           Authorization: `Bearer ${token}`, // Add your bearer token here
         },
       });
-      console.log('Received charges:', chargesResponse.data);
 
       // Store the received charges data in Secure Store
       await storeInSecureStore('charges', chargesResponse.data);
@@ -62,12 +86,10 @@ export default function HomeGuest({ navigation }) {
     try {
       // Fetch guestDetails from cache using the provided getFromAsync method
       const guestAddress = await getFromAsync('defaultAddress');
-      console.log('Fetching defaultAdrres:', JSON.stringify(guestAddress, null, 2));
-
     let requestBody = null; // Initialize an empty request body
 
 // Check if guestDetails is not empty
-if (guestAddress) {
+    if (guestAddress) {
 // Prepare the request body
 requestBody = {
   address: {
@@ -84,16 +106,17 @@ requestBody = {
   },
 };
 }
-  // Make a POST request to fetch host list
+
+
     const response = await axios.post(`${URL}/guest/hosts`, requestBody, {
       headers: {
         Authorization: `Bearer ${token}`, // Add your bearer token here
         uuidGuest: storedUuidGuest, // Use the storedUuidGuest in the headers
         // You can include other headers if needed
       },
-      params: {
-        radius: 10, // Set the desired radius here
-      },
+      // params: {
+      //   radius: 10, // Set the desired radius here
+      // },
     });
 
     setHostList(response.data);
@@ -107,19 +130,25 @@ requestBody = {
       console.error("Error status:", error.response.status);
       console.error("Error data:", error.response.data);
 
+      // Custom error message based on status code
       if (error.response.status === 400) {
-        // Display the custom error message
-        alert(error.response.data); // or handle in a more user-friendly way than an alert
+        alert(error.response.data); // Alert the user with the response message
+        setShowPincodeChecker(true); // Show pincode checker in case of service unavailability
+        setHostList([]);
       }
     } else if (error.request) {
       console.error("No response received:", error.request);
+      setHostList([]);
     } else {
       console.error("Error:", error.message);
     }
+  } finally {
+    setHasFetchedHosts(true);
+    setIsReLoading(false);
+    setLoading(false);
+    console.log("value of loading at end is------->" + loading);
   }
-  setHasFetchedHosts(true);
-  setLoading(false); // Set loading to false once data is fetched
-}
+};
 
 useFocusEffect(
   useCallback(() => {
@@ -134,6 +163,8 @@ useFocusEffect(
 
 const onRefresh = React.useCallback(() => {
   setRefreshing(true);
+  setLoading(true);
+  console.log('loading value when refreshed'+ loading);
   fetchUuidAndHosts().then(() => setRefreshing(false));
 }, []);
 
@@ -167,11 +198,13 @@ const onRefresh = React.useCallback(() => {
       });
     });
   };
-  
-        
-
   const filteredHosts = filterHostsByMealType();
   if (loading) {
+    console.log("Rendering Loader, loading:", loading);
+    return <Loader />;
+  }
+  if (isReLoading) {
+    console.log("Rendering Loader, loading:", loading);
     return <Loader />;
   }
   return (  
@@ -182,7 +215,7 @@ const onRefresh = React.useCallback(() => {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-        />}
+        />} showsVerticalScrollIndicator={false}
         >
      <View>
         {
@@ -198,6 +231,9 @@ const onRefresh = React.useCallback(() => {
         )}
       </View>
     </ScrollView>
+    {/* {!showPincodeChecker &&  <TouchableOpacity onPress={() => setShowPincodeChecker(true)} style={globalStyles.centralisingContainer}>
+      <Text style={globalStyles.button}>Check Pincode</Text></TouchableOpacity>} */}
+
     <MealTypeFilter
       selectedMealTypes={selectedMealTypes}
       toggleMealType={toggleMealType}

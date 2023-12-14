@@ -5,6 +5,8 @@ import { globalStyles, colors } from '../commonMethods/globalStyles'; // Update 
 import { useNavigation } from '@react-navigation/native';
 import StarRating from '../commonMethods/StarRating';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
+import * as Animatable from 'react-native-animatable';
+// import * as Animatable from 'react-native-animatable';
 
 const screenWidth = Dimensions.get('window').width;
 const dpDimension = screenWidth * 0.25; 
@@ -53,11 +55,20 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
       <View style={styles.containerVertical}>
             <View style={styles.container}>
           <View style={styles.imageContainer}>
+          <Animatable.View
+            iterationDelay={1000}
+            easing="ease-out"
+            animation="pulse"
+            useNativeDriver
+            iterationCount='infinite'
+          >
             <Image
               style={styles.itemImage}
               source={{ uri: imageUri }}
               onError={(error) => console.error("Image Error", error)}
             />
+          </Animatable.View>
+
           </View>
           <View style={styles.hostInfo}>
           <View style={styles.nameAndIndicator}>
@@ -82,7 +93,14 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
           </View>
 
           <View style={styles.detailConatiner}>
+          <Animatable.Text
+            iterationDelay={10000}
+          easing="ease-in-out"
+                animation="bounce"
+                useNativeDriver 
+                iterationCount='infinite'>
          <Text style={styles.detail}>{item.description}</Text>
+         </Animatable.Text>
            </View>
            </View>
         </LinearGradient>
@@ -102,6 +120,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 5,
+        paddingTop:10,
     },
     containerVertical: {
         flexDirection: 'column',
@@ -154,7 +173,7 @@ const styles = StyleSheet.create({
       highlightedText: {
         fontWeight: 'bold',
         color: colors.darkPink,
-        fontSize:16
+        fontSize:17
       },
     itemImage: {
         width: '100%',

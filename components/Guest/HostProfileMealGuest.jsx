@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
-import HostDetailCard from "../GuestSubComponent/HostDetailCard";
 import ItemCard from "../GuestSubComponent/ItemCard";
 import NavBarMeals from "../GuestSubComponent/NavBarMeals";
-// import { Modal, RadioButton } from "react-native-paper";
 import axios from "axios";
 import { getFromSecureStore } from "../Context/SensitiveDataStorage";
 import config from '../Context/constants';
@@ -13,6 +11,9 @@ import MealTimeMessage from "../GuestSubComponent/MealTimeMessage";
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import MessageCard from "../commonMethods/MessageCard";
 import { LinearGradient } from "expo-linear-gradient";
+import StarRating from "../commonMethods/StarRating";
+import * as Animatable from 'react-native-animatable';
+
 
 const URL = config.URL; 
 
@@ -248,31 +249,42 @@ useEffect(() => {
 
   try {
     const token = await getFromSecureStore('token');
-
     console.log(`Order sent was: ${JSON.stringify(orderData)}`);
-console.log('capacity'+capacityData.capacityUuid);
-      const response = await axios.post(`${URL}/guest/order`, orderData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add your bearer token here
-      capacityUuid:capacityData.uuidCapacity,
-        },
-      });
-      // const response = await axios.post("http://192.168.79.128:9090/guest/order", orderData);
+    console.log('capacity', capacityData.capacityUuid);
+
+    const response = await axios.post(`${URL}/guest/order`, orderData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        capacityUuid:capacityData.uuidCapacity,
+            },
+    });
+
+    if (response.status === 200) {
+      // Order placed successfully
       console.log(response.data);
       setOrderPlaced(true);
       setModalVisible(false);
-
-  } catch (error) {
-    console.error('Error:', error.message);
-    if (error.response) {
-        console.error('Server Response:', error.response.data);
-        console.error('Server Status:', error.response.status);
-        console.error('Server Headers:', error.response.headers);
-    } else if (error.request) {
-        console.error('Request made by client:', error.request);
+    } else {
+      // Handle other successful responses with different status codes if needed
     }
-}
+  } catch (error) {
+    if (error.response) {
+      console.error('Server Response:', error.response.data);
+      console.error('Server Status:', error.response.status);
+      console.error('Server Headers:', error.response.headers);
+      console.log('Complete Server Response:', error.response);
+
+      // Display error message from the server
+      alert(error.response.data); // This will display the custom error message from your controller
+    } else if (error.request) {
+      console.error('Request made by client:', error.request);
+      // Display a generic error message
+      alert("An error occurred while placing the order. Please try again.");
+    } else {
+      console.error('Error:', error.message);
+      alert("An unexpected error occurred.");
+    }
+  } 
 finally {
   setIsOrdering(false); // Reset isOrdering after order process is complete
 }
@@ -280,17 +292,26 @@ finally {
 
 return (
   <View style={{ flex: 1 }}>
-  <ScrollView style={styles.container}>
-  <Text style={styles.descriptionHost}>
-          {host.descriptionHost}
-        </Text>
+  <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+
+
+  <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
+  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+
+        <Text style={styles.hostName}>{host.nameHost}</Text>
+        {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}
+        </View>
+        <Text style={styles.address}>
+            {host.addressHost.city}, {host.addressHost.state}
+          </Text>
+        <Text style={styles.descriptionHost}>{host.descriptionHost}</Text>
+      </LinearGradient>
+
         <NavBarMeals 
           selectedMealType={selectedMealType} 
           onSelectMealType={setSelectedMealType} 
           servedMeals={servedMeals} 
         />
-
-      
       {getSelectedItem() && <ItemCard item={getSelectedItem()} />}
 {/* <View style={styles.capacityContainer}>
 
@@ -303,9 +324,17 @@ return (
       <Text style={styles.counterText}>-</Text>
   </TouchableOpacity>
   <Text style={styles.noOfGuest}>{mealCount}</Text>
+  <Animatable.View
+            iterationDelay={1000}
+            easing="ease-out"
+            animation="rubberBand"
+            useNativeDriver
+            iterationCount='infinite'
+          >
   <TouchableOpacity style={styles.counterButton} onPress={increaseMealCount}>
       <Text style={styles.counterText}>+</Text>
   </TouchableOpacity>
+  </Animatable.View>
 </View>
 
 <View style={styles.costsContainer}>
@@ -325,17 +354,17 @@ return (
   )}
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Meal Price:</Text>
-      <Text style={styles.costValueText}>{mealTotal.toFixed(2)}</Text>
+      <Text style={styles.costValueText}>{mealTotal.toFixed(2)}/-</Text>
   </View>
 
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Delivery Charges:</Text>
-      <Text style={styles.costValueText}>{deliveryCharge.toFixed(2)}</Text>
+      <Text style={styles.costValueText}>{deliveryCharge.toFixed(2)}/-</Text>
   </View>
 
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Packaging and Handling Charges:</Text>
-      <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}</Text>
+      <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}/-</Text>
   </View>
   {mealCount > 0 && (
   <View style={styles.costRow}>
@@ -345,12 +374,20 @@ return (
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Total Amount:</Text>
-      <Text style={styles.finalAmountText}>{totalAmount.toFixed(2)}</Text>
+      <Text style={styles.finalAmountText}>{totalAmount.toFixed(2)}/-</Text>
   </View>)}
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Payment:</Text>
-      <Text style={styles.finalAmountText}>Cash On Delivery</Text>
+      <Animatable.Text
+            iterationDelay={3000}
+          easing="ease-out"
+                animation="tada"
+                useNativeDriver 
+                iterationCount='infinite'>
+
+      <Text style={styles.finalAmountText}>Pay On Delivery</Text>
+                </Animatable.Text>
   </View>)}
 </View>
 <MealTimeMessage
@@ -377,12 +414,19 @@ return (
 )}
 <View style={globalStyles.centralisingContainer}>
 {mealCount > 0 && (
+
   <TouchableOpacity 
   style={styles.orderButton} 
   onPress={handleConfirm} 
   disabled={isOrdering}
->
+><Animatable.Text
+            iterationDelay={4000}
+          easing="ease-out"
+                animation="rotate"
+                useNativeDriver 
+                iterationCount='infinite'>
   <Text style={styles.buttonText}>{isOrdering ? 'Processing...' : 'Order'}</Text>
+  </Animatable.Text>
 </TouchableOpacity>
 )}
       </View>
@@ -430,13 +474,39 @@ const styles = StyleSheet.create({
       // backgroundColor: colors.darkestBlue,
       backgroundColor: colors.primaryLight, // Slightly off-white for a more professional look
   },
-  descriptionHost: {
-    // backgroundColor: bgColor,
-    fontSize: 14,
-    padding: 10,
-    fontFamily: 'sans-serif', // Use a system font
-    color: colors.darkPink, 
+  // descriptionHost: {
+  //   // backgroundColor: bgColor,
+  //   fontSize: 14,
+  //   padding: 10,
+  //   fontFamily: 'sans-serif', // Use a system font
+  //   color: colors.darkPink, 
     
+  // },
+  hostInfoContainer: {
+    // margin:1,
+    // marginBottom:5,
+    padding: 10,
+    // backgroundColor: colors.prima, // Light grey background
+    borderRadius:5,
+    // borderBottomWidth: 3,
+    // borderBottomColor: colors.pink, // Light border for separation
+  },
+  address: {
+    fontSize: 14,
+    color: 'gray',
+    marginBottom: 10,
+  },
+  hostName: {
+    fontSize: 19,
+    fontWeight: 'bold',
+    color: colors.deepBlue, // Dark text for the name
+    // marginBottom: 5, // Space between name and description
+  },
+  descriptionHost: {
+    fontSize: 14,
+    color: colors.pink, // Slightly lighter text for the description
+    lineHeight: 18, // For better readability in multi-line text
+    marginBottom: 10,
   },
   title: {
       fontSize: 20,
@@ -453,7 +523,7 @@ const styles = StyleSheet.create({
   quantityContainer: {
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: 10,
+      marginVertical: 10,
       marginHorizontal: 10,
       justifyContent: 'center',
       backgroundColor: colors.primaryText,

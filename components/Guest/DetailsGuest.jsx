@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity,ScrollView } from 'react-native';
 import axios from 'axios';
-import ImageUploader from '../commonMethods/ImageUploader'; // Import the ImageUploader component
 import {EnterDate} from '../commonMethods/EnterDate'; 
-import { uploadImageToS3 } from '../Context/s3config';
-import { getFromSecureStore } from '../Context/SensitiveDataStorage';
+import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
 import { useNavigation } from '@react-navigation/native';
