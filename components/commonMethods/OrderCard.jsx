@@ -8,6 +8,7 @@ import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import axios from 'axios';
 import config from '../Context/constants';
 import * as Animatable from 'react-native-animatable';
+import StarRating from './StarRating';
 
 const URL = config.URL;
 export default function OrderCard({ order, navigation }) {
@@ -224,6 +225,15 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
 {order.status === 'com' && !order.review && (
   <ReviewInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp}/>
 )}
+<View style={styles.confirmationPrompt}>
+{order.status === 'com' && order.review && (
+      <Text style={styles.confirmationText}>{order.review}</Text>
+    )}
+{order.status === 'com' && order.rating && (
+  <StarRating rating={order.rating} />
+)}
+ 
+</View>
 </LinearGradient>
 );
 }
