@@ -14,6 +14,9 @@ export default function SettingsGuest() {
   const handlePasswordChangeSuccess = () => {
     setIsChangePasswordVisible(false);
   };
+  const contactUs=()=>{
+    navigation.navigate('ContactPage');
+  }
   
   const handleLogout = async () => {
     await deleteInSecureStore('token');
@@ -21,6 +24,7 @@ export default function SettingsGuest() {
     await deleteInSecureStore('uuidGuest');
     await deleteInSecureStore('uuidDevBoy');
     await deleteInSecureStore('timeStamp');
+    await deleteInSecureStore('altPhone');
     await deleteInSecureStore('phone');
     await deleteInAsync('guestDetails');
     navigation.navigate('LoginGuest');
@@ -43,7 +47,9 @@ export default function SettingsGuest() {
             <Text style={styles.buttonText}>Change Password</Text>
           </TouchableOpacity>
         }
-
+     <TouchableOpacity style={styles.button} onPress={contactUs}>
+          <Text style={styles.buttonText}>Contact Us</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>

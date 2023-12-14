@@ -10,7 +10,7 @@ import Loader from '../commonMethods/Loader';
 
 const URL = config.URL;
 
-export default function OrderHistoryGuest({ navigation }) {
+export default function OrderHistoryGuest() {
   const [orderList, setOrderList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -64,7 +64,7 @@ export default function OrderHistoryGuest({ navigation }) {
       <ScrollView style={globalStyles.containerPrimary}>
         {orderList.length === 0 ? (
           <View style={styles.centered}>
-            <Text>No orders available to display.</Text>
+            <Text style={styles.text}>You have not ordered anything yet.</Text>
           </View>
         ) : (
           orderList
@@ -90,10 +90,16 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   centered: {
-    fontSize: 20,
-    color: colors.darkestBlue,
-    textAlign: 'center',
-    paddingHorizontal: 20, 
-    marginTop: 100,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:180,
+   
   },
+  text:{
+    color:colors.darkBlue,
+    // color:colors.secondaryText,
+    fontSize: 18,
+    fontWeight: 'bold',
+  }
 });

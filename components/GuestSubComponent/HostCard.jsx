@@ -120,7 +120,7 @@ return (
             {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}
           </View>
           <Animatable.Text
-            iterationDelay={1000}
+            iterationDelay={2000}
           easing="ease-out"
                 animation="pulse"
                 useNativeDriver 

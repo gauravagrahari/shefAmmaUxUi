@@ -45,6 +45,8 @@ import { HostProvider } from "./components/Context/HostContext";
 import { init } from "./components/Context/sqLiteDB";
 import ItemListGuest from "./components/Guest/ItemListGuest";
 import { AddressProvider } from "./components/Context/AddressContext";
+import LoadingScreen from "./components/commonMethods/LoadingScreen";
+import ContactPage from "./components/Guest/ContactPage";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -82,31 +84,25 @@ export default function App() {
   }, []);
   
   if (isLoading) {
-    return (
-      <LinearGradient
-          colors={['#A6A6A6', '#FFF']} // You can adjust these colors
-          style={styles.loadingContainer}
-      >
-          <View style={styles.brandContainer}>
-              <Text style={styles.shef}>Shef</Text>
-              <Text style={styles.amma}>Amma</Text>
-          </View>
-          <Text style={styles.tagline}>Deliciousness at your doorstep</Text>
-      </LinearGradient>
-  );
+    return <LoadingScreen />;
 }
 
 
   return (
+    <SafeAreaView style={{ flex: 1, paddingTop: 42,backgroundColor:'#EAF86B' }}>
     <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>
          <AddressProvider>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRoute}>
+    <Stack.Navigator 
+    initialRouteName={initialRoute}
+    screenOptions={{ headerShown: false }} // Add this line
+  >
         <Stack.Screen name="HomeGuest" component={HomeGuest}/>
         <Stack.Screen name="SearchGuest">
        {(props) => <SearchGuest {...props} navigation={props.navigation} />}
        </Stack.Screen>
         <Stack.Screen name="SearchFilterGuest" component={SearchFilterGuest}/>
+        <Stack.Screen name="ContactPage" component={ContactPage}/>
         <Stack.Screen name="OrderHistoryGuest" component={OrderHistoryGuest}/>
         <Stack.Screen name="DetailsGuest" component={DetailsGuest}/>
         <Stack.Screen name="UpdateGuestDetails" component={UpdateGuestDetails}/>
@@ -144,6 +140,8 @@ export default function App() {
     </NavigationContainer>
     </AddressProvider>
     </HostProvider>
+    </SafeAreaView>
+
   );
 }
 const styles = StyleSheet.create({

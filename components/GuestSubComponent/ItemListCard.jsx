@@ -94,7 +94,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
 
           <View style={styles.detailConatiner}>
           <Animatable.Text
-            iterationDelay={5500}
+            iterationDelay={10000}
           easing="ease-in-out"
                 animation="bounce"
                 useNativeDriver 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
       highlightedText: {
         fontWeight: 'bold',
         color: colors.darkPink,
-        fontSize:16
+        fontSize:17
       },
     itemImage: {
         width: '100%',

@@ -16,7 +16,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView, RefreshControl } from "react-native";
 import MealTypeFilter from "../commonMethods/MealTypeFilter";
 import { AddressContext } from "../Context/AddressContext";
-import { Button } from "react-native-paper";
 
 const URL = config.URL;
 const windowWidth = Dimensions.get('window').width;
@@ -27,6 +26,8 @@ export default function HomeGuest({ navigation }) {
   const [lastFetchedAddress, setLastFetchedAddress] = React.useState(null);
   const [showPincodeChecker, setShowPincodeChecker] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [isReLoading, setIsReLoading] = useState(false);
+
   const { hostList, setHostList, hasFetchedHosts, setHasFetchedHosts } = useContext(HostContext);
   const [refreshing, setRefreshing] = React.useState(false); 
   const [selectedMealTypes, setSelectedMealTypes] = React.useState({
@@ -48,6 +49,7 @@ export default function HomeGuest({ navigation }) {
       // setLoading(true);
       fetchUuidAndHosts(defaultAddress);
       setLastFetchedAddress(defaultAddress);
+      setIsReLoading(true);
     } else if (defaultAddressType !== lastDefaultAddressType) {
       setLastFetchedAddress(null);
     }
@@ -142,6 +144,7 @@ requestBody = {
     }
   } finally {
     setHasFetchedHosts(true);
+    setIsReLoading(false);
     setLoading(false);
     console.log("value of loading at end is------->" + loading);
   }
@@ -200,7 +203,10 @@ const onRefresh = React.useCallback(() => {
     console.log("Rendering Loader, loading:", loading);
     return <Loader />;
   }
-  
+  if (isReLoading) {
+    console.log("Rendering Loader, loading:", loading);
+    return <Loader />;
+  }
   return (  
       <View style={globalStyles.containerPrimary}>
      <NavBarGuest navigation={navigation} />
