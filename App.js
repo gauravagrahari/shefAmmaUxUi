@@ -174,3 +174,4 @@ tagline: {
 },
 });
 // {"key": "images/8727054607_pkr.jpeg"}
+// public/images/plate1.jpg

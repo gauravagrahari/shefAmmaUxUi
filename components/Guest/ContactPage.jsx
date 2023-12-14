@@ -10,8 +10,8 @@ const ContactPage = () => {
     const handleEmailPress = async (email) => {
         try {
             const userPhoneNumber = await getFromSecureStore('phone');
-            // const emailSubject = encodeURIComponent('ShefAmma - Customer Inquiry/Complaint');
-            const emailBody = encodeURIComponent(`Mobile Number - ${userPhoneNumber}\n\nMy Concern - `);
+            const emailSubject = encodeURIComponent('');
+            const emailBody = encodeURIComponent(`Mobile Number - ${userPhoneNumber}\n\nMy Concern or Query - `);
             const mailtoUrl = `mailto:${email}?subject=${emailSubject}&body=${emailBody}`;
             Linking.openURL(mailtoUrl);
         } catch (error) {
@@ -32,22 +32,22 @@ const ContactPage = () => {
                     <Text style={styles.emailText} onPress={() => handleEmailPress('complaint@shefamma.com')}>
                         {" complaint@shefamma.com "}
                     </Text>
-                    with your order number and contact number.
+                    with your registered contact number and your concern.
                 </Text>
             </LinearGradient>
 
             <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
                 <Text style={styles.contentText}>
-                    For general inquiries, email us at 
+                    For general inquiries or to join us as a partner email us at 
                     <Text style={styles.emailText} onPress={() => handleEmailPress('contactus@shefamma.com')}>
                         {" contactus@shefamma.com "}
                     </Text>
-                    with your name and contact information.
+                    with contact information and the details.
                 </Text>
             </LinearGradient>
 
             <Text style={styles.footerText}>
-                Thank you for choosing ShefAmma.
+                Thank you for choosing ShefAmma!
             </Text>
         </View>
     );
@@ -63,17 +63,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center', // Center content vertically
         padding: screenWidth * 0.05,
-        backgroundColor: colors.deepBlue,
+        backgroundColor:colors.darkBlue,
     },
     headerText: {
         fontSize: screenWidth * 0.055,
         color: colors.pink,
         fontWeight: 'bold',
-        marginBottom: screenWidth * 0.03,
+        marginBottom: screenWidth * 0.045,
         textAlign: 'center',
     },
     card: {
-        padding: screenWidth * 0.04,
+        padding: screenWidth * 0.043,
         borderRadius: 15, // More pronounced rounded corners
         elevation: 6, // Slightly more shadow for Android
         shadowColor: '#000', // Shadow for iOS
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 4,
         marginBottom: screenWidth * 0.06,
+        margin:10,
     },
     contentText: {
         fontSize: screenWidth * 0.04,

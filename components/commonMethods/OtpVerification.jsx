@@ -19,11 +19,12 @@ export default function OtpVerification({ type, onVerify }) {
   const [disableInput, setDisableInput] = useState(false);  // New state variable
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity
   const [serverError, setServerError] = useState('');  // State for server error
+  const [serverErrorMessage, setServerErrorMessage] = useState('');
 
   const handleVerify = async () => {
     // Reset previous errors
     setInputError('');
-
+    setServerErrorMessage('');
     // Validate input based on type
     if (type === 'phone' && input.length !== 10) {
       setInputError('Phone number must be 10 digits');
@@ -44,9 +45,12 @@ export default function OtpVerification({ type, onVerify }) {
       })
       .catch(error => {
         if (error.response && error.response.data) {
-            setServerError(error.response.data);  // Set server error message
+          setServerErrorMessage(error.response.data);
+          setServerError(error.response.data);  // Set server error message
         } else {
             console.error(error);
+            setServerErrorMessage('An unexpected error occurred. Please try again.'); // Generic error message
+
         }
     });
   };
@@ -107,6 +111,10 @@ export default function OtpVerification({ type, onVerify }) {
       />
     </View>
     {inputError && <Text style={styles.errorMessage}>{inputError}</Text>}
+    {serverErrorMessage && (
+        <Text style={styles.errorMessage}>{serverErrorMessage}</Text>
+      )}
+
     {showInputButton && (
       <TouchableOpacity style={styles.button} onPress={handleVerify}>
         <Text style={styles.buttonText}>Verify {type}</Text>

@@ -117,7 +117,7 @@ justifyContent: 'center',
     
   },
   displayText:{
-    fontSize: 20,
+    fontSize: 19,
     color: colors.pink,
     fontWeight: 'bold',
   },

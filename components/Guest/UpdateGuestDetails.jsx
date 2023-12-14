@@ -284,11 +284,11 @@ const handleRadioChange = async (value) => {
               {fullName.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()).join(' ')}
             </Text>
           </View>
-          {/* <View style={globalStyles.displayTextContainer}>
+          <View style={globalStyles.displayTextContainer}>
             <Text style={globalStyles.displayText}>
              {phone}
             </Text>
-          </View> */}
+          </View>
 
           <View style={styles.addressContainer}>
           <Text style={globalStyles.textPrimary}>Alternate Mobile Number</Text>

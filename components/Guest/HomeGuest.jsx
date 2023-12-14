@@ -114,9 +114,9 @@ requestBody = {
         uuidGuest: storedUuidGuest, // Use the storedUuidGuest in the headers
         // You can include other headers if needed
       },
-      params: {
-        radius: 10, // Set the desired radius here
-      },
+      // params: {
+      //   radius: 10, // Set the desired radius here
+      // },
     });
 
     setHostList(response.data);
