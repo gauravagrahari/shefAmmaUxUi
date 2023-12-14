@@ -217,11 +217,12 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
           <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
         )
       ) : null }
-{order.status === 'com' && order.rating === null && (
-<View style={styles.ratingReviewSection}>
+{order.status === 'com' && !order.rating && (
   <StarRatingInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp} uuidHost={order.uuidHost} geoHost={order.geoHost} />
+)}
+
+{order.status === 'com' && !order.review && (
   <ReviewInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp}/>
-</View>
 )}
 </LinearGradient>
 );
