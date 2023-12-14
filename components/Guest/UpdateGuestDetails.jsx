@@ -113,7 +113,12 @@ const handleRadioChange = async (value) => {
       setMessageCardVisible(true);
       // Update context
       updateAddressInContext('primary', updatedAddress);
-  } else if (value === 'office') {
+  }   if (value === 'office' && isOfficeAddressEmpty()) {
+    // If office address is empty, do not set it as default and prompt user
+    setMessageText("Please add a secondary address before selecting it as default.");
+    setMessageCardVisible(true);
+    return;
+  }else if (value === 'office' ) {
       updatedAddress = {
           street: officeStreet || '',
           houseName: officeHouseName || '',
@@ -134,7 +139,9 @@ const handleRadioChange = async (value) => {
   // Store in Async Storage (if needed)
   await storeInAsync('defaultAddress', updatedAddress);
 };
-
+const isOfficeAddressEmpty = () => {
+  return !officeStreet && !officeHouseName && !officeCity && !officeState && !officePinCode;
+};
   useEffect(() => {
     const fetchGuestDetails = async () => {
       setIsLoading(true);
