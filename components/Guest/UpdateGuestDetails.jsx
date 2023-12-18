@@ -42,6 +42,7 @@ export default function UpdateGuestDetails() {
   const [initialData, setInitialData] = useState({});
   const [alternateMobile, setAlternateMobile] = useState('');
   const [geocode, setGeocode] = useState('');
+  const [showSecondaryAddressForm, setShowSecondaryAddressForm] = useState(false);
 
   const navigation = useNavigation();
 
@@ -142,6 +143,17 @@ const handleRadioChange = async (value) => {
 const isOfficeAddressEmpty = () => {
   return !officeStreet && !officeHouseName && !officeCity && !officeState && !officePinCode;
 };
+useEffect(() => {
+  // On component mount, check if secondary address is empty
+  setShowSecondaryAddressForm(!isOfficeAddressEmpty());
+}, []);
+const handleAddSecondaryAddress = () => {
+  setShowSecondaryAddressForm(true);
+};
+const shouldDisplayRadioButtons = () => {
+  return !isOfficeAddressEmpty();
+};
+
   useEffect(() => {
     const fetchGuestDetails = async () => {
       setIsLoading(true);
@@ -348,7 +360,17 @@ const isOfficeAddressEmpty = () => {
               onChangeText={setPinCode} 
             />
           </View>
-  
+          {!showSecondaryAddressForm && (
+            <View style={styles.addSecondaryAddressContainer}>
+              <TouchableOpacity 
+                style={styles.addButton}
+                onPress={handleAddSecondaryAddress}
+              >
+                <Text style={styles.isOfficeAddressEmpty}>Add Secondary Address</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+           {showSecondaryAddressForm && (
           <View style={styles.addressContainer}>
           <View style={styles.radioPair}>
           <TouchableOpacity
@@ -404,7 +426,7 @@ const isOfficeAddressEmpty = () => {
           setFirstTime(false);  // This line is added to set firstTime to false when the card is closed.
   }} 
 />
-          </View>
+          </View>)}
           <View style={globalStyles.centralisingContainer}>
             <TouchableOpacity style={styles.button} onPress={handleUpdate}>
               <Text style={styles.buttonText}>Update Details</Text>
