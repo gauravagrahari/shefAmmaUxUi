@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ChangePassword from '../commonMethods/ChangePassword';
@@ -6,19 +6,26 @@ import { deleteInSecureStore } from '../Context/SensitiveDataStorage';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { deleteInAsync } from '../Context/NonSensitiveDataStorage';
+import { AddressContext } from '../Context/AddressContext';
 
 export default function SettingsGuest() {
   const navigation = useNavigation();
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
+  const { addresses, clearAddressesInContext } = useContext(AddressContext); // Corrected method name and added addresses
 
   const handlePasswordChangeSuccess = () => {
     setIsChangePasswordVisible(false);
   };
-  const contactUs=()=>{
+  const handleContactUs=()=>{
     navigation.navigate('ContactPage');
   }
   
+  const handleTiming=()=>{
+    navigation.navigate('ChargesDisplay');
+  }
+  
   const handleLogout = async () => {
+    console.log('Current addresses in context before logout------>', addresses);
     await deleteInSecureStore('token');
     await deleteInSecureStore('defaultAddress');
     await deleteInSecureStore('uuidGuest');
@@ -27,6 +34,8 @@ export default function SettingsGuest() {
     await deleteInSecureStore('altPhone');
     await deleteInSecureStore('phone');
     await deleteInAsync('guestDetails');
+    console.log('Calling clearAddressesInContext');
+    clearAddressesInContext();
     navigation.navigate('LoginGuest');
   }
 
@@ -42,14 +51,18 @@ export default function SettingsGuest() {
           onPasswordChangeSuccess={handlePasswordChangeSuccess} 
         />
 
+     <TouchableOpacity style={styles.button} onPress={handleContactUs}>
+          <Text style={styles.buttonText}>Contact Us</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleTiming}>
+          <Text style={styles.buttonText}>Timings</Text>
+        </TouchableOpacity>
+        
         {!isChangePasswordVisible && 
           <TouchableOpacity style={styles.button} onPress={() => setIsChangePasswordVisible(true)}>
             <Text style={styles.buttonText}>Change Password</Text>
           </TouchableOpacity>
         }
-     <TouchableOpacity style={styles.button} onPress={contactUs}>
-          <Text style={styles.buttonText}>Contact Us</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>

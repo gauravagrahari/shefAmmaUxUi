@@ -23,7 +23,7 @@ const ContactPage = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>Contact Us</Text>
+            <Text style={globalStyles.headerText}>Contact Us</Text>
 
             <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
                 <Text style={styles.contentText}>
@@ -64,13 +64,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Center content vertically
         padding: screenWidth * 0.05,
         backgroundColor:colors.darkBlue,
-    },
-    headerText: {
-        fontSize: screenWidth * 0.055,
-        color: colors.pink,
-        fontWeight: 'bold',
-        marginBottom: screenWidth * 0.045,
-        textAlign: 'center',
     },
     card: {
         padding: screenWidth * 0.043,

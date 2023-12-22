@@ -49,7 +49,7 @@ export default function LoginGuest() {
               if (defaultAddress && defaultAddress.pinCode) {
                   console.log("Default Address " + defaultAddress.pinCode);
               }
-              navigation.navigate('HomeGuest');
+              navigation.navigate('SelectDefaultAddress');
           } else {
               // Navigate to UpdateDetailsGuest and show the MessageCard
               setMessage("You have not added or updated your address. Please update it.");

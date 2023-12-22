@@ -14,6 +14,7 @@ export default function OrderHistoryGuest() {
   const [orderList, setOrderList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [charges, setCharges] = useState();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -23,7 +24,8 @@ export default function OrderHistoryGuest() {
       try {
         const storedUuidGuest = await getFromSecureStore('uuidGuest');
         const token = await getFromSecureStore('token');
-
+        const charges = await getFromSecureStore('charges');
+        setCharges(charges);
         const responseConfig = {
           headers: {
             uuidOrder: storedUuidGuest,
@@ -70,7 +72,7 @@ export default function OrderHistoryGuest() {
           orderList
             .sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
             .map((eachOrder) => (
-              <OrderCard key={eachOrder.timeStamp} order={eachOrder} isHost={false} />
+              <OrderCard key={eachOrder.timeStamp} order={eachOrder} cutOffTime={charges.cancelCutOffTime} isHost={false} />
             ))
         )}
       </ScrollView> 

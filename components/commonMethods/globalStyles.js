@@ -64,6 +64,13 @@ const globalStyles = StyleSheet.create({
     borderBottomColor: colors.pink,
     borderBottomWidth: 2,
   },
+  headerText: {
+    fontSize: screenWidth * 0.055,
+    color: colors.pink,
+    fontWeight: 'bold',
+    marginBottom: screenWidth * 0.045,
+    textAlign: 'center',
+},
   centralisingContainer:{
 flex: 1,
 alignItems: 'center',
