@@ -43,10 +43,12 @@ import { getFromSecureStore } from "./components/Context/SensitiveDataStorage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
 import { init } from "./components/Context/sqLiteDB";
-import ItemListGuest from "./components/Guest/ItemListGuest";
+import ItemListGuest from "./components/Guest/ItemListGuest";   
+import ChargesDisplay from "./components/Guest/ChargesDisplay";   
 import { AddressProvider } from "./components/Context/AddressContext";
 import LoadingScreen from "./components/commonMethods/LoadingScreen";
 import ContactPage from "./components/Guest/ContactPage";
+import SelectDefaultAddress from "./components/Guest/SelectDefaultAddress";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -68,7 +70,7 @@ export default function App() {
         const timeStamp = await getFromSecureStore('timeStamp');
   
         if (token !== null && uuidGuest !== null && timeStamp !== null) {
-            setInitialRoute('HomeGuest');
+            setInitialRoute('SelectDefaultAddress');
         } 
         else if (token !== null && uuidDevBoy !== null && timeStamp !== null){
           setInitialRoute('HomeDevBoy');
@@ -98,6 +100,8 @@ export default function App() {
     screenOptions={{ headerShown: false }} // Add this line
   >
         <Stack.Screen name="HomeGuest" component={HomeGuest}/>
+        <Stack.Screen name="ChargesDisplay" component={ChargesDisplay}/>
+        <Stack.Screen name="SelectDefaultAddress" component={SelectDefaultAddress}/>
         <Stack.Screen name="SearchGuest">
        {(props) => <SearchGuest {...props} navigation={props.navigation} />}
        </Stack.Screen>

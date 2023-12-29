@@ -66,15 +66,18 @@ export default function LoginGuest() {
       
     })
     .catch(error => {
-        setIsLoading(false);
-
-        console.error("API Call Error:", error); // More detailed error logging
-
-        setMessage1("Request failed");
-        Alert.alert("Error", message1);
-    });
-
-  };
+      setIsLoading(false);
+      if (error.response) {
+          // Display the error message from the API response
+          setMessage1(error.response.data);
+          Alert.alert("Login Error", error.response.data);
+      } else {
+          // Generic error message for network issues or server unavailability
+          setMessage1("Unable to connect to the server. Please try again later.");
+          Alert.alert("Connection Error", "Unable to connect to the server. Please try again later.");
+      }
+  });
+};
 
   return (
     // <LinearGradient colors={['#dee3e3', colors.darkBlue]} style={styles.container}>

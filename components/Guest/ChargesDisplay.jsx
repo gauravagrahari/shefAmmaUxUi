@@ -14,6 +14,10 @@ const ChargesDisplay = () => {
       const fetchData = async () => {
         const token = await getFromSecureStore('token');
         const charges = await getFromSecureStore('charges');
+        if (!token) {
+          navigation.navigate('LoginGuest');
+          return; 
+        }
         if (!charges) {
             try {
                 const response = await axios.get(`${URL}/guest/getCharges`, {

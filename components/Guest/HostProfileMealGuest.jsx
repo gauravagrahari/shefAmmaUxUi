@@ -107,6 +107,10 @@ useEffect(() => {
   const fetchCapacityData = async () => {
     try {
       const token = await getFromSecureStore('token'); // Assuming you store your token like this
+      if (!token) {
+        navigation.navigate('LoginGuest');
+        return; 
+      }
       const response = await axios.get(`${URL}/guest/host/capacity`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -296,7 +300,7 @@ return (
 
 
   <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
-  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',    marginTop:10, }}>
 
         <Text style={styles.hostName}>{host.nameHost}</Text>
         {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}

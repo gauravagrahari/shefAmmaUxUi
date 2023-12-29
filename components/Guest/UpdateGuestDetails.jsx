@@ -8,21 +8,17 @@ import { useNavigation } from '@react-navigation/native'; // If you're using Rea
 import { StyleSheet } from 'react-native';
 import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveDataStorage';
 import MessageCard from '../commonMethods/MessageCard';
-import CustomRadioButton from '../commonMethods/CustomRadioButton';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Loader from '../commonMethods/Loader';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
-import { RadioButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AddressContext } from '../Context/AddressContext';
 
 const URL = config.URL;
 export default function UpdateGuestDetails() {
-  const { updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedAddress, setSelectedAddress] = useState('primary');
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('m');
@@ -42,7 +38,9 @@ export default function UpdateGuestDetails() {
   const [initialData, setInitialData] = useState({});
   const [alternateMobile, setAlternateMobile] = useState('');
   const [geocode, setGeocode] = useState('');
-  const [showSecondaryAddressForm, setShowSecondaryAddressForm] = useState(false);
+  const [showSecondaryAddressForm, setShowSecondaryAddressForm] = useState('');
+  const [selectedAddress, setSelectedAddress] = useState('primary');
+  const { addresses,updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
 
   const navigation = useNavigation();
 
@@ -67,6 +65,16 @@ export default function UpdateGuestDetails() {
     }
   });
   useEffect(() => {
+    // On component mount, check if secondary address is empty
+    setShowSecondaryAddressForm(addresses.default === 'office');
+  }, [addresses.default]);
+  const handleAddSecondaryAddress = () => {
+    setShowSecondaryAddressForm(true);
+  };
+  const shouldDisplayRadioButtons = () => {
+    return !isOfficeAddressEmpty();
+  };
+  useEffect(() => {
     const setDefaultAddress = async () => {
       const defaultAddress = await getFromAsync('defaultAddress');
       if (defaultAddress) {
@@ -81,8 +89,14 @@ export default function UpdateGuestDetails() {
   }, []);
 
   useEffect(() => {
+    console.log('Initial selectedAddress:', selectedAddress);
+
     const fetchDefaultAddress = async () => {
         const defaultAddress = await getFromAsync('defaultAddress');
+
+        const fetchedAddress = 'primary'; // Replace this with your actual fetching logic
+      setSelectedAddress(fetchedAddress);
+      console.log('Fetched and set selectedAddress:', fetchedAddress);
         if (defaultAddress) {
             setSelectedAddress(defaultAddress);
         } else {
@@ -98,6 +112,8 @@ export default function UpdateGuestDetails() {
 
 const handleRadioChange = async (value) => {
   setSelectedAddress(value);
+  console.log('Radio button selected:', value);
+
   console.log("UpdateGuestDetails: Radio button selected", value);
 
   let updatedAddress = {}; // Initialize an empty object
@@ -142,16 +158,6 @@ const handleRadioChange = async (value) => {
 };
 const isOfficeAddressEmpty = () => {
   return !officeStreet && !officeHouseName && !officeCity && !officeState && !officePinCode;
-};
-useEffect(() => {
-  // On component mount, check if secondary address is empty
-  setShowSecondaryAddressForm(!isOfficeAddressEmpty());
-}, []);
-const handleAddSecondaryAddress = () => {
-  setShowSecondaryAddressForm(true);
-};
-const shouldDisplayRadioButtons = () => {
-  return !isOfficeAddressEmpty();
 };
 
   useEffect(() => {
@@ -209,9 +215,19 @@ const shouldDisplayRadioButtons = () => {
   
     fetchGuestDetails();
   }, []);
-  
 
+  const validateOfficeAddress = () => {
+    console.log("Validating office address...", { officeStreet, officeHouseName, officeCity, officeState, officePinCode });
+    if (!officeStreet || !officeHouseName || !officeCity || !officeState || !officePinCode) {
+      setMessageText("Please fill in all fields of the secondary address before updating.");
+      setMessageCardVisible(true);
+      return false; // Indicates validation failed
+    }
+    return true; // Indicates validation passed
+  };
+  
   const handleUpdate = async () => {
+    console.log("Starting update process...");
     const currentData = extractRelevantDetails({
       name: fullName,
       phone,
@@ -232,11 +248,21 @@ const shouldDisplayRadioButtons = () => {
         pinCode: officePinCode,
       }
     });
-
+    console.log("Current data:", currentData);
+    console.log("Initial data:", initialData);
     if (JSON.stringify(currentData) === JSON.stringify(initialData)) {
       setMessageText("No changes detected. Skipping update.");
       setMessageCardVisible(true);
+      console.log("No changes detected.");
       return;
+    }
+  
+    console.log("Selected address:", selectedAddress);
+    console.log("Show secondary address form:", showSecondaryAddressForm);
+  
+    if (selectedAddress === 'office' && showSecondaryAddressForm && !validateOfficeAddress()) {
+      console.log("Validation failed for office address.");
+      return; // Stop the update process if validation fails
     }
     try {
       const token = await getFromSecureStore('token');
@@ -245,7 +271,10 @@ const shouldDisplayRadioButtons = () => {
         ...currentData,
         alternateMobile: alternateMobile,
       };
-
+      if (!token) {
+        navigation.navigate('LoginGuest');
+        return; 
+      }
       await axios.put(`${URL}/guest/updateDetails`, guestEntity, {
         headers: {
           'Content-Type': 'application/json',
@@ -264,7 +293,9 @@ const shouldDisplayRadioButtons = () => {
               state: state,
               pinCode: pinCode
           };
-      } else if (selectedAddress === 'office') {
+      }  
+     
+      else if (selectedAddress === 'office') {
           updatedAddress = {
               street: officeStreet,
               houseName: officeHouseName,
@@ -278,15 +309,17 @@ const shouldDisplayRadioButtons = () => {
       await storeInAsync('defaultAddress', updatedAddress);
       setMessageText('Details updated successfully!');
       setMessageCardVisible(true);
+      await storeInAsync('guestDetails', guestEntity);
 
       console.log('Updating context with:', selectedAddress, updatedAddress);
       updateAddressInContext(selectedAddress, updatedAddress); // updatedAddress is the full address object
       setDefaultAddressInContext(selectedAddress); // selectedAddress should be 'primary' or 'secondary'
       
     } catch (error) {
-        console.error("Failed to update guest details:", error);
-        setMessageText('Failed to update details. Please try again later.');
-        setMessageCardVisible(true);
+      console.error("Failed to update guest details:", error);
+      setMessageText('Failed to update details. Please try again later.');
+      setMessageCardVisible(true);
+      console.error('Update failed:', error);
     }
   };
 
@@ -320,15 +353,27 @@ const shouldDisplayRadioButtons = () => {
 </View>
           <Text style={styles.infoText}>Choose or update your delivery Address (By default it woud be delivered to the primary address)</Text>
           <View style={styles.addressContainer}>
+
             <View style={styles.radioPair}>
-            <TouchableOpacity
-    style={[styles.radioButton, selectedAddress === 'primary' && styles.radioButtonSelected]}
-    onPress={() => handleRadioChange('primary')}
->   
-    {selectedAddress === 'primary' && <View style={styles.radioButtonInner} />}
+
+            {shouldDisplayRadioButtons() && (
+ <TouchableOpacity
+ style={[
+   styles.radioButton, 
+   addresses.default === 'primary' ? styles.radioButtonSelected : {}
+ ]}
+ onPress={() => handleRadioChange('primary')}
+>
+ {addresses.default === 'primary' && (
+   <View style={styles.radioButtonInner} />
+ )}
 </TouchableOpacity>
+)}
+
 <Text style={globalStyles.textPrimary}>Primary Address</Text>
             </View>
+
+            
             <TextInput 
               style={globalStyles.input}
               placeholder="Street" 
@@ -361,24 +406,28 @@ const shouldDisplayRadioButtons = () => {
             />
           </View>
           {!showSecondaryAddressForm && (
-            <View style={styles.addSecondaryAddressContainer}>
-              <TouchableOpacity 
-                style={styles.addButton}
-                onPress={handleAddSecondaryAddress}
-              >
-                <Text style={styles.isOfficeAddressEmpty}>Add Secondary Address</Text>
+        <View style={globalStyles.centralisingContainer}>
+        <TouchableOpacity style={styles.linkText}
+                onPress={handleAddSecondaryAddress}>
+                <Text style={styles.isOfficeAddressEmpty}>Select or Add Second Address</Text>
               </TouchableOpacity>
             </View>
           )}
            {showSecondaryAddressForm && (
           <View style={styles.addressContainer}>
           <View style={styles.radioPair}>
-          <TouchableOpacity
-    style={[styles.radioButton, selectedAddress === 'office' && styles.radioButtonSelected]}
-    onPress={() => handleRadioChange('office')}
+          {shouldDisplayRadioButtons() && (
+  <TouchableOpacity
+  style={[
+    styles.radioButton, 
+    addresses.default === 'office' ? styles.radioButtonSelected : {}
+  ]}
+  onPress={() => handleRadioChange('office')}
 >
-    {selectedAddress === 'office' && <View style={styles.radioButtonInner} />}
-</TouchableOpacity>
+  {addresses.default === 'office' && (
+    <View style={styles.radioButtonInner} />
+  )}
+</TouchableOpacity>)}
 <Text style={globalStyles.textPrimary}>Secondary Address</Text>
           </View>
           <TextInput 
@@ -480,6 +529,16 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10,
     paddingHorizontal: 20,
+  },
+  linkText:{
+borderBottomWidth:1,
+borderBottomColor: colors.pink,
+// padding: 5,
+margin:20,
+  },
+  isOfficeAddressEmpty:{
+fontSize: 16,
+color: colors.pink
   },
   addressTitle: {
     color: colors.primaryText,

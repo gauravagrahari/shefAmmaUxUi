@@ -33,7 +33,10 @@ export default function OrderHistoryGuest() {
             Authorization: `Bearer ${token}`,
           },
         };
-
+        if (!token) {
+          navigation.navigate('LoginGuest');
+          return; 
+        }
         const response = await axios.get(`${URL}/guest/orders`, responseConfig);
         setOrderList(response.data);
         console.log(response.data);

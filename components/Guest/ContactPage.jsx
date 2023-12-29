@@ -94,6 +94,3 @@ const styles = StyleSheet.create({
 
 export default ContactPage;
 
-//call other cooks 
-//call bhooomi and look into sms succcess as false
-//proceed to putting srver to live.
