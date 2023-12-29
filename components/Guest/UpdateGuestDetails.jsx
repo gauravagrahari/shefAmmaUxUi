@@ -126,13 +126,13 @@ const handleRadioChange = async (value) => {
           state: state || '',
           pinCode: pinCode || ''
       };
-      setMessageText("Refresh the Home Screen to find meals near this Default Address!");
+      setMessageText("Fetching meals and cooks at this location");
       setMessageCardVisible(true);
       // Update context
       updateAddressInContext('primary', updatedAddress);
   }   if (value === 'office' && isOfficeAddressEmpty()) {
     // If office address is empty, do not set it as default and prompt user
-    setMessageText("Please add a secondary address before selecting it as default.");
+    setMessageText("Please add Address 2 before selecting it as default.");
     setMessageCardVisible(true);
     return;
   }else if (value === 'office' ) {
@@ -143,7 +143,7 @@ const handleRadioChange = async (value) => {
           state: officeState || '',
           pinCode: officePinCode || ''
       };
-      setMessageText("Refresh the Home Screen to find meals near this Default Address!");
+      setMessageText("Fetching meals and cooks at this location!");
       setMessageCardVisible(true);
       // Update context
       updateAddressInContext('secondary', updatedAddress);
@@ -370,7 +370,7 @@ const isOfficeAddressEmpty = () => {
 </TouchableOpacity>
 )}
 
-<Text style={globalStyles.textPrimary}>Primary Address</Text>
+<Text style={globalStyles.textPrimary}>Address 1(Primary)</Text>
             </View>
 
             
@@ -413,6 +413,21 @@ const isOfficeAddressEmpty = () => {
               </TouchableOpacity>
             </View>
           )}
+           <MessageCard 
+            message={messageText} 
+            isVisible={messageCardVisible} 
+            style={styles.messageCardFixed}
+            onClose={() => setMessageCardVisible(false)} 
+          />
+          <MessageCard 
+          message={messageText} 
+          style={styles.messageCardFixed}
+          isVisible={messageCardVisible || firstTime}  // Updated this line
+          onClose={() => {
+          setMessageCardVisible(false);
+          setFirstTime(false);  // This line is added to set firstTime to false when the card is closed.
+  }} 
+/>
            {showSecondaryAddressForm && (
           <View style={styles.addressContainer}>
           <View style={styles.radioPair}>
@@ -428,7 +443,7 @@ const isOfficeAddressEmpty = () => {
     <View style={styles.radioButtonInner} />
   )}
 </TouchableOpacity>)}
-<Text style={globalStyles.textPrimary}>Secondary Address</Text>
+<Text style={globalStyles.textPrimary}>Address 2</Text>
           </View>
           <TextInput 
             style={globalStyles.input}
@@ -460,21 +475,7 @@ const isOfficeAddressEmpty = () => {
             value={officePinCode} 
             onChangeText={setOfficePinCode} 
           />
-          <MessageCard 
-            message={messageText} 
-            isVisible={messageCardVisible} 
-            style={styles.messageCardFixed}
-            onClose={() => setMessageCardVisible(false)} 
-          />
-          <MessageCard 
-          message={messageText} 
-          style={styles.messageCardFixed}
-          isVisible={messageCardVisible || firstTime}  // Updated this line
-          onClose={() => {
-          setMessageCardVisible(false);
-          setFirstTime(false);  // This line is added to set firstTime to false when the card is closed.
-  }} 
-/>
+         
           </View>)}
           <View style={globalStyles.centralisingContainer}>
             <TouchableOpacity style={styles.button} onPress={handleUpdate}>

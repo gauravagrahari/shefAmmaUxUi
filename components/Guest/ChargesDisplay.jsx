@@ -56,11 +56,12 @@ const ChargesDisplay = () => {
       );
     
       return (
-        <LinearGradient colors={[colors.darkBlue, 'white']} style={styles.container}>
+        <LinearGradient colors={[colors.darkBlue, colors.darkBlue]} style={styles.container}>
           <Text style={globalStyles.headerText}>Meal Timings and Booking Information</Text>
           <Text style={styles.commonText}>
             The Delivery Window indicates the time frame during which we delightfully deliver your meal.
-            {"\n"}The Booking Cut-off Time helps us ensure timely delivery; orders placed before this time are guaranteed delivery today, while orders after this time are warmly scheduled for tomorrow's delivery.
+            {"\n"}{"\n"}The Booking Cut-off Time helps us ensure timely delivery; orders placed before this time will be delivery today, while orders after this time are warmly scheduled for tomorrow's delivery.
+            {"\n"}{"\n"}Currently Breakfast service has not been started!
           </Text>
           {charges ? (
             <>
@@ -102,10 +103,14 @@ const ChargesDisplay = () => {
         fontSize: 16,
         marginVertical: 10,
         paddingHorizontal: 20,
+        color: colors.deepBlue,
+
       },
     heading: {
       fontSize: 18,
       fontWeight: 'bold',
+      color: colors.deepBlue,
+
       marginBottom: 10,
     },
     text: {

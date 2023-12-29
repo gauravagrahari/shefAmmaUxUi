@@ -70,6 +70,7 @@ const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: screenWidth * 0.045,
     textAlign: 'center',
+    paddingHorizontal:10,
 },
   centralisingContainer:{
 flex: 1,
