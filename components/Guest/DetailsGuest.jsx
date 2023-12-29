@@ -21,25 +21,39 @@ export default function DetailsGuest() {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [pinCode, setPinCode] = useState('');
-  // const [image, setImage] = useState(null);
-  // const [dp, setDp] = useState('');
+  const [messageText, setMessageText] = useState('');
   const [officeStreet, setOfficeStreet] = useState('');
 const [officeHouseName, setOfficeHouseName] = useState('');
 const [officeCity, setOfficeCity] = useState('');
 const [officeState, setOfficeState] = useState('');
 const [officePinCode, setOfficePinCode] = useState('');
+const [isSubmitting, setIsSubmitting] = useState(false);
 
   // const [showDatePicker, setShowDatePicker] = useState(false);
   const navigation = useNavigation();
-
+  const validateForm = () => {
+    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !pinCode || !alternateMobileNumber) {
+      setMessageText("Please fill in all the fields before submitting.");
+      return false;
+    }
+    return true;
+  };
   const handleSubmission = async () => {
+    if (!validateForm()) {
+        return;
+      }
+      setIsSubmitting(true); 
+      setMessageText("");
     try {
-
         const uuidGuest = await getFromSecureStore('uuidGuest');
         const phone = await getFromSecureStore('phone');
         console.log(uuidGuest);
 
         const token = await getFromSecureStore('token');  
+        if (!token) {
+            navigation.navigate('LoginGuest');
+            return; 
+          }
         const data = {
             uuidGuest: uuidGuest,
             geocode: '',
@@ -89,12 +103,12 @@ const [officePinCode, setOfficePinCode] = useState('');
                 console.error('Error:', error);
             });
     } catch (error) {
-        console.error('An error occurred:', error);  // Generalized the error message
+        console.error('An error occurred:', error);  
     }
+    finally {
+        setIsSubmitting(false); // End submission regardless of the outcome
+      }
    };
-  // const handleImageUpload = (uploadedImage) => {
-  //   setImage(uploadedImage);
-  // };
   const handleDateChange = (date) => {
    setDob(date);
   };
@@ -155,13 +169,14 @@ const [officePinCode, setOfficePinCode] = useState('');
                 <Text style={styles.addressTitle}>Primary Address(Default Address)</Text>
                 {renderAddressFields(street, setStreet, 'Street', houseName, setHouseName, city, setCity, state, setState, pinCode, setPinCode)}
             </View>
-
+{/* 
             <View style={styles.addressBox}>
                 <Text style={styles.addressTitle}>Secondary Address</Text>
                 {renderAddressFields(officeStreet, setOfficeStreet, 'Office Street', officeHouseName, setOfficeHouseName, officeCity, setOfficeCity, officeState, setOfficeState, officePinCode, setOfficePinCode)}
-            </View>
+            </View> */}
+        {messageText.length > 0 && <Text style={styles.messageText}>{messageText}</Text>}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmission}>
+            <TouchableOpacity  disabled={isSubmitting} style={styles.button} onPress={handleSubmission}>
                 <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
         </ScrollView>
@@ -206,6 +221,10 @@ const styles = StyleSheet.create({
       color: colors.deepBlue,
       margin: 15,
       textAlign: 'center',
+  },
+  messageText:{
+margin:5,
+color:'red',
   },
     inputContainer: {
       flexDirection: 'row',

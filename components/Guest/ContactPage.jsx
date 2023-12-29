@@ -23,7 +23,7 @@ const ContactPage = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}>Contact Us</Text>
+            <Text style={globalStyles.headerText}>Contact Us</Text>
 
             <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
                 <Text style={styles.contentText}>
@@ -65,13 +65,6 @@ const styles = StyleSheet.create({
         padding: screenWidth * 0.05,
         backgroundColor:colors.darkBlue,
     },
-    headerText: {
-        fontSize: screenWidth * 0.055,
-        color: colors.pink,
-        fontWeight: 'bold',
-        marginBottom: screenWidth * 0.045,
-        textAlign: 'center',
-    },
     card: {
         padding: screenWidth * 0.043,
         borderRadius: 15, // More pronounced rounded corners
@@ -101,6 +94,3 @@ const styles = StyleSheet.create({
 
 export default ContactPage;
 
-//call other cooks 
-//call bhooomi and look into sms succcess as false
-//proceed to putting srver to live.

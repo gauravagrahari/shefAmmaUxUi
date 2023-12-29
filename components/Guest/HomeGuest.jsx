@@ -8,8 +8,6 @@ import config from '../Context/constants';
 import { getFromSecureStore, storeInSecureStore } from "../Context/SensitiveDataStorage";
 import { getFromAsync } from "../Context/NonSensitiveDataStorage";
 import HostContext from '../Context/HostContext';
-import Icon from 'react-native-vector-icons/AntDesign'; // Import Icon component
-// import globalStyles from '../commonMethods/globalStyles';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Loader from "../commonMethods/Loader";
 import { useFocusEffect } from '@react-navigation/native';
@@ -60,7 +58,10 @@ export default function HomeGuest({ navigation }) {
     // Fetch the UUID from Secure Store
     const storedUuidGuest = await getFromSecureStore('uuidGuest');
     const token = await getFromSecureStore('token');
- 
+    if (!token || !addresses || !addresses.default) {
+      navigation.navigate('LoginGuest');
+      return; // Exit the useEffect if token is not present or addresses is not defined
+    }
    console.log("value of loadinf is------->"+loading);
     try {
       // Fetch charges from the API
@@ -185,7 +186,9 @@ const onRefresh = React.useCallback(() => {
       [mealType]: !selectedMealTypes[mealType],
     });
   };
-
+  const handleCheckPincode = () => {
+    setShowPincodeChecker(true);
+  };
   const filterHostsByMealType = () => {
     return hostList.filter((host) => {
       return host.meals.some(meal => {
@@ -221,8 +224,13 @@ const onRefresh = React.useCallback(() => {
         {
         filteredHosts.length === 0 && !showPincodeChecker ? (
           <View style={styles.emptyHostMessageContainer}>
-            <Text style={styles.emptyHostMessage}>No cooks available in your region! Try updating your Address.</Text>
-          </View>
+              <Text style={styles.emptyHostMessage}>
+                No cooks available at your selected or chosen Address! Try updating your Address.
+              </Text>
+              <TouchableOpacity onPress={handleCheckPincode} style={styles.checkPincodeButton}>
+                <Text style={styles.checkPincodeButtonText}>Check Pincode</Text>
+              </TouchableOpacity>
+            </View>
         ) : (
           filteredHosts.map((host, index) => (
             <HostCard key={index} host={host.hostEntity} meals={host.meals} />
@@ -246,6 +254,11 @@ const onRefresh = React.useCallback(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  checkPincodeButtonText:{
+fontSize:18,
+margin:10,
+fontWeight:'bold',
   },
   mealTypeFilter: {
     flexDirection: 'row',
@@ -302,3 +315,5 @@ const styles = StyleSheet.create({
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+//out of radius hosts are being displayed, check it

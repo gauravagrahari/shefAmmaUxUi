@@ -8,9 +8,10 @@ import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import axios from 'axios';
 import config from '../Context/constants';
 import * as Animatable from 'react-native-animatable';
+import StarRating from './StarRating';
 
 const URL = config.URL;
-export default function OrderCard({ order, navigation }) {
+export default function OrderCard({ order,charges, navigation }) {
   const statusMappings = {
     new:"New",
     ip: "In Progress",
@@ -71,7 +72,7 @@ export default function OrderCard({ order, navigation }) {
       if (parts.length < 3) {
         return null;
       }
-const dayMonthPart = parts[1]; 
+      const dayMonthPart = parts[1]; 
       const timePart = parts[2].split(' and ')[0]; 
       const year = new Date().getFullYear();
 const [day, month] = dayMonthPart.split(' ');
@@ -87,10 +88,9 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
       if (isNaN(dateTime)) {
         return null;
       }
-      
-      // Subtract 3 hours to get the cutoff time
-      const cutoffTime = new Date(dateTime.setHours(dateTime.getHours() - 3));
-      
+      const cancelCutOffHours = charges && charges.cancelCutOffTime ? parseInt(charges.cancelCutOffTime, 10) : 3;
+      const cutoffTime = new Date(dateTime.setHours(dateTime.getHours() - cancelCutOffHours));
+        
       return cutoffTime;
     } catch (error) {
       console.error('Error parsing date:', error);
@@ -151,9 +151,16 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
       console.error("Error cancelling the order:", error);
     }
   };
-//   const shouldShowRatingOptions = () => {
-//     return order.status === 'com' && order.rating === null && order.review === null;
-// };
+  const renderCancelCutoffTime = () => {
+    const cutoffTime = getCutoffTime(order.delTimeAndDay);
+    if (!cutoffTime) return null;
+
+    return (
+      <Text>
+        Eligible for cancellation by {cutoffTime.toLocaleString('en-IN', options)}
+      </Text>
+    );
+  };
   return (
     <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
    <View style={styles.orderDetails}>
@@ -193,8 +200,8 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
               </TouchableOpacity>
               <TouchableOpacity style={styles.noButton} onPress={() => setShowConfirmation(false)}>
               <Animatable.Text
-            // iterationDelay={1000}
-          easing="ease-out"
+              // iterationDelay={1000}
+              easing="ease-out"
                 animation="pulse"
                 useNativeDriver 
                 iterationCount='infinite'>
@@ -206,9 +213,11 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
             <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
 
             <View style={globalStyles.centralisingContainer}>
+          
             <TouchableOpacity style={styles.orderButton} onPress={() => setShowConfirmation(true)}>
               <Text style={styles.btnText}>Cancel Order</Text>
             </TouchableOpacity>
+            {renderCancelCutoffTime()}
             </View>
             </>
           )
@@ -217,6 +226,7 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
           <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
         )
       ) : null }
+
 {order.status === 'com' && !order.rating && (
   <StarRatingInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp} uuidHost={order.uuidHost} geoHost={order.geoHost} />
 )}
@@ -224,6 +234,15 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
 {order.status === 'com' && !order.review && (
   <ReviewInput uuidOrder={order.uuidOrder} timeStamp={order.timeStamp}/>
 )}
+{order.status === 'com' && (order.review||order.rating) && (
+<View style={styles.confirmationPrompt}>
+{order.status === 'com' && order.review && (
+      <Text style={styles.confirmationText}>{order.review}</Text>
+    )}
+{order.status === 'com' && order.rating && (
+  <StarRating rating={order.rating} />
+)}
+</View>)}
 </LinearGradient>
 );
 }
@@ -249,7 +268,7 @@ orderButton: {
   width: '50%',
   height: 35,
   marginTop: 9,
-  marginBottom: 5,
+  marginBottom: 8,
   borderRadius: 10,
   borderColor: colors.pink,
   borderWidth: 1,
@@ -333,13 +352,13 @@ confirmationPrompt: {
   alignItems: 'center', // Centers children vertically in the cross axis
   justifyContent: 'center', // Centers children horizontally in the main axis
   padding: 10, // Add some padding for spacing
-  marginTop: 10, // Give some space from the above element
+  marginTop: 5, // Give some space from the above element
 },
 confirmationText: {
   flex: 1, // Takes up as much space as possible
   marginRight: 10, // Add some margin to the right of the text
-  fontSize: 16, // Standard readable size
-  color: colors.matBlack, // Assuming a light background, otherwise choose a contrasting color
+  fontSize: 17, // Standard readable size
+  color: colors.deepBlue, // Assuming a light background, otherwise choose a contrasting color
 },
 yesButton: {
   backgroundColor: 'rgba(0, 150, 136, 0.05)', // 80% opacity of #009688
