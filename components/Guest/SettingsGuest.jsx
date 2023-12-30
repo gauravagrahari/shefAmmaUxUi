@@ -7,11 +7,12 @@ import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { deleteInAsync } from '../Context/NonSensitiveDataStorage';
 import { AddressContext } from '../Context/AddressContext';
+// import RNRestart from 'react-native-restart';
 
 export default function SettingsGuest() {
   const navigation = useNavigation();
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
-  const { addresses, clearAddressesInContext } = useContext(AddressContext); // Corrected method name and added addresses
+  const { addresses, clearAddressesInContext,setAddresses } = useContext(AddressContext); // Corrected method name and added addresses
 
   const handlePasswordChangeSuccess = () => {
     setIsChangePasswordVisible(false);
@@ -25,7 +26,9 @@ export default function SettingsGuest() {
   }
   
   const handleLogout = async () => {
-    console.log('Current addresses in context before logout------>', addresses);
+    console.log('Current addresses in context before logout:', addresses);
+  
+    // Deleting data from SecureStore
     await deleteInSecureStore('token');
     await deleteInSecureStore('defaultAddress');
     await deleteInSecureStore('uuidGuest');
@@ -33,12 +36,18 @@ export default function SettingsGuest() {
     await deleteInSecureStore('timeStamp');
     await deleteInSecureStore('altPhone');
     await deleteInSecureStore('phone');
-    await deleteInAsync('guestDetails');
-    console.log('Calling clearAddressesInContext');
+  
+    // Deleting guestDetails from AsyncStorage
+    const deleteResult = await deleteInAsync('guestDetails');
+    console.log('Guest details deleted:', deleteResult);
+  
+    // Resetting the context
     clearAddressesInContext();
-    navigation.navigate('LoginGuest');
-  }
-
+    console.log('Address context cleared');
+  
+    navigation.navigate('SignupGuest');
+  };
+  
   return (
     // <View style={globalStyles.containerPrimary}>
     <View style={styles.mainContainer}>

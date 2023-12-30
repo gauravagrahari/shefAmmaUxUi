@@ -17,7 +17,7 @@ export default function LoginGuest() {
   const [phoneNo, setPhoneNo] = useState('');
   const [password, setPassword] = useState('');
   const [message1, setMessage1] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
   const [showMessageCard, setShowMessageCard] = useState(false);
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
@@ -42,7 +42,7 @@ export default function LoginGuest() {
           await storeInSecureStore('altPhone',response.data.guestDetails.alternateMobile);
           await storeInAsync('guestDetails', response.data.guestDetails);
       
-          if (response.data.guestDetails && response.data.guestDetails.addressGuest) {
+          if (response.data.guestDetails && response.data.guestDetails.addressGuest) { 
               // Only run this code if addressGuest exists
               await storeInAsync('defaultAddress', response.data.guestDetails.addressGuest);
               const defaultAddress = await getFromAsync('defaultAddress');
@@ -54,9 +54,7 @@ export default function LoginGuest() {
               // Navigate to UpdateDetailsGuest and show the MessageCard
               setMessage("You have not added or updated your address. Please update it.");
               setShowMessageCard(true);
-              navigation.navigate('DetailsGuest', {
-                uuidGuest: response.data.uuidGuest,
-              });
+              navigation.navigate('DetailsGuest');
           }
       }
        else {
