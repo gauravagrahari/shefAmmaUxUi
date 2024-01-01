@@ -215,7 +215,18 @@ const isOfficeAddressEmpty = () => {
   
     fetchGuestDetails();
   }, []);
-
+  const isOfficeAddressCompleteOrEmpty = () => {
+    const fields = [officeStreet, officeHouseName, officeCity, officeState, officePinCode];
+    const allEmpty = fields.every(field => field === '');
+    const allFilled = fields.every(field => field !== '');
+  
+    return allEmpty || allFilled;
+  };
+  const isPrimaryAddressComplete = () => {
+    const fields = [street, houseName, city, state, pinCode];
+    return fields.every(field => field !== '');
+  };
+  
   const validateOfficeAddress = () => {
     console.log("Validating office address...", { officeStreet, officeHouseName, officeCity, officeState, officePinCode });
     if (!officeStreet || !officeHouseName || !officeCity || !officeState || !officePinCode) {
@@ -228,6 +239,16 @@ const isOfficeAddressEmpty = () => {
   
   const handleUpdate = async () => {
     console.log("Starting update process...");
+    if (!isOfficeAddressCompleteOrEmpty()) {
+      setMessageText("Please add all the Fields of Address 2");
+      setMessageCardVisible(true);
+      return;
+    }
+    if (!isPrimaryAddressComplete()) {
+      setMessageText("Please add all the Fields of Address 1");
+      setMessageCardVisible(true);
+      return;
+    }
     const currentData = extractRelevantDetails({
       name: fullName,
       phone,
@@ -477,6 +498,16 @@ const isOfficeAddressEmpty = () => {
           />
          
           </View>)}
+          {!isOfficeAddressCompleteOrEmpty() && (
+      <Text style={styles.errorMessage}>
+        While adding the Address 2, fill all the fields!
+      </Text>
+    )}
+     {!isPrimaryAddressComplete() && (
+    <Text style={styles.errorMessage}>
+      Please fill all fields of the Address 1.
+    </Text>
+  )}
           <View style={globalStyles.centralisingContainer}>
             <TouchableOpacity style={styles.button} onPress={handleUpdate}>
               <Text style={styles.buttonText}>Update Details</Text>
@@ -498,6 +529,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     // backgroundColor: '#f8f8f8',
+  },
+  errorMessage: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    margin: 10,
   },
   button: {
     width: '80%',

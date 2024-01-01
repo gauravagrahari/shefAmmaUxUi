@@ -26,9 +26,11 @@ export const AddressProvider = ({ children }) => {
     });
   };
   const clearAddressesInContext = () => {
-    console.log('Clearing all addresses in context');
-    setAddresses(initialState);  // Resetting to the initial state
+    console.log('Clearing all addresses in context. Current addresses:', addresses);
+    setAddresses(initialState);
+    console.log('Addresses in context after clearing:', initialState);
   };
+  
 
   return (
     <AddressContext.Provider value={{ addresses, updateAddressInContext, setDefaultAddressInContext, clearAddressesInContext }}>

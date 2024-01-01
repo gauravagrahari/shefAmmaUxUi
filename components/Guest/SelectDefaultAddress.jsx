@@ -15,15 +15,18 @@ export default function SelectDefaultAddress() {
 
   useEffect(() => {
     const fetchGuestDetails = async () => {
+      console.log("Fetching guest details for address selection");
       const details = await getFromAsync('guestDetails');
+      console.log("Fetched guest details:", details);
       
       if (!details || Object.keys(details).length === 0) {
-        // If guestDetails is empty or undefined, navigate to DetailsGuest
+        console.log("Guest details are empty, navigating to DetailsGuest");
         navigation.navigate('DetailsGuest');
       } else {
         console.log('New guest details fetched:', details);
         setGuestDetails(details);
         const defaultAddress = await getFromAsync('defaultAddress');
+        console.log("Setting selected and default address:", defaultAddress);
         setSelectedAddress(defaultAddress || 'primary');
         updateAddressInContext('primary', details.addressGuest);
         updateAddressInContext('secondary', details.officeAddress);

@@ -7,7 +7,8 @@ import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { deleteInAsync } from '../Context/NonSensitiveDataStorage';
 import { AddressContext } from '../Context/AddressContext';
-// import RNRestart from 'react-native-restart';
+
+const initialState = { primary: null, secondary: null, default: 'primary' };
 
 export default function SettingsGuest() {
   const navigation = useNavigation();
@@ -39,11 +40,12 @@ export default function SettingsGuest() {
   
     // Deleting guestDetails from AsyncStorage
     const deleteResult = await deleteInAsync('guestDetails');
-    console.log('Guest details deleted:', deleteResult);
   
-    // Resetting the context
+    console.log('Current addresses in context before logout:', addresses);
+
+
     clearAddressesInContext();
-    console.log('Address context cleared');
+    console.log('Address context should now be cleared to:', initialState);
   
     navigation.navigate('SignupGuest');
   };
