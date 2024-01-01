@@ -227,7 +227,7 @@ const onRefresh = React.useCallback(() => {
               <Text style={styles.emptyHostMessage}>
                 No cooks available at your selected or chosen Address! Try updating your Address.
               </Text>
-              <TouchableOpacity onPress={handleCheckPincode} style={styles.checkPincodeButton}>
+              <TouchableOpacity onPress={handleCheckPincode}>
                 <Text style={styles.checkPincodeButtonText}>Check Pincode</Text>
               </TouchableOpacity>
             </View>

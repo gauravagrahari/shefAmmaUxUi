@@ -15,30 +15,43 @@ export default function SelectDefaultAddress() {
 
   useEffect(() => {
     const fetchGuestDetails = async () => {
+      console.log("Fetching guest details for address selection");
       const details = await getFromAsync('guestDetails');
-      if (details) {
+      console.log("Fetched guest details:", details);
+      
+      if (!details || Object.keys(details).length === 0) {
+        console.log("Guest details are empty, navigating to DetailsGuest");
+        navigation.navigate('DetailsGuest');
+      } else {
+        console.log('New guest details fetched:', details);
         setGuestDetails(details);
         const defaultAddress = await getFromAsync('defaultAddress');
+        console.log("Setting selected and default address:", defaultAddress);
         setSelectedAddress(defaultAddress || 'primary');
+        updateAddressInContext('primary', details.addressGuest);
+        updateAddressInContext('secondary', details.officeAddress);
+        setDefaultAddressInContext(defaultAddress || 'primary');
       }
     };
     fetchGuestDetails();
   }, []);
+
   useEffect(() => {
-    if (isAddressEmpty(guestDetails.officeAddress)) {
+    if (guestDetails && isAddressEmpty(guestDetails.officeAddress)) {
       Animated.timing(progress, {
         toValue: 100,
         duration: 2000,
         useNativeDriver: false,
       }).start();
-
+  
       const timer = setTimeout(() => {
         navigation.navigate('HomeGuest');
       }, 4000);
-
+  
       return () => clearTimeout(timer);
     }
   }, [guestDetails, navigation, progress]);
+  
   const isAddressEmpty = (address) => !(address && address.street && address.city);
 
   const handleRadioChange = async (value) => {
@@ -61,6 +74,7 @@ export default function SelectDefaultAddress() {
   };
 
   const handleClose = () => navigation.navigate('HomeGuest');
+
   return (
     <LinearGradient colors={['white', colors.darkBlue]} style={styles.modalContainer}>
         {isAddressEmpty(guestDetails.officeAddress) && (

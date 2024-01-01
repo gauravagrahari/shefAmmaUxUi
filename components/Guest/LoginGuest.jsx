@@ -17,7 +17,7 @@ export default function LoginGuest() {
   const [phoneNo, setPhoneNo] = useState('');
   const [password, setPassword] = useState('');
   const [message1, setMessage1] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
   const [showMessageCard, setShowMessageCard] = useState(false);
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
@@ -28,6 +28,7 @@ export default function LoginGuest() {
       phone: phoneNo,
       password: password,
     };
+    console.log("Attempting login with:", data);
     axios.post(`${URL}/guestLogin`, data)
     .then(async response => {  // added async here
         setIsLoading(false); 
@@ -35,6 +36,7 @@ export default function LoginGuest() {
         console.log("Received response in Login page:", response.data); // Logging the received response
 
         if (response.status === 200) {
+          console.log("Storing token and user details in secure storage");
           await storeInSecureStore('token', response.data.token);
           await storeInSecureStore('uuidGuest', response.data.uuidGuest);
           await storeInSecureStore('timeStamp', response.data.timeStamp);
@@ -42,8 +44,8 @@ export default function LoginGuest() {
           await storeInSecureStore('altPhone',response.data.guestDetails.alternateMobile);
           await storeInAsync('guestDetails', response.data.guestDetails);
       
-          if (response.data.guestDetails && response.data.guestDetails.addressGuest) {
-              // Only run this code if addressGuest exists
+          if (response.data.guestDetails && response.data.guestDetails.addressGuest) { 
+            console.log("Storing default address:", response.data.guestDetails.addressGuest);
               await storeInAsync('defaultAddress', response.data.guestDetails.addressGuest);
               const defaultAddress = await getFromAsync('defaultAddress');
               if (defaultAddress && defaultAddress.pinCode) {
@@ -54,19 +56,19 @@ export default function LoginGuest() {
               // Navigate to UpdateDetailsGuest and show the MessageCard
               setMessage("You have not added or updated your address. Please update it.");
               setShowMessageCard(true);
-              navigation.navigate('DetailsGuest', {
-                uuidGuest: response.data.uuidGuest,
-              });
+              console.log("Address details not available, navigating to DetailsGuest");
+              navigation.navigate('DetailsGuest');
           }
       }
-       else {
-          setMessage(response.data);
-          Alert.alert("Error", message);
+      else {
+        console.error("Login failed with response:", response.data);
+        Alert.alert("Error", response.data);
       }
       
     })
     .catch(error => {
       setIsLoading(false);
+      console.error("Login error:", error);
       if (error.response) {
           // Display the error message from the API response
           setMessage1(error.response.data);

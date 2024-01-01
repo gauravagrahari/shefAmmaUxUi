@@ -126,13 +126,13 @@ const handleRadioChange = async (value) => {
           state: state || '',
           pinCode: pinCode || ''
       };
-      setMessageText("Refresh the Home Screen to find meals near this Default Address!");
+      setMessageText("Fetching meals and cooks at this location");
       setMessageCardVisible(true);
       // Update context
       updateAddressInContext('primary', updatedAddress);
   }   if (value === 'office' && isOfficeAddressEmpty()) {
     // If office address is empty, do not set it as default and prompt user
-    setMessageText("Please add a secondary address before selecting it as default.");
+    setMessageText("Please add Address 2 before selecting it as default.");
     setMessageCardVisible(true);
     return;
   }else if (value === 'office' ) {
@@ -143,7 +143,7 @@ const handleRadioChange = async (value) => {
           state: officeState || '',
           pinCode: officePinCode || ''
       };
-      setMessageText("Refresh the Home Screen to find meals near this Default Address!");
+      setMessageText("Fetching meals and cooks at this location!");
       setMessageCardVisible(true);
       // Update context
       updateAddressInContext('secondary', updatedAddress);
@@ -215,7 +215,18 @@ const isOfficeAddressEmpty = () => {
   
     fetchGuestDetails();
   }, []);
-
+  const isOfficeAddressCompleteOrEmpty = () => {
+    const fields = [officeStreet, officeHouseName, officeCity, officeState, officePinCode];
+    const allEmpty = fields.every(field => field === '');
+    const allFilled = fields.every(field => field !== '');
+  
+    return allEmpty || allFilled;
+  };
+  const isPrimaryAddressComplete = () => {
+    const fields = [street, houseName, city, state, pinCode];
+    return fields.every(field => field !== '');
+  };
+  
   const validateOfficeAddress = () => {
     console.log("Validating office address...", { officeStreet, officeHouseName, officeCity, officeState, officePinCode });
     if (!officeStreet || !officeHouseName || !officeCity || !officeState || !officePinCode) {
@@ -228,6 +239,16 @@ const isOfficeAddressEmpty = () => {
   
   const handleUpdate = async () => {
     console.log("Starting update process...");
+    if (!isOfficeAddressCompleteOrEmpty()) {
+      setMessageText("Please add all the Fields of Address 2");
+      setMessageCardVisible(true);
+      return;
+    }
+    if (!isPrimaryAddressComplete()) {
+      setMessageText("Please add all the Fields of Address 1");
+      setMessageCardVisible(true);
+      return;
+    }
     const currentData = extractRelevantDetails({
       name: fullName,
       phone,
@@ -370,7 +391,7 @@ const isOfficeAddressEmpty = () => {
 </TouchableOpacity>
 )}
 
-<Text style={globalStyles.textPrimary}>Primary Address</Text>
+<Text style={globalStyles.textPrimary}>Address 1(Primary)</Text>
             </View>
 
             
@@ -413,6 +434,21 @@ const isOfficeAddressEmpty = () => {
               </TouchableOpacity>
             </View>
           )}
+           <MessageCard 
+            message={messageText} 
+            isVisible={messageCardVisible} 
+            style={styles.messageCardFixed}
+            onClose={() => setMessageCardVisible(false)} 
+          />
+          <MessageCard 
+          message={messageText} 
+          style={styles.messageCardFixed}
+          isVisible={messageCardVisible || firstTime}  // Updated this line
+          onClose={() => {
+          setMessageCardVisible(false);
+          setFirstTime(false);  // This line is added to set firstTime to false when the card is closed.
+  }} 
+/>
            {showSecondaryAddressForm && (
           <View style={styles.addressContainer}>
           <View style={styles.radioPair}>
@@ -428,7 +464,7 @@ const isOfficeAddressEmpty = () => {
     <View style={styles.radioButtonInner} />
   )}
 </TouchableOpacity>)}
-<Text style={globalStyles.textPrimary}>Secondary Address</Text>
+<Text style={globalStyles.textPrimary}>Address 2</Text>
           </View>
           <TextInput 
             style={globalStyles.input}
@@ -460,22 +496,18 @@ const isOfficeAddressEmpty = () => {
             value={officePinCode} 
             onChangeText={setOfficePinCode} 
           />
-          <MessageCard 
-            message={messageText} 
-            isVisible={messageCardVisible} 
-            style={styles.messageCardFixed}
-            onClose={() => setMessageCardVisible(false)} 
-          />
-          <MessageCard 
-          message={messageText} 
-          style={styles.messageCardFixed}
-          isVisible={messageCardVisible || firstTime}  // Updated this line
-          onClose={() => {
-          setMessageCardVisible(false);
-          setFirstTime(false);  // This line is added to set firstTime to false when the card is closed.
-  }} 
-/>
+         
           </View>)}
+          {!isOfficeAddressCompleteOrEmpty() && (
+      <Text style={styles.errorMessage}>
+        While adding the Address 2, fill all the fields!
+      </Text>
+    )}
+     {!isPrimaryAddressComplete() && (
+    <Text style={styles.errorMessage}>
+      Please fill all fields of the Address 1.
+    </Text>
+  )}
           <View style={globalStyles.centralisingContainer}>
             <TouchableOpacity style={styles.button} onPress={handleUpdate}>
               <Text style={styles.buttonText}>Update Details</Text>
@@ -497,6 +529,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     // backgroundColor: '#f8f8f8',
+  },
+  errorMessage: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    margin: 10,
   },
   button: {
     width: '80%',

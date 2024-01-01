@@ -97,7 +97,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             })
             .then((response) => {
                 console.log('Server response:', response.data);
-                navigation.navigate('HomeGuest');
+                navigation.navigate('SelectDefaultAddress');
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -162,7 +162,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                     onPress={() => handleGenderChange('t')}>
                     {gender === 't' && <View style={styles.radioButtonInner} />}
                 </TouchableOpacity>
-                <Text style={styles.radioButtonLabel}>Trans</Text>
+                <Text style={styles.radioButtonLabel}>Others</Text>
             </View>
 
             <View style={styles.addressBox}>

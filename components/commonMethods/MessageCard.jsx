@@ -28,30 +28,39 @@ const MessageCard = ({ message, isVisible, onClose }) => {
 
     return (
         <Animated.View style={{ ...styles.container, opacity: fadeAnim }}>
-            <Text style={styles.message}>{message}</Text>
+            <View style={styles.messageBox}>
+                <Text style={styles.message}>{message}</Text>
+            </View>
         </Animated.View>
     );
+    
 }
-
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        top: '10%',
-        left: '10%',
-        right: '10%',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: adds a semi-transparent overlay for better visibility
+    },
+    messageBox: {
         padding: 15,
         borderRadius: 10,
         backgroundColor: '#444',
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 2,
+        // },
+        // shadowOpacity: 0.25,
+        // shadowRadius: 3.84,
+        // elevation: 5,
+        maxWidth: '80%', // Ensures the box doesn't stretch too wide on larger screens
     },
     message: {
         color: '#fff',

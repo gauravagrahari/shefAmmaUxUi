@@ -8,10 +8,12 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { deleteInAsync } from '../Context/NonSensitiveDataStorage';
 import { AddressContext } from '../Context/AddressContext';
 
+const initialState = { primary: null, secondary: null, default: 'primary' };
+
 export default function SettingsGuest() {
   const navigation = useNavigation();
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
-  const { addresses, clearAddressesInContext } = useContext(AddressContext); // Corrected method name and added addresses
+  const { addresses, clearAddressesInContext,setAddresses } = useContext(AddressContext); // Corrected method name and added addresses
 
   const handlePasswordChangeSuccess = () => {
     setIsChangePasswordVisible(false);
@@ -25,7 +27,9 @@ export default function SettingsGuest() {
   }
   
   const handleLogout = async () => {
-    console.log('Current addresses in context before logout------>', addresses);
+    console.log('Current addresses in context before logout:', addresses);
+  
+    // Deleting data from SecureStore
     await deleteInSecureStore('token');
     await deleteInSecureStore('defaultAddress');
     await deleteInSecureStore('uuidGuest');
@@ -33,12 +37,19 @@ export default function SettingsGuest() {
     await deleteInSecureStore('timeStamp');
     await deleteInSecureStore('altPhone');
     await deleteInSecureStore('phone');
-    await deleteInAsync('guestDetails');
-    console.log('Calling clearAddressesInContext');
-    clearAddressesInContext();
-    navigation.navigate('LoginGuest');
-  }
+  
+    // Deleting guestDetails from AsyncStorage
+    const deleteResult = await deleteInAsync('guestDetails');
+  
+    console.log('Current addresses in context before logout:', addresses);
 
+
+    clearAddressesInContext();
+    console.log('Address context should now be cleared to:', initialState);
+  
+    navigation.navigate('SignupGuest');
+  };
+  
   return (
     // <View style={globalStyles.containerPrimary}>
     <View style={styles.mainContainer}>
