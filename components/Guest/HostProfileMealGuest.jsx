@@ -56,6 +56,8 @@ export default function HostProfileMealGuest({ route }) {
   const [preferredTime, setPreferredTime] = useState('');
   const [servedMeals, setServedMeals] = useState([]);
   const [isOrdering, setIsOrdering] = useState(false);
+  const [maxMeal, setMaxMeal] = useState(2); 
+
   useEffect(() => {
     setMealCount(0);
 }, [selectedMealType]);
@@ -74,17 +76,63 @@ useEffect(() => {
   useEffect(() => {
     setCapacityAttributes(getCurrentCapacityAttributes());
   }, [selectedMealType]);
+
   const getSelectedItem = useCallback(() => {
     return itemList.find(item => item.mealType === selectedMealType);
 }, [itemList, selectedMealType]);
 
 const increaseMealCount = () => {
-  if (mealCount < capacityData[currentCapacity]) {
-      setMealCount(prevCount => prevCount + 1);
-  } else {
-      setShowExceedMessage(true); // Show the message card when capacity is exceeded
+  if (mealCount >= capacityData[currentCapacity]) {
+    setShowExceedMessage(true); // Show message when capacity is exceeded
+    return;
+  }
+
+  if (mealCount >= maxMeal) {
+    alert(`Per order, a maximum of ${maxMeal} meals can be ordered.`);
+    return;
+  }
+
+  setMealCount(prevCount => prevCount + 1);
+};
+
+
+const fetchCharges = async () => {
+  try {
+    const token = await getFromSecureStore('token');
+    const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const chargesData = chargesResponse.data;
+    setDeliveryCharge(parseFloat(chargesData.deliveryCharges));
+    console.log('fetched------------------->');
+    setPackagingCharge(parseFloat(chargesData.packagingCharges) + parseFloat(chargesData.handlingCharges));
+    setDiscount(parseFloat(chargesData.discount));
+    if (chargesData.maxMeal) {
+      setMaxMeal(chargesData.maxMeal);
+    }
+    await storeInSecureStore('charges', chargesData);
+  } catch (error) {
+    console.error('Failed to fetch charges:', error);
+    throw error;
   }
 };
+
+useEffect(() => {
+  const fetchChargesFromStore = async () => {
+    const charges = await getFromSecureStore('charges');
+    if (!charges) {
+      await fetchCharges();
+    } else {
+      setDeliveryCharge(parseFloat(charges.deliveryCharges));
+      setPackagingCharge(parseFloat(charges.packagingCharges) + parseFloat(charges.handlingCharges));
+      setDiscount(parseFloat(charges.discount));
+      if (charges.maxMeal) {
+        setMaxMeal(charges.maxMeal);
+      }
+    }
+  };
+  fetchChargesFromStore();
+}, []); 
 
 useEffect(() => {
   const fetchDefaultAddress = async () => {
@@ -133,37 +181,6 @@ useEffect(() => {
   fetchCapacityData();
 }, []);
 
-const fetchCharges = async () => {
-  try {
-    const token = await getFromSecureStore('token');
-    const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const chargesData = chargesResponse.data;
-    setDeliveryCharge(parseFloat(chargesData.deliveryCharges));
-    console.log('fetched------------------->');
-    setPackagingCharge(parseFloat(chargesData.packagingCharges) + parseFloat(chargesData.handlingCharges));
-    setDiscount(parseFloat(chargesData.discount));
-    await storeInSecureStore('charges', chargesData);
-  } catch (error) {
-    console.error('Failed to fetch charges:', error);
-    throw error;
-  }
-};
-
-useEffect(() => {
-  const fetchChargesFromStore = async () => {
-    const charges = await getFromSecureStore('charges');
-    if (!charges) {
-      await fetchCharges();
-    } else {
-      setDeliveryCharge(parseFloat(charges.deliveryCharges));
-      setPackagingCharge(parseFloat(charges.packagingCharges) + parseFloat(charges.handlingCharges));
-      setDiscount(parseFloat(charges.discount));
-    }
-  };
-  fetchChargesFromStore();
-}, []); 
 
   useEffect(() => {
     const selectedItem = getSelectedItem();
@@ -345,7 +362,8 @@ return (
 
 {capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
       <View style={styles.costRow}>
-          <Text style={styles.costLabelText}>Total {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text>
+          <Text style={styles.costLabelText}>Total Kitchen Capacity:</Text>
+          {/* <Text style={styles.costLabelText}>Total {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text> */}
           <Text style={styles.costValueText}>{capacityData[capacity]}</Text>
       </View>
   )}
@@ -353,6 +371,7 @@ return (
   {capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
       <View style={styles.costRow}>
           <Text style={styles.costLabelText}>Remaining {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text>
+          {/* <Text style={styles.costLabelText}>Remaining {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text> */}
           <Text style={styles.costValueText}>{capacityData[currentCapacity]}</Text>
       </View>
   )}
@@ -367,7 +386,7 @@ return (
   </View>
 
   <View style={styles.costRow}>
-      <Text style={styles.costLabelText}>Packaging and Handling Charges:</Text>
+      <Text style={styles.costLabelText}>Packaging, handling and platform Charges:</Text>
       <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}/-</Text>
   </View>
   {mealCount > 0 && (

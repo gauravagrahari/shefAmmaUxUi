@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, TextInput, View, TouchableOpacity, Text, Alert } from 'react-native';
 import axios from 'axios';
 import config from '../Context/constants';
@@ -10,6 +10,7 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import MessageCard from '../commonMethods/MessageCard';
+import { AddressContext } from '../Context/AddressContext';
 
 const URL = config.URL;
 
@@ -21,7 +22,8 @@ export default function LoginGuest() {
   const [showMessageCard, setShowMessageCard] = useState(false);
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
-
+  const { updateAddressInContext, setDefaultAddressInContext, clearAddressesInContext } = useContext(AddressContext);
+  
   const handleLogin = () => {
     setIsLoading(true); // Start loading when API call starts
     const data = {
@@ -51,7 +53,10 @@ export default function LoginGuest() {
               if (defaultAddress && defaultAddress.pinCode) {
                   console.log("Default Address " + defaultAddress.pinCode);
               }
-              navigation.navigate('SelectDefaultAddress');
+              updateAddressInContext('primary', response.data.guestDetails.addressGuest);
+        updateAddressInContext('secondary', response.data.guestDetails.officeAddress);
+        setDefaultAddressInContext(response.data.guestDetails.defaultAddress || 'primary');
+        navigation.navigate('HomeGuest');
           } else {
               // Navigate to UpdateDetailsGuest and show the MessageCard
               setMessage("You have not added or updated your address. Please update it.");

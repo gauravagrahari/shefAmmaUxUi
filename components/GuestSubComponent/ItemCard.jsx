@@ -46,10 +46,9 @@ const fetchImage = async () => {
             </View>
 
       </View>
-      {/* <Text style={styles.specialIngredient}>{item.specialIngredient}</Text>
-      <Text style={styles.dishCategory}>{item.dishCategory}</Text> */}
+
       <Text style={styles.description}>{item.description}</Text>
-      {/* <Text style={styles.serve}>Each Serve - {item.serve}</Text> */}
+    
       <Text style={styles.amount}>{item.amount}/-</Text>
     </View>
     </View >
