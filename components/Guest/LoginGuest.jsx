@@ -31,60 +31,69 @@ export default function LoginGuest() {
       password: password,
     };
     console.log("Attempting login with:", data);
+  
     axios.post(`${URL}/guestLogin`, data)
-    .then(async response => {  // added async here
+      .then(async response => {
         setIsLoading(false); 
-
         console.log("Received response in Login page:", response.data); // Logging the received response
-
+  
         if (response.status === 200) {
           console.log("Storing token and user details in secure storage");
           await storeInSecureStore('token', response.data.token);
           await storeInSecureStore('uuidGuest', response.data.uuidGuest);
           await storeInSecureStore('timeStamp', response.data.timeStamp);
           await storeInSecureStore('phone', data.phone);
-          await storeInSecureStore('altPhone',response.data.guestDetails.alternateMobile);
-          await storeInAsync('guestDetails', response.data.guestDetails);
-      
-          if (response.data.guestDetails && response.data.guestDetails.addressGuest) { 
-            console.log("Storing default address:", response.data.guestDetails.addressGuest);
+  
+          if (response.data.guestDetails) {
+            await storeInSecureStore('altPhone', response.data.guestDetails.alternateMobile);
+            await storeInAsync('guestDetails', response.data.guestDetails);
+  
+            if (response.data.guestDetails.addressGuest) { 
+              console.log("Storing default address:", response.data.guestDetails.addressGuest);
               await storeInAsync('defaultAddress', response.data.guestDetails.addressGuest);
               const defaultAddress = await getFromAsync('defaultAddress');
               if (defaultAddress && defaultAddress.pinCode) {
-                  console.log("Default Address " + defaultAddress.pinCode);
+                console.log("Default Address " + defaultAddress.pinCode);
               }
+  
               updateAddressInContext('primary', response.data.guestDetails.addressGuest);
-        updateAddressInContext('secondary', response.data.guestDetails.officeAddress);
-        setDefaultAddressInContext(response.data.guestDetails.defaultAddress || 'primary');
-        navigation.navigate('HomeGuest');
-          } else {
-              // Navigate to UpdateDetailsGuest and show the MessageCard
+              updateAddressInContext('secondary', response.data.guestDetails.officeAddress);
+              setDefaultAddressInContext(response.data.guestDetails.defaultAddress || 'primary');
+              navigation.navigate('HomeGuest');
+            } else {
+              // Address details are missing, navigate to DetailsGuest
               setMessage("You have not added or updated your address. Please update it.");
               setShowMessageCard(true);
               console.log("Address details not available, navigating to DetailsGuest");
               navigation.navigate('DetailsGuest');
+            }
+          } else {
+            // Guest details are missing, navigate to DetailsGuest
+            setMessage("Guest details are not available. Please update your profile.");
+            setShowMessageCard(true);
+            console.log("Guest details not available, navigating to DetailsGuest");
+            navigation.navigate('DetailsGuest');
           }
-      }
-      else {
-        console.error("Login failed with response:", response.data);
-        Alert.alert("Error", response.data);
-      }
-      
-    })
-    .catch(error => {
-      setIsLoading(false);
-      console.error("Login error:", error);
-      if (error.response) {
+        } else {
+          console.error("Login failed with response:", response.data);
+          Alert.alert("Error", response.data);
+        }
+      })
+      .catch(error => {
+        setIsLoading(false);
+        console.error("Login error:", error);
+        if (error.response) {
           // Display the error message from the API response
           setMessage1(error.response.data);
           Alert.alert("Login Error", error.response.data);
-      } else {
+        } else {
           // Generic error message for network issues or server unavailability
           setMessage1("Unable to connect to the server. Please try again later.");
           Alert.alert("Connection Error", "Unable to connect to the server. Please try again later.");
-      }
-  });
-};
+        }
+      });
+  };
+  
 
   return (
     // <LinearGradient colors={['#dee3e3', colors.darkBlue]} style={styles.container}>

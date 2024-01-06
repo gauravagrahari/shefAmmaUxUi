@@ -22,6 +22,10 @@ export default function SettingsGuest() {
     navigation.navigate('ContactPage');
   }
   
+  const handleAboutUs=()=>{
+    navigation.navigate('AboutUs');
+  }
+  
   const handleTiming=()=>{
     navigation.navigate('ChargesDisplay');
   }
@@ -64,6 +68,9 @@ export default function SettingsGuest() {
 
      <TouchableOpacity style={styles.button} onPress={handleContactUs}>
           <Text style={styles.buttonText}>Contact Us</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleAboutUs}>
+          <Text style={styles.buttonText}>About Us</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleTiming}>
           <Text style={styles.buttonText}>Timings</Text>

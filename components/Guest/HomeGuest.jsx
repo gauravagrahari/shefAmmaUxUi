@@ -10,6 +10,7 @@ import { getFromAsync } from "../Context/NonSensitiveDataStorage";
 import HostContext from '../Context/HostContext';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Loader from "../commonMethods/Loader";
+import LoadingScreen from "../commonMethods/LoadingScreen";
 import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView, RefreshControl } from "react-native";
 import MealTypeFilter from "../commonMethods/MealTypeFilter";
@@ -206,7 +207,7 @@ const onRefresh = React.useCallback(() => {
     console.log("Rendering Loader, loading:", loading);
     return <Loader />;
   }
-  if (isReLoading) {
+  if (isReLoading) { 
     console.log("Rendering Loader, loading:", loading);
     return <Loader />;
   }
@@ -225,7 +226,7 @@ const onRefresh = React.useCallback(() => {
         filteredHosts.length === 0 && !showPincodeChecker ? (
           <View style={styles.emptyHostMessageContainer}>
               <Text style={styles.emptyHostMessage}>
-                No cooks available at your selected or chosen Address! Try updating your Address.
+                Currently no cooks and meals are available at your selected Address for the selected meals!
               </Text>
               <TouchableOpacity onPress={handleCheckPincode}>
                 <Text style={styles.checkPincodeButtonText}>Check Pincode</Text>

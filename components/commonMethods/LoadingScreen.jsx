@@ -5,14 +5,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 const LoadingScreen = () => {
     return (
         <LinearGradient
-            colors={['#A6A6A6', '#FFF']}
+            colors={['#ECF87F', '#FFF']}
             style={styles.loadingContainer}
         >
             <View style={styles.brandContainer}>
                 <Text style={styles.shef}>Shef</Text>
                 <Text style={styles.amma}>Amma</Text>
             </View>
-            <Text style={styles.tagline}>Deliciousness at your doorstep</Text>
+            <Text style={styles.tagline}>Home-Cooked Delights, Delivered to Your Doorstep</Text>
         </LinearGradient>
     );
 };
