@@ -169,11 +169,6 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                 <Text style={styles.addressTitle}>Primary Address(Default Address)</Text>
                 {renderAddressFields(street, setStreet, 'Street', houseName, setHouseName, city, setCity, state, setState, pinCode, setPinCode)}
             </View>
-{/* 
-            <View style={styles.addressBox}>
-                <Text style={styles.addressTitle}>Secondary Address</Text>
-                {renderAddressFields(officeStreet, setOfficeStreet, 'Office Street', officeHouseName, setOfficeHouseName, officeCity, setOfficeCity, officeState, setOfficeState, officePinCode, setOfficePinCode)}
-            </View> */}
         {messageText.length > 0 && <Text style={styles.messageText}>{messageText}</Text>}
 
             <TouchableOpacity  disabled={isSubmitting} style={styles.button} onPress={handleSubmission}>

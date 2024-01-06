@@ -2,12 +2,9 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupGuest from "./components/Guest/SignupGuest";
-import SearchFilterGuest from "./components/Guest/SearchFilterGuest";
 import HostProfileMealGuest from "./components/Guest/HostProfileMealGuest";
-import HostProfileGuest from "./components/Guest/HostProfileGuest";
 import HomeGuest from "./components/Guest/HomeGuest";
 import SettingsGuest from "./components/Guest/SettingsGuest";
-import SearchGuest from "./components/Guest/SearchGuest";
 import OrderHistoryGuest from "./components/Guest/OrderHistoryGuest";
 import DetailsGuest from "./components/Guest/DetailsGuest";
 // import TestImage from "./components/commonMethods/TestImage";
@@ -27,7 +24,6 @@ import NavBarGuest from "./components/GuestSubComponent/NavBarGuest";
 // import LoginHost from "./components/Host/LoginHost";
 import LoginGuest from "./components/Guest/LoginGuest";
 // import NavHost from "./components/HostSubComponent/NavHost";
-import ProfileGuest from "./components/Guest/ProfileGuest";
 import UpdateGuestDetails from "./components/Guest/UpdateGuestDetails";
 import S3Image from "./components/commonMethods/S3Image";
 // import ProfileHost from "./components/Host/ProfileHost";
@@ -102,17 +98,12 @@ export default function App() {
         <Stack.Screen name="HomeGuest" component={HomeGuest}/>
         <Stack.Screen name="ChargesDisplay" component={ChargesDisplay}/>
         <Stack.Screen name="SelectDefaultAddress" component={SelectDefaultAddress}/>
-        <Stack.Screen name="SearchGuest">
-       {(props) => <SearchGuest {...props} navigation={props.navigation} />}
-       </Stack.Screen>
-        <Stack.Screen name="SearchFilterGuest" component={SearchFilterGuest}/>
         <Stack.Screen name="ContactPage" component={ContactPage}/>
         <Stack.Screen name="OrderHistoryGuest" component={OrderHistoryGuest}/>
         <Stack.Screen name="DetailsGuest" component={DetailsGuest}/>
         <Stack.Screen name="UpdateGuestDetails" component={UpdateGuestDetails}/>
         <Stack.Screen name="SettingsGuest" component={SettingsGuest}/>
         <Stack.Screen name="HostProfileMealGuest" component={HostProfileMealGuest}/>
-        <Stack.Screen name="HostProfileGuest" component={HostProfileGuest}/>
         {/* <Stack.Screen name="AddItemHost" component={AddItemHost}/> */}
         {/* <Stack.Screen name="ItemCardTest" component={ItemCardTest}/> */}
         {/* <Stack.Screen name="SignupHost" component={SignupHost}/> */}
@@ -132,7 +123,6 @@ export default function App() {
         {/* <Stack.Screen name="Dashboard" component={Dashboard}/>
         {/* <Stack.Screen name="SettingsHost" component={SettingsHost}/>
         <Stack.Screen name="ProfileHost" component={ProfileHost}/> */}
-        <Stack.Screen name="ProfileGuest" component={ProfileGuest}/>
         <Stack.Screen name="S3Image" component={S3Image}/>
         {/* <Stack.Screen name="TestProfileHost" component={TestProfileHost}/> */}
         {/* <Stack.Screen name="TestEditableText" component={TestEditableText}/>

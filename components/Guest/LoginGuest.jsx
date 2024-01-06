@@ -128,8 +128,6 @@ export default function LoginGuest() {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <View >
-          {/* <GoogleSignInButton /> */}
-          {/* <GoogleSignIn /> */}
 
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('SignupGuest')}>

@@ -7,14 +7,12 @@ import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import { Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Dropdown from '../commonMethods/Dropdown';
 
 const URL = config.URL;
 
 export default function OrderCardDevBoy({ orderData, hostAddress, guestAddress, navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-  const [dropdownItems, setDropdownItems] = useState(['Not Picked Up', 'Undelivered']);
 
 console.log("order data:", JSON.stringify(orderData));
 console.log("host address:", JSON.stringify(hostAddress));
