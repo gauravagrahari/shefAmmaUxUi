@@ -40,7 +40,7 @@ export default function ChangePassword({ visible, onClose, onPasswordChangeSucce
     
     const headers = {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${token}` // assuming 'jwt' is the key where the JWT is stored
+      'Authorization': `Bearer ${token}` // assuming 'jwt' is the key where the JWT is stored
     };
   
     // Make the axios post request

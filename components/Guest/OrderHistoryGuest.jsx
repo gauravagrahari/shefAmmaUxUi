@@ -75,7 +75,7 @@ export default function OrderHistoryGuest() {
           orderList
             .sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp))
             .map((eachOrder) => (
-              <OrderCard key={eachOrder.timeStamp} order={eachOrder} cutOffTime={charges.cancelCutOffTime} isHost={false} />
+              <OrderCard key={eachOrder.timeStamp} order={eachOrder} cancelCutOffTime={charges.cancelCutOffTime} isHost={false} />
             ))
         )}
       </ScrollView> 

@@ -97,7 +97,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             })
             .then((response) => {
                 console.log('Server response:', response.data);
-                navigation.navigate('SelectDefaultAddress');
+                navigation.navigate('WelcomeMessage');
             })
             .catch((error) => {
                 console.error('Error:', error);

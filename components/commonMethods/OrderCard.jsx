@@ -11,7 +11,7 @@ import * as Animatable from 'react-native-animatable';
 import StarRating from './StarRating';
 
 const URL = config.URL;
-export default function OrderCard({ order,charges, navigation }) {
+export default function OrderCard({ order,cancelCutOffTime }) {
   const statusMappings = {
     new:"New",
     ip: "In Progress",
@@ -42,7 +42,6 @@ export default function OrderCard({ order,charges, navigation }) {
     statusStyle = styles.inProgress;
   }
   const [showConfirmation, setShowConfirmation] = React.useState(false);
-  const [isModalVisible, setModalVisible] = React.useState(false);
   const options = {
     year: 'numeric', 
     month: 'short', 
@@ -54,14 +53,13 @@ export default function OrderCard({ order,charges, navigation }) {
   };
 
   const formattedDateTime = new Date(order.timeStamp).toLocaleString('en-IN', options);
-  
- 
 
   const mealMapping = {
     b: "Breakfast",
     l: "Lunch",
     d: "Dinner"
   };
+  
   const getCutoffTime = (delTimeAndDay) => {
     if (!delTimeAndDay) {
       return null;
@@ -75,31 +73,30 @@ export default function OrderCard({ order,charges, navigation }) {
       const dayMonthPart = parts[1]; 
       const timePart = parts[2].split(' and ')[0]; 
       const year = new Date().getFullYear();
-const [day, month] = dayMonthPart.split(' ');
+      const [day, month] = dayMonthPart.split(' ');
 
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const monthNumber = monthNames.indexOf(month) + 1;
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const monthNumber = monthNames.indexOf(month) + 1;
+      const monthPadded = monthNumber.toString().padStart(2, '0');
+      const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
 
-const monthPadded = monthNumber.toString().padStart(2, '0');
-
-const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
       // Create the Date object from the dateString
       const dateTime = new Date(dateString);
       if (isNaN(dateTime)) {
         return null;
       }
-      const cancelCutOffHours = charges && charges.cancelCutOffTime ? parseInt(charges.cancelCutOffTime, 10) : 3;
-      const cutoffTime = new Date(dateTime.setHours(dateTime.getHours() - cancelCutOffHours));
-        
+
+      // Now 'charges.cancelCutOffTime' represents minutes
+      const cancelCutOffMinutes = cancelCutOffTime ? parseInt(cancelCutOffTime, 10) : 182; // Defaulting to 180 minutes (3 hours)
+      const cutoffTime = new Date(dateTime.setMinutes(dateTime.getMinutes() - cancelCutOffMinutes));
+
       return cutoffTime;
     } catch (error) {
       console.error('Error parsing date:', error);
       return null;
     }
-  };
-  const handleConfirm = () => {
-    setModalVisible(true);
-  };
+};
+
   const canCancel = (order) => {
     if (!order.delTimeAndDay || (order.status !== 'new' && order.status !== 'pkd')) {
       return false;
@@ -151,6 +148,7 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
       console.error("Error cancelling the order:", error);
     }
   };
+
   const renderCancelCutoffTime = () => {
     const cutoffTime = getCutoffTime(order.delTimeAndDay);
     if (!cutoffTime) return null;
@@ -161,6 +159,7 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
       </Text>
     );
   };
+
   return (
     <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
    <View style={styles.orderDetails}>
@@ -172,6 +171,7 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
   <Text style={styles.detailsMealType}>{mealMapping[order.mealType]}</Text>
   <Text style={styles.details}>Quantity - {order.noOfServing}</Text>
   <Text style={styles.details}>Booked on - {formattedDateTime}</Text>
+  <Text style={styles.details}>{order.delAddress.houseName}, {order.delAddress.street} - {order.delAddress.pinCode}</Text>
 </View>
 
 <View style={styles.rightSide}>
@@ -223,7 +223,7 @@ const dateString = `${year}-${monthPadded}-${day}T${timePart}:00`;
           )
         ) : (
           // Message when the order can't be cancelled
-          <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
+          <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you on {order.delTimeAndDay}!</Text>
         )
       ) : null }
 

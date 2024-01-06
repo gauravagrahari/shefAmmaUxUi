@@ -49,6 +49,8 @@ import { AddressProvider } from "./components/Context/AddressContext";
 import LoadingScreen from "./components/commonMethods/LoadingScreen";
 import ContactPage from "./components/Guest/ContactPage";
 import SelectDefaultAddress from "./components/Guest/SelectDefaultAddress";
+import WelcomeMessage from "./components/Guest/WelcomeMessage";
+import AboutUs from "./components/Guest/AboutUs";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -99,7 +101,8 @@ export default function App() {
     initialRouteName={initialRoute}
     screenOptions={{ headerShown: false }} // Add this line
   >
-        <Stack.Screen name="HomeGuest" component={HomeGuest}/>
+        <Stack.Screen name="HomeGuest" component={HomeGuest}/> 
+        <Stack.Screen name="WelcomeMessage" component={WelcomeMessage}/> 
         <Stack.Screen name="ChargesDisplay" component={ChargesDisplay}/>
         <Stack.Screen name="SelectDefaultAddress" component={SelectDefaultAddress}/>
         <Stack.Screen name="SearchGuest">
@@ -115,7 +118,6 @@ export default function App() {
         <Stack.Screen name="HostProfileGuest" component={HostProfileGuest}/>
         <Stack.Screen name="AddItemHost" component={AddItemHost}/>
         <Stack.Screen name="ItemCardTest" component={ItemCardTest}/>
-        {/* <Stack.Screen name="SignupHost" component={SignupHost}/> */}
         <Stack.Screen name="SignupGuest" component={SignupGuest}/>
         <Stack.Screen name="LoginHost" component={LoginHost}/>
         <Stack.Screen name="LoginGuest" component={LoginGuest}/>
@@ -140,6 +142,7 @@ export default function App() {
         <Stack.Screen name="EditItemHost" component={EditItemHost}/>
         <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/>
         <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
+        <Stack.Screen name="AboutUs" component={AboutUs} />
       </Stack.Navigator>
     </NavigationContainer>
     </AddressProvider>
