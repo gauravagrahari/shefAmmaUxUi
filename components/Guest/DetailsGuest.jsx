@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity,ScrollView } from 'react-native';
 import axios from 'axios';
 import {EnterDate} from '../commonMethods/EnterDate'; 
@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { AddressContext } from '../Context/AddressContext';
 
 const URL = config.URL;
 export default function DetailsGuest() {
@@ -28,6 +29,7 @@ const [officeCity, setOfficeCity] = useState('');
 const [officeState, setOfficeState] = useState('');
 const [officePinCode, setOfficePinCode] = useState('');
 const [isSubmitting, setIsSubmitting] = useState(false);
+const { updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
 
   // const [showDatePicker, setShowDatePicker] = useState(false);
   const navigation = useNavigation();
@@ -97,6 +99,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             })
             .then((response) => {
                 console.log('Server response:', response.data);
+                updateAddressInContext('primary', data.addressGuest);
+                setDefaultAddressInContext('primary');
                 navigation.navigate('WelcomeMessage');
             })
             .catch((error) => {
