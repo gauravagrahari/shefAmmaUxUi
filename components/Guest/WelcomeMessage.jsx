@@ -15,7 +15,8 @@ const WelcomeMessage = () => {
         <Text style={styles.commonText}>{messages.welcomeMessage}</Text>
         <TouchableOpacity 
           style={styles.button} 
-          onPress={() => navigation.navigate('SelectDefaultAddress')}
+          onPress={() => navigation.navigate('HomeGuest')}
+          // onPress={() => navigation.navigate('SelectDefaultAddress')}
         >
           <Text style={styles.buttonText}>Close</Text>
         </TouchableOpacity>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import colors from './path-to-colors'; // Import your colors file
+import {globalStyles,colors} from '../commonMethods/globalStyles';
 
 const AboutUs = () => {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.card}>
         <Text style={styles.mainHeading}>ShefAmma: Nourishing Kolkata with Homemade Meals</Text>
         <Text style={styles.commonText}>
@@ -33,10 +33,8 @@ const AboutUs = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
   card: {
     margin: 10,

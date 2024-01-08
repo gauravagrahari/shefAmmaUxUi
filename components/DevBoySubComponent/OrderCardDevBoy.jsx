@@ -181,6 +181,10 @@ const options = {
         <Icon name="call-outline" size={20} color={colors.primaryText} />
         <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneHost}</Text>
     </TouchableOpacity>
+    <TouchableOpacity onPress={() => dialNumber(orderData.altPhone)} style={styles.phoneContainer}>
+        <Icon name="call-outline" size={20} color={colors.primaryText} />
+        <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.altPhone}</Text>
+    </TouchableOpacity>
     <TouchableOpacity style={styles.clickableAddressContainer} 
     onPress={() => openInGoogleMaps(`${hostAddress.street},${hostAddress.houseName}, ${hostAddress.city}, ${hostAddress.state}, ${hostAddress.pinCode}`)}>
  <Text style={[styles.details, styles.clickableAddress]}>
