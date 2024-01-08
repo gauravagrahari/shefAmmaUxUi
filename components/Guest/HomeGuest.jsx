@@ -19,7 +19,7 @@ import { AddressContext } from "../Context/AddressContext";
 const URL = config.URL;
 const windowWidth = Dimensions.get('window').width;
 
-export default function HomeGuest({ navigation }) {
+export default function HomeGuest({ navigation, route  }) {
   const [lastDefaultAddressType, setLastDefaultAddressType] = useState(addresses?.default);
   const { addresses } = useContext(AddressContext);
   const [lastFetchedAddress, setLastFetchedAddress] = React.useState(null);
@@ -39,6 +39,14 @@ export default function HomeGuest({ navigation }) {
     if (!addresses) {
       console.log("HomeGuest: Addresses context is not defined yet.");
       return; // Exit the useEffect if addresses is not defined
+    }
+  
+    const fetchedAddresses = route.params?.fetchedAddresses;
+    console.log("-------------------------true or false", fetchedAddresses);
+
+    if (fetchedAddresses) {
+      console.log("Skipping fetchUuidAndHosts as addresses were just set in SelectDefaultAddress");
+      return; // Exit the useEffect to avoid fetching data
     }
     const defaultAddressType = addresses.default;
     const defaultAddress = addresses[defaultAddressType];

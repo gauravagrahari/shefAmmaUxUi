@@ -22,41 +22,38 @@ export default function SelectDefaultAddress() {
       if (!details || Object.keys(details).length === 0) {
         console.log("Guest details are empty, navigating to DetailsGuest");
         navigation.navigate('DetailsGuest');
-      } else {
-        console.log('New guest details fetched:', details);
-        setGuestDetails(details);
-        const defaultAddress = await getFromAsync('defaultAddress');
-        console.log("Setting selected and default address:", defaultAddress);
-        setSelectedAddress(defaultAddress || 'primary');
-        updateAddressInContext('primary', details.addressGuest);
-        updateAddressInContext('secondary', details.officeAddress);
-        setDefaultAddressInContext(defaultAddress || 'primary');
+        return; // Early return to prevent further execution in this useEffect
+      }
+
+      console.log('New guest details fetched:', details);
+      setGuestDetails(details);
+      const defaultAddress = await getFromAsync('defaultAddress');
+      console.log("Setting selected and default address:", defaultAddress);
+      setSelectedAddress(defaultAddress || 'primary');
+      updateAddressInContext('primary', details.addressGuest);
+      updateAddressInContext('secondary', details.officeAddress);
+      setDefaultAddressInContext(defaultAddress || 'primary');
+
+      if (isAddressEmpty(details.officeAddress)) {
+        Animated.timing(progress, {
+          toValue: 100,
+          duration: 3000,
+          useNativeDriver: false,
+        }).start();
+
+        setTimeout(() => {
+          navigation.navigate('HomeGuest', { fetchedAddresses: true });
+        }, 3000);
       }
     };
-    fetchGuestDetails();
-  }, []);
 
-  useEffect(() => {
-    if (guestDetails && isAddressEmpty(guestDetails.officeAddress)) {
-      Animated.timing(progress, {
-        toValue: 100,
-        duration: 2000,
-        useNativeDriver: false,
-      }).start();
-  
-      const timer = setTimeout(() => {
-        navigation.navigate('HomeGuest');
-      }, 4000);
-  
-      return () => clearTimeout(timer);
-    }
-  }, [guestDetails, navigation, progress]);
-  
+    fetchGuestDetails();
+  }, [navigation, progress]);
+
   const isAddressEmpty = (address) => !(address && address.street && address.city);
 
   const handleRadioChange = async (value) => {
     console.log("Selected address type:", value);
-
     setSelectedAddress(value);
     let addressToStore = value === 'primary' ? guestDetails.addressGuest : guestDetails.officeAddress;
     console.log("Address to store:", addressToStore);
@@ -64,8 +61,6 @@ export default function SelectDefaultAddress() {
     try {
       await storeInAsync('defaultAddress', addressToStore);
       console.log("Stored in async storage successfully.");
-
-      // Assuming updateAddressInContext also updates the database
       updateAddressInContext(value, addressToStore);
       console.log("Updated context and potentially the database successfully.");
     } catch (error) {
@@ -74,33 +69,33 @@ export default function SelectDefaultAddress() {
   };
 
   const handleClose = () => navigation.navigate('HomeGuest');
+  const hasGuestDetails = () => Object.keys(guestDetails).length > 0;
 
   return (
     <LinearGradient colors={['white', colors.darkBlue]} style={styles.modalContainer}>
-        {isAddressEmpty(guestDetails.officeAddress) && (
-      <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-        <Text style={styles.closeButtonText}>X</Text>
-      </TouchableOpacity>)}
-      {!isAddressEmpty(guestDetails.officeAddress) && (
-      <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-        <Text style={styles.closeButtonText}>Proceed</Text>
-      </TouchableOpacity>)}
-      {!isAddressEmpty(guestDetails.officeAddress) && (
-      <Text style={globalStyles.headerText}>Choose Address</Text>
-      )}
-      {isAddressEmpty(guestDetails.officeAddress) && (
-        <Text style={globalStyles.headerText}>Your food will be delivered at...</Text>
-        
-      )}
-      <TouchableOpacity onPress={() => handleRadioChange('primary')}>
-        <View style={[styles.radioButton, selectedAddress === 'primary' && styles.radioButtonSelected]}>
-          <View style={[styles.radioButtonInner, selectedAddress === 'primary' && { backgroundColor: 'white' }]} />
-          <Text style={styles.radioText}>
-            {`${guestDetails.addressGuest?.street}, ${guestDetails.addressGuest?.houseName}, ${guestDetails.addressGuest?.city} - ${guestDetails.addressGuest?.pinCode}`}
+      {hasGuestDetails() && <>
+        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+          <Text style={styles.closeButtonText}>
+            {isAddressEmpty(guestDetails.officeAddress) ? 'X' : 'Proceed'}
           </Text>
-        </View>
-      </TouchableOpacity>
-      {!isAddressEmpty(guestDetails.officeAddress) && (
+        </TouchableOpacity>
+        <Text style={globalStyles.headerText}>
+          {isAddressEmpty(guestDetails.officeAddress) ? 'Your food will be delivered at...' : 'Choose Address'}
+        </Text>
+      </>}
+
+      {hasGuestDetails() && (
+        <TouchableOpacity onPress={() => handleRadioChange('primary')}>
+          <View style={[styles.radioButton, selectedAddress === 'primary' && styles.radioButtonSelected]}>
+            <View style={[styles.radioButtonInner, selectedAddress === 'primary' && { backgroundColor: 'white' }]} />
+            <Text style={styles.radioText}>
+              {`${guestDetails.addressGuest?.street}, ${guestDetails.addressGuest?.houseName}, ${guestDetails.addressGuest?.city} - ${guestDetails.addressGuest?.pinCode}`}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
+
+      {hasGuestDetails() && !isAddressEmpty(guestDetails.officeAddress) && (
         <TouchableOpacity onPress={() => handleRadioChange('office')}>
           <View style={[styles.radioButton, selectedAddress === 'office' && styles.radioButtonSelected]}>
             <View style={[styles.radioButtonInner, selectedAddress === 'office' && { backgroundColor: 'white' }]} />
@@ -110,7 +105,8 @@ export default function SelectDefaultAddress() {
           </View>
         </TouchableOpacity>
       )}
-       {isAddressEmpty(guestDetails.officeAddress) && (
+
+      {isAddressEmpty(guestDetails.officeAddress) && hasGuestDetails() && (
         <Animated.View style={[styles.progressBar, { width: progress.interpolate({
           inputRange: [0, 100],
           outputRange: ['0%', '100%'],
@@ -118,7 +114,7 @@ export default function SelectDefaultAddress() {
       )}
     </LinearGradient>
   );
-      }  
+} 
   const screenWidth = Dimensions.get('window').width;
   const styles = StyleSheet.create({
     modalContainer: {
