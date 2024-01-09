@@ -259,15 +259,21 @@ const onRefresh = React.useCallback(() => {
      </View>
   );
 }
+const { width, height } = Dimensions.get('window');
+
+function responsiveFontSize(fSize) {
+  const tempHeight = (16 / 9) * width;
+  return Math.sqrt(tempHeight ** 2 + width ** 2) * (fSize / 100);
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   checkPincodeButtonText:{
-fontSize:18,
-margin:10,
-fontWeight:'bold',
+    fontSize: responsiveFontSize(2.25), // Example: 2.25% of the screen size
+    margin: width * 0.025,
+    fontWeight: 'bold',
   },
   mealTypeFilter: {
     flexDirection: 'row',
@@ -279,9 +285,9 @@ fontWeight:'bold',
   }, 
   mealTypeItem: {
     flex: 1,
-    height: 40,
+    height: height * 0.05, // 5% of screen height
     justifyContent: 'center',
-    backgroundColor: colors.pink, // Updated color
+    backgroundColor: colors.pink,
     borderWidth: 1,
     borderColor: 'transparent',
   },
@@ -296,7 +302,7 @@ fontWeight:'bold',
     top: 8,
   },
   mealTypeText: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(2), // Smaller font size
     color: colors.darkestBlue,
     textAlign: 'center',
   },
@@ -312,13 +318,13 @@ fontWeight:'bold',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 300, // Adjust as necessary
+    height: height * 0.4, // Adjusted to 40% of screen height
   },
   emptyHostMessage: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(2.25),
     color: colors.darkestBlue,
     textAlign: 'center',
-    paddingHorizontal: 20, // To ensure the message fits well if it's long
+    paddingHorizontal: width * 0.05,
   },
 });
 function capitalize(str) {

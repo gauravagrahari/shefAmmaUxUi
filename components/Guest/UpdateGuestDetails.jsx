@@ -519,8 +519,12 @@ const isOfficeAddressEmpty = () => {
   );
 
 }
-const screenWidth = Dimensions.get('window').width;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
+function responsiveFontSize(fontSize) {
+  const standardScreenHeight = 680; // Adjust based on your target devices
+  return (fontSize * screenHeight) / standardScreenHeight;
+}
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -532,25 +536,25 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: 'red',
-    fontSize: 16,
+    fontSize: responsiveFontSize(14),
     textAlign: 'center',
     margin: 10,
   },
   button: {
     width: '80%',
-    height: 55,
+    height: screenHeight * 0.07, // 8% of screen height
     marginTop: 20,
     marginBottom: 30,
     borderRadius: 10,
     borderColor: colors.pink,
     borderWidth: 2,
-    backgroundColor: 'rgba(0, 150, 136, 0.15)', // 80% opacity of #009688
+    backgroundColor: 'rgba(0, 150, 136, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
     color: colors.deepBlue,
-    fontSize: 18,
+    fontSize: responsiveFontSize(15),
     fontWeight: 'bold',
   },
   messageCardFixed: {
@@ -558,10 +562,9 @@ const styles = StyleSheet.create({
     bottom: 10,
     left: 0,
     right: 0,
-    zIndex: 1000 // Ensure it's above other elements
+    zIndex: 1000,
   },
   addressContainer: {
-    // backgroundColor: colors.darkBlue,
     padding: 10,
     borderRadius: 8,
     marginBottom: 5,
@@ -574,26 +577,25 @@ borderBottomColor: colors.pink,
 // padding: 5,
 margin:20,
   },
-  isOfficeAddressEmpty:{
-fontSize: 16,
-color: colors.pink
+  isOfficeAddressEmpty: {
+    fontSize: responsiveFontSize(14),
+    color: colors.pink,
   },
   addressTitle: {
     color: colors.primaryText,
-    fontSize: screenWidth * 0.047,
+    fontSize: responsiveFontSize(screenWidth * 0.047),
     marginBottom: 5,
     paddingLeft: 40,
   },
-  infoText:{
-    // color: colors.primaryText,
+  infoText: {
     color: colors.deepBlue,
-    fontSize: screenWidth * 0.038,
+    fontSize: responsiveFontSize(screenWidth * 0.035),
     marginTop: 5,
     padding: 15,
   },
   activeAddressHint: {
-    fontSize: 13,
-    color: colors.deepBlue, // or any color you prefer
+    fontSize: responsiveFontSize(14),
+    color: colors.deepBlue,
     marginLeft: 5,
     marginRight: 5,
   },
@@ -610,28 +612,28 @@ color: colors.pink
     marginBottom: 10,
   },
   radioButton: {
-    width: 20,
-    height: 20,
+    width: screenWidth * 0.05, // 5% of screen width
+    height: screenWidth * 0.05, // 5% of screen width
     borderRadius: 12,
     borderWidth: 2,
     borderColor: colors.pink,
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
-},
-radioButtonSelected: {
+  },
+  radioButtonSelected: {
     backgroundColor: colors.pink,
-},
-radioButtonInner: {
-    width: 10,
-    height: 10,
+  },
+  radioButtonInner: {
+    width: screenWidth * 0.025, // 2.5% of screen width
+    height: screenWidth * 0.025, // 2.5% of screen width
     borderRadius: 6,
     backgroundColor: colors.darkBlue,
-},
+  },
 
   radioLabel: {
     marginLeft: 5,
-    fontSize: 16,
+    fontSize: responsiveFontSize(15),
   },
 });
 

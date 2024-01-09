@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity,ScrollView } from 'react-native';
+import { StyleSheet,Dimensions , Text, View, TextInput, TouchableOpacity,ScrollView } from 'react-native';
 import axios from 'axios';
 import {EnterDate} from '../commonMethods/EnterDate'; 
 import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveDataStorage';
@@ -213,7 +213,12 @@ function renderAddressFields(street, setStreet, streetPlaceholder, houseName, se
         </>
     );
 }}
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
+function responsiveFontSize(fontSize) {
+  const standardScreenHeight = 680; // Adjust this based on your target devices
+  return (fontSize * screenHeight) / standardScreenHeight;
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,

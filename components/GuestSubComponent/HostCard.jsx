@@ -153,27 +153,27 @@ return (
   </TouchableOpacity>
 );
 }
-const itemWidth='20';
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
-const hostHeight = screenHeight * 0.13; // You can adjust this value according to your needs
-const bgColor = '#fcfddd'; 
-// const bgColor = colors.darkBlue; 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const dpDimension = screenWidth * 0.25  ;
+function responsiveFontSize(fontSize) {
+  // Dynamic font size based on screen size
+  const standardScreenHeight = 680; // Standardizing with an average screen height
+  return (fontSize * screenHeight) / standardScreenHeight;
+}
+const itemWidth='20';
+const bgColor = '#fcfddd'; 
+
+const dpDimension = screenWidth * 0.25; // Carousel image dimension
+const hostHeight = screenHeight * 0.13; // Host image height
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: bgColor,
     marginBottom: 4,
     shadowColor: colors.pink,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 5,
-    // borderBottomLeftRadius: 15,
-    // borderBottomRightRadius: 15,
-    padding: 5, 
-
+    padding: 5,
   },
  host: {
     flexDirection: 'row',
@@ -211,55 +211,41 @@ carouselImage: {
   height: dpDimension,
   resizeMode: 'cover',
 },
-  descriptionContainer: {
-    // paddingTop: 5,
-    // paddingHorizontal: 2,
-    width: '100%',
-    // borderBottomLeftRadius: 18,
-    // borderBottomRightRadius: 18,
-    overflow: 'hidden',
-    // backgroundColor: bgColor,
-    paddingTop: 5,
-    padding:3,
-// borderTopWidth: 1,
-// borderTopColor:'#0F0E0E',
-    // marginBottom: 5,
-    marginTop: 5,
-    // marginLeft: 5,
-    // marginRight:6,
-  },
-  descriptionHost: {
-    // backgroundColor: bgColor,
-    fontSize: screenWidth * 0.037,
-    lineHeight: screenWidth * 0.045, // Adjust line height
-    fontFamily: 'sans-serif', // Use a system font
-    color: colors.darkPink, // Darker, more professional font color
-    // color: colors.darkestOliveGreen, // Darker, more professional font color
-    // fontWeight: 'bold',
-  },
-  readMoreContainer: {
-    position: 'absolute', 
-    bottom: 0,
-    right: 0,
-    backgroundColor: bgColor, // Semi-transparent background
-    paddingHorizontal: 3,
-    marginRight: 1,
-   borderBottomRightRadius: 5,
-  },
-  readMoreText: {
-    color: '#662549',
-    fontSize: screenWidth * 0.035,
-    fontWeight: 'bold',
-    paddingRight: 5,
-    borderBottomRightRadius: 5,
-  },
-
-  name: {
-    fontSize: screenWidth * 0.04,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    flex: 1,
-  },
+descriptionContainer: {
+  width: '100%',
+  overflow: 'hidden',
+  paddingTop: 5,
+  padding: 3,
+  marginTop: 5,
+},
+descriptionHost: {
+  fontSize: responsiveFontSize(12),
+  lineHeight: responsiveFontSize(15),
+  fontFamily: 'sans-serif',
+  color: colors.darkPink,
+},
+readMoreContainer: {
+  position: 'absolute', 
+  bottom: 0,
+  right: 0,
+  backgroundColor: bgColor,
+  paddingHorizontal: 3,
+  marginRight: 1,
+  borderBottomRightRadius: 5,
+},
+readMoreText: {
+  color: '#662549',
+  fontSize: responsiveFontSize(14),
+  fontWeight: 'bold',
+  paddingRight: 5,
+  borderBottomRightRadius: 5,
+},
+name: {
+  fontSize: responsiveFontSize(16),
+  fontWeight: 'bold',
+  marginBottom: 5,
+  flex: 1,
+},
   nameItem: {
     color:"#1BCCBA",
     fontSize: screenWidth * 0.045,
