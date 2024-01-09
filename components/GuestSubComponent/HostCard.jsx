@@ -245,7 +245,6 @@ carouselImage: {
     paddingHorizontal: 3,
     marginRight: 1,
    borderBottomRightRadius: 5,
-
   },
   readMoreText: {
     color: '#662549',

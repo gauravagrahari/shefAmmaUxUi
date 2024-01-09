@@ -1,14 +1,11 @@
-// ItemListGuest.js
-import React, { useContext, useState, useRef } from 'react';
-import {Animated,View, Text, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, ScrollView } from 'react-native';
 import HostContext from '../Context/HostContext';
 import ItemListCard from '../GuestSubComponent/ItemListCard';
-import { ScrollView } from 'react-native';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
-import { useNavigation } from '@react-navigation/native'; // If you're using React Navigation
-import {globalStyles,colors} from '../commonMethods/globalStyles';
+import { useNavigation } from '@react-navigation/native';
+import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
 import MealTypeFilter from '../commonMethods/MealTypeFilter';
 
 export default function ItemListGuest() {
@@ -19,10 +16,8 @@ export default function ItemListGuest() {
     lunch: true, 
     dinner: true,
   });
-  const cardHeight = 120;
-  const padding = 10;   
+
   const handleHostCardClick = (selectedMeal, hostEntity) => {
-    // Find the complete set of meals for the host
     const host = hostList.find(h => h.hostEntity.uuidHost === hostEntity.uuidHost);
     if (host) {
       navigation.navigate('HostProfileMealGuest', {
@@ -30,8 +25,6 @@ export default function ItemListGuest() {
         itemList: host.meals,
         initialMealType: selectedMeal.mealType
       });
-    } else {
-      // Handle the case where the host is not found (Optional)
     }
   };
 
@@ -54,60 +47,35 @@ export default function ItemListGuest() {
     );
   };
 
-  const scrollY = useRef(new Animated.Value(0)).current;
-
-    const renderItem = ({ item, index }) => {
-        // Calculate animated styles based on scroll position
-        const inputRange = [
-            (cardHeight + padding) * index,
-            (cardHeight + padding) * (index + 1)
-        ];
-        const opacity = scrollY.interpolate({
-            inputRange,
-            outputRange: [1, 0],
-            extrapolate: 'clamp',
-        });
-        const translateY = scrollY.interpolate({
-            inputRange,
-            outputRange: [0, -50], // Adjust as needed
-            extrapolate: 'clamp',
-        });
-
-        // Filter meals and render ItemListCard with animated style
-        return item.meals.filter(filterMealsByType).map((meal, mealIndex) => (
-            <Animated.View key={`${index}-${mealIndex}`} style={{ opacity, transform: [{ translateY }] }}>
-                <ItemListCard 
-                    item={meal}
-                    host={item.hostEntity}
-                    handleHostCardClick={() => handleHostCardClick(meal, item.hostEntity)}
-                />
-            </Animated.View>
-        ));
-    };
-
-    return (
-        <View style={globalStyles.containerPrimary}>
-            <NavBarGuest navigation={navigation} />
-
-            <Animated.FlatList
-                showsVerticalScrollIndicator={false}
-                data={hostList}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={renderItem}
-                onScroll={Animated.event(
-                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                    { useNativeDriver: true }
-                )}
-            />
-
-            <MealTypeFilter
-                selectedMealTypes={selectedMealTypes}
-                toggleMealType={toggleMealType}
+  const renderItem = ({ item, index }) => {
+    return item.meals.filter(filterMealsByType).map((meal, mealIndex) => (
+        <View key={`${index}-${mealIndex}`}>
+            <ItemListCard 
+                item={meal}
+                host={item.hostEntity}
+                handleHostCardClick={() => handleHostCardClick(meal, item.hostEntity)}
             />
         </View>
-    );
-}
+    ));
+  };
 
+  return (
+    <View style={globalStyles.containerPrimary}>
+      <NavBarGuest navigation={navigation} />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        {hostList.map((item, index) => renderItem({ item, index }))}
+      </ScrollView>
+
+      <MealTypeFilter
+        selectedMealTypes={selectedMealTypes}
+        toggleMealType={toggleMealType}
+      />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   mealTypeFilter: {

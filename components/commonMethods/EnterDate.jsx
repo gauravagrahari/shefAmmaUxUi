@@ -60,7 +60,7 @@ export const EnterDate = ({ onDateChange }) => {
                 maxLength={10}
                 onChangeText={handleDateChange}
                 value={date}
-                placeholderTextColor={colors.matBlack}
+                // placeholderTextColor={colors.matBlack}
             />
         </View>
         {error !== '' && <Text style={styles.errorText}>{error}</Text>}
