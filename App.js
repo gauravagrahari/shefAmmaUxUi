@@ -107,9 +107,9 @@ export default function App() {
         <Stack.Screen name="UpdateGuestDetails" component={UpdateGuestDetails}/>
         <Stack.Screen name="SettingsGuest" component={SettingsGuest}/>
         <Stack.Screen name="HostProfileMealGuest" component={HostProfileMealGuest}/>
-        <Stack.Screen name="HostProfileGuest" component={HostProfileGuest}/>
+        {/* <Stack.Screen name="HostProfileGuest" component={HostProfileGuest}/>
         <Stack.Screen name="AddItemHost" component={AddItemHost}/>
-        <Stack.Screen name="ItemCardTest" component={ItemCardTest}/>
+        <Stack.Screen name="ItemCardTest" component={ItemCardTest}/> */}
         <Stack.Screen name="SignupGuest" component={SignupGuest}/>
         {/* <Stack.Screen name="LoginHost" component={LoginHost}/> */}
         <Stack.Screen name="LoginGuest" component={LoginGuest}/>
