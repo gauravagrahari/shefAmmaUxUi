@@ -1,12 +1,26 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {globalStyles,colors} from '../commonMethods/globalStyles.js';
 import messages from '../commonMethods/texts.js';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const WelcomeMessage = () => {
   const navigation = useNavigation();
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        console.log('Back button pressed in HomeGuest');
+        // Handle back action here, return true to override
+        return true;
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
   return (
     <LinearGradient colors={[colors.darkBlue,'white']} style={styles.container}>

@@ -8,8 +8,6 @@ import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 import * as Animatable from 'react-native-animatable';
 // import * as Animatable from 'react-native-animatable';
 
-const screenWidth = Dimensions.get('window').width;
-const dpDimension = screenWidth * 0.25; 
   
 const ItemListCard = ({ item, host,handleHostCardClick  }) => {
     const [imageUri, setImageUri] = useState(null);
@@ -107,7 +105,9 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
       </TouchableOpacity>
     );
   };
-
+  
+const screenWidth = Dimensions.get('window').width;
+const dpDimension = screenWidth * 0.25; 
 
 const styles = StyleSheet.create({
     container: {
@@ -215,7 +215,7 @@ paddingTop: 5,
     },
 
     detail: {
-        fontSize: screenWidth * 0.036,
+        fontSize: screenWidth * 0.034,
         marginBottom: 2,
         color:colors.pink,
         // Additional styling for other details

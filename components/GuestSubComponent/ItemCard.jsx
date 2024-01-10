@@ -1,5 +1,5 @@
-import React, { useEffect, useState, memo } from 'react';
-import { View, Button, Text, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useState, memo  } from 'react';
+import { View, Button, Text, Image, StyleSheet,Dimensions } from 'react-native';
 import { Storage } from 'aws-amplify';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
@@ -46,6 +46,7 @@ const fetchImage = async () => {
             </View>
 
       </View>
+      <Text style={styles.label}>Your 1 plate will contain below items!</Text>
 
       <Text style={styles.description}>{item.description}</Text>
     
@@ -54,57 +55,46 @@ const fetchImage = async () => {
     </View >
   );
 }
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.darkBlue,
-    // backgroundColor: colors.darkBlue,
-    // padding: 1,
-    marginBottom: 10,
+    marginBottom: screenHeight * 0.01, // Responsive margin
     borderRadius: 20,
     borderBottomColor: colors.pink,
-    borderBottomWidth:3,
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 2,
-
-    // elevation: 2,
+    borderBottomWidth: 3,
   },
   DP: {
-    width: '100%', // Make image as wide as the container
-    aspectRatio: 1, // Keep the image square
-    marginBottom: 8,
-    // padding:10,
-    // borderBottomWidth: 1, // Add a horizontal line below the image
-    // borderBottomColor: '#ccc', // Set the color for the horizontal line
+    width: '100%',
+    aspectRatio: 1,
+    marginBottom: screenHeight * 0.01,
   },
-  details:{
-    paddingLeft:16,
-    paddingBottom:16,
-     // borderTopWidth: 1,
-    // borderTopColor: '#ccc',
+  details: {
+    paddingLeft: screenWidth * 0.04, // Responsive padding
+    paddingBottom: screenHeight * 0.02,
   },
   indicatorBox: {
-    width: 14,
-    height: 14,
+    width: screenWidth * 0.035,
+    height: screenWidth * 0.035,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 5,
+    marginLeft: screenWidth * 0.01,
   },
   vegIndicator: {
-    width: 9,
-    height: 9,
-    borderRadius: 5,
+    width: screenWidth * 0.022,
+    height: screenWidth * 0.022,
+    borderRadius: screenWidth * 0.022 / 2, // Responsive circle
   },
   vegBox: {
     backgroundColor: 'transparent',
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: 'green',
   },
   nonVegBox: {
     backgroundColor: 'transparent',
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: 'red',
   },
   veg: {
@@ -116,15 +106,12 @@ const styles = StyleSheet.create({
   nameItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: screenHeight * 0.005,
   },
   nameItem: {
-    fontSize: 18,
+    fontSize: screenWidth * 0.045, // Responsive font size
     fontWeight: 'bold',
     color:colors.pink,
-    // marginBottom: 4,
-    // borderTopWidth: 1,
-    // borderTopColor: '#ccc',
   },
   dishCategory: {
     fontSize: 14,
@@ -132,14 +119,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
 
   },
+  label:{
+    fontWeight: 'bold',
+    fontSize: screenWidth * 0.037,
+    paddingBottom: 4, // Space out the line from the text
+color:"#4D6664",
+  },
   description: {
-    fontSize: 14,
-    // borderBottomWidth: 1, // Add a horizontal line below the description
-    // borderBottomColor: '#ccc', // Set the color for the horizontal line
+    fontSize: screenWidth * 0.037,
     marginBottom: 4,
     paddingBottom: 4, // Space out the line from the text
 color:colors.deepBlue,
-
   },
  
   quantityContainer: {
@@ -153,9 +143,8 @@ color:colors.deepBlue,
   amount: {
     marginTop: 4,
     fontWeight: '700',
-    color:colors.deepBlue,
-    fontSize: 17,
-
+    color: colors.deepBlue,
+    fontSize: screenWidth * 0.042,
   },
 });
 export default memo(ItemCard);

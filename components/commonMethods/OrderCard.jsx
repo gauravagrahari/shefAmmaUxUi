@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import ReviewInput from '../GuestSubComponent/ReviewInput';
 import StarRatingInput from '../GuestSubComponent/StarRatingInput';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
@@ -246,14 +246,18 @@ export default function OrderCard({ order,cancelCutOffTime }) {
 </LinearGradient>
 );
 }
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+function responsiveFontSize(fontSize) {
+  const standardScreenHeight = 680; // You can adjust this based on your target devices
+  return (fontSize * screenHeight) / standardScreenHeight;
+}
+
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'column',  // Change row to column
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    // borderWidth: 1,
-    // borderColor: "#e0e0e0",
-    // borderRadius: 8,
-    // margin: 3,
     padding: 12,
     backgroundColor: colors.darkBlue,
     shadowColor: '#aaa',
@@ -261,26 +265,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 2,
-    borderBottomColor:colors.pink,
-    borderBottomWidth:4,
-},
-orderButton: {
-  width: '50%',
-  height: 35,
-  marginTop: 9,
-  marginBottom: 8,
-  borderRadius: 10,
-  borderColor: colors.pink,
-  borderWidth: 1,
-  backgroundColor: 'rgba(0, 150, 136, 0.15)', // 80% opacity of #009688
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-orderDetails: {
+    borderBottomColor: colors.pink,
+    borderBottomWidth: 4,
+  },
+  orderButton: {
+    width: '50%',
+    height: screenHeight * 0.05, // 5% of screen height
+    marginTop: 9,
+    marginBottom: 8,
+    borderRadius: 10,
+    borderColor: colors.pink,
+    borderWidth: 1,
+    backgroundColor: 'rgba(0, 150, 136, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  orderDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-},
+  },
   leftSide: {
     flex: 2,
   },
@@ -355,10 +359,10 @@ confirmationPrompt: {
   marginTop: 5, // Give some space from the above element
 },
 confirmationText: {
-  flex: 1, // Takes up as much space as possible
-  marginRight: 10, // Add some margin to the right of the text
-  fontSize: 17, // Standard readable size
-  color: colors.deepBlue, // Assuming a light background, otherwise choose a contrasting color
+  flex: 1,
+  marginRight: 10,
+  fontSize: responsiveFontSize(14),
+  color: colors.deepBlue,
 },
 yesButton: {
   backgroundColor: 'rgba(0, 150, 136, 0.05)', // 80% opacity of #009688
@@ -380,11 +384,9 @@ noButton: {
   borderWidth: 2,
 },
 btnText: {
-  color: colors.deepBlue, // Text color that stands out on the buttons
-  fontSize: 16, // Matching font size with the confirmation text
-  textAlign: 'center', // Center text inside the button
+  color: colors.deepBlue,
+  fontSize: responsiveFontSize(13),
+  textAlign: 'center',
 },
 
 });
-//when cancelled then the currentcapacity should get increased by nOfserving in db.
-//when calling the updateattibute method in db twice, instead update the complete item at once
