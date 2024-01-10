@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: 'rgba(0, 0, 0, 0.5)', // Optional: adds a semi-transparent overlay for better visibility
+     
     },
     messageBox: {
         padding: 15,
@@ -52,15 +52,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#444',
         alignItems: 'center',
         justifyContent: 'center',
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 2,
-        // },
-        // shadowOpacity: 0.25,
-        // shadowRadius: 3.84,
-        // elevation: 5,
-        maxWidth: '80%', // Ensures the box doesn't stretch too wide on larger screens
+
     },
     message: {
         color: '#fff',

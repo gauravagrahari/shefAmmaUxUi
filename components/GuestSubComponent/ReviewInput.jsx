@@ -53,10 +53,8 @@ const ReviewInput = ({ uuidOrder, timeStamp }) => {
   };
 
   return (
-    <>
-      {showMessage && (
-        <MessageCard message={message} isVisible={true} onClose={() => setShowMessage(false)} />
-      )}
+    <View style={{ flex: 1, justifyContent: 'space-between' }}> 
+      
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -69,7 +67,10 @@ const ReviewInput = ({ uuidOrder, timeStamp }) => {
           <Text style={styles.postText}>Submit</Text>
         </TouchableOpacity>
       </View>
-    </>
+      {showMessage && (
+        <MessageCard message={message} isVisible={true} onClose={() => setShowMessage(false)} />
+      )}
+    </View>
   );
 };
 
