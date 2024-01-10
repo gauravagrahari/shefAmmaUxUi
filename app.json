@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "shefAmmaUI",
+    "name": "ShefAmma",
     "slug": "shefAmmaUI",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,10 +18,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shefAmma.shefAmmaUI"
+      "bundleIdentifier": "com.shefAmma.app"
     },
     "android": {
-      "package": "com.shefAmma.shefAmmaUI",
+      "package": "com.shefAmma.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
