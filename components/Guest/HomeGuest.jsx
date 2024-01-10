@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView, RefreshControl } from "react-native";
 import MealTypeFilter from "../commonMethods/MealTypeFilter";
 import { AddressContext } from "../Context/AddressContext";
+import { BackHandler } from 'react-native';
 
 const URL = config.URL;
 const windowWidth = Dimensions.get('window').width;
@@ -34,6 +35,21 @@ export default function HomeGuest({ navigation, route  }) {
     lunch: true, 
     dinner: true,
   }); 
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        console.log('Back button pressed in HomeGuest');
+        // Handle back action here, return true to override
+        return true;
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
   useEffect(() => {
     if (!addresses) {
@@ -52,6 +68,7 @@ export default function HomeGuest({ navigation, route  }) {
     const defaultAddress = addresses[defaultAddressType];
 
   
+
     if (JSON.stringify(defaultAddress) !== JSON.stringify(lastFetchedAddress)) {
       // setLoading(true);
       fetchUuidAndHosts(defaultAddress);

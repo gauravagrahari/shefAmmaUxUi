@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions,Animated  } from 'react-native';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AddressContext } from '../Context/AddressContext';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BackHandler } from 'react-native';
 
 export default function SelectDefaultAddress() {
   const navigation = useNavigation();
@@ -12,6 +13,21 @@ export default function SelectDefaultAddress() {
   const [guestDetails, setGuestDetails] = useState({});
   const { updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
   const [progress, setProgress] = useState(new Animated.Value(0));
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        console.log('Back button pressed in HomeGuest');
+        // Handle back action here, return true to override
+        return true;
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
   useEffect(() => {
     const fetchGuestDetails = async () => {

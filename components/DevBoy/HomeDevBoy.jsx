@@ -6,6 +6,8 @@ import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import NavBarDevBoy from '../DevBoySubComponent/NavBarDevBoy';
 import {colors} from '../commonMethods/globalStyles';
+import { BackHandler } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const URL = config.URL;
 
@@ -15,6 +17,21 @@ export default function HomeDevBoy({ navigation }) {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        console.log('Back button pressed in HomeGuest');
+        // Handle back action here, return true to override
+        return true;
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+  
   const fetchOrders = async () => {
     setLoading(true);
     setError(null);

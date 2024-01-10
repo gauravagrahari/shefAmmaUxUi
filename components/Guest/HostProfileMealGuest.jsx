@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
+import { Button,Dimensions, StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
 import ItemCard from "../GuestSubComponent/ItemCard";
 import NavBarMeals from "../GuestSubComponent/NavBarMeals";
 import axios from "axios";
@@ -339,7 +339,7 @@ return (
 </View> */}
     <View style={styles.quantityContainer}>
     {/* <View style={{backgroundColor: 'red'}}> */}
-    <Text style={styles.subTitle}>Choose number of {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} : </Text>
+    <Text style={styles.subTitle}>Choose number of plates : </Text>
  {/* </View> */}
    <TouchableOpacity style={styles.counterButton} onPress={decreaseMealCount}>
       <Text style={styles.counterText}>-</Text>
@@ -361,20 +361,19 @@ return (
 <View style={styles.costsContainer}>
 
 {capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
-      <View style={styles.costRow}>
-          <Text style={styles.costLabelText}>Total Kitchen Capacity:</Text>
-          {/* <Text style={styles.costLabelText}>Total {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text> */}
-          <Text style={styles.costValueText}>{capacityData[capacity]}</Text>
-      </View>
-  )}
+  <View style={styles.costRow}>
+      <Text style={styles.costLabelText}>Maximum Plates We Can Prepare:</Text>
+      <Text style={styles.costValueText}>{capacityData[capacity]}</Text>
+  </View>
+)}
 
-  {capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
-      <View style={styles.costRow}>
-          <Text style={styles.costLabelText}>Remaining {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text>
-          {/* <Text style={styles.costLabelText}>Remaining {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)} Capacity:</Text> */}
-          <Text style={styles.costValueText}>{capacityData[currentCapacity]}</Text>
-      </View>
-  )}
+{capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
+  <View style={styles.costRow}>
+      <Text style={styles.costLabelText}>Plates Available to Order:</Text>
+      <Text style={styles.costValueText}>{capacityData[currentCapacity]}</Text>
+  </View>
+)}
+
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Meal Price:</Text>
       <Text style={styles.costValueText}>{mealTotal.toFixed(2)}/-</Text>
@@ -488,6 +487,8 @@ onRequestClose={() => {
 
 );
 }
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
@@ -506,30 +507,24 @@ const styles = StyleSheet.create({
     
   // },
   hostInfoContainer: {
-    // margin:1,
-    // marginBottom:5,
-    padding: 10,
-    // backgroundColor: colors.prima, // Light grey background
-    borderRadius:5,
-    // borderBottomWidth: 3,
-    // borderBottomColor: colors.pink, // Light border for separation
+    padding: screenWidth * 0.025,
+    borderRadius: 5,
   },
   address: {
-    fontSize: 14,
+    fontSize: screenWidth * 0.037,
     color: 'gray',
-    marginBottom: 10,
+    marginBottom: screenHeight * 0.012,
   },
   hostName: {
-    fontSize: 19,
+    fontSize: screenWidth * 0.048,
     fontWeight: 'bold',
-    color: colors.deepBlue, // Dark text for the name
-    // marginBottom: 5, // Space between name and description
+    color: colors.deepBlue,
   },
   descriptionHost: {
-    fontSize: 14,
-    color: colors.pink, // Slightly lighter text for the description
-    lineHeight: 18, // For better readability in multi-line text
-    marginBottom: 10,
+    fontSize: screenWidth * 0.038,
+    color: colors.pink,
+    lineHeight: screenWidth * 0.045,
+    marginBottom: screenHeight * 0.01,
   },
   title: {
       fontSize: 20,
@@ -537,22 +532,20 @@ const styles = StyleSheet.create({
       marginBottom: 15,
       color: '#2C3E50', // Dark bluish-gray for better contrast
   },
-  subTitle: {
-      fontSize: 16,
-      fontWeight: "600",
-      color: 'white', // Slightly lighter shade of bluish-gray
-
-  },      
-  quantityContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginVertical: 10,
-      marginHorizontal: 10,
-      justifyContent: 'center',
-      backgroundColor: colors.primaryText,
-      padding: 5,
-      // borderRadius: 10,
-      borderRadius: 8,
+ subTitle: {
+    fontSize: screenWidth * 0.04,
+    fontWeight: "600",
+    color: 'white',
+  },     
+   quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: screenHeight * 0.01,
+    marginHorizontal: screenWidth * 0.025,
+    justifyContent: 'center',
+    backgroundColor: colors.primaryText,
+    padding: screenHeight * 0.01,
+    borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -595,12 +588,12 @@ closeButton: {
     fontSize: 24,
     color: '#FFF',
 },
-  noOfGuest: {
-      marginHorizontal: 10,
-      fontSize: 18,
-      fontWeight: "500",
-      color: 'white',
-  },
+noOfGuest: {
+  marginHorizontal: screenWidth * 0.035,
+  fontSize: screenWidth * 0.048,
+  fontWeight: "500",
+  color: 'white',
+},
   modalView: {
     flex: 1,
     justifyContent: 'center',
@@ -672,20 +665,21 @@ closeButton: {
     borderWidth: 2,
   },
   counterButton: {
-    backgroundColor: colors.darkBlue, 
-    padding: 12,  // increased padding
+    backgroundColor: colors.darkBlue,
+    padding: screenWidth * 0.025,
     alignItems: 'center',
-    justifyContent: 'center',  // center the text inside the touchable
+    justifyContent: 'center',
     borderRadius: 5,
-    marginHorizontal: 5,
-    width: 45,  // increased width
-    height: 45  // ensure height
-},
-    counterText: {
-fontSize: 18,
+    marginHorizontal: screenWidth * 0.015,
+    width: screenWidth * 0.12,
+    height: screenWidth * 0.12,
+  },
+  counterText: {
+    fontSize: screenWidth * 0.048,
     color: colors.deepBlue,
     fontWeight: '600',
-},
+  },
+
   orderButton: {
     width: '80%',
     height: 55,
@@ -709,23 +703,21 @@ fontSize: 18,
       backgroundColor:colors.primaryLight,
   },
   costRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginTop: 5,
-      marginBottom: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: screenHeight * 0.0051,
+    marginBottom: screenHeight * 0.005,
   },
   costLabelText: {
-      fontSize: 16,
-      // fontWeight: '500',
-      color: colors.deepBlue,
-      // color: '#555',
+    fontSize: screenWidth * 0.04,
+    color: colors.deepBlue,
   },
   costValueText: {
-      fontSize: 16,
-      fontWeight: '500',
-      color: colors.deepBlue,
-      textAlign: 'right',
+    fontSize: screenWidth * 0.041,
+    fontWeight: '500',
+    color: colors.deepBlue,
+    textAlign: 'right',
   },
   discountText: {
       fontSize: 16,

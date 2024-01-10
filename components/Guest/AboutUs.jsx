@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView,Dimensions  } from 'react-native';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const AboutUs = () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.card}>
+    <View style={styles.container}>
+      <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
         <Text style={styles.mainHeading}>ShefAmma: Nourishing Kolkata with Homemade Meals</Text>
         <Text style={styles.commonText}>
           ShefAmma brings the essence of Kolkata's culinary tradition to your doorstep. Our mission is simple - to provide delicious, home-cooked meals in the midst of your busy life. Our chefs, the loving moms of Kolkata, cook each dish with care, infusing traditional flavors in every bite.
@@ -26,47 +27,50 @@ const AboutUs = () => {
         <Text style={styles.commonText}>
           Join us in celebrating Kolkata's heritage with every meal from ShefAmma.
         </Text>
-      </View>
-    </ScrollView>
+      </LinearGradient>
+    </View>
   );
 };
+const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    flex: 1,
+    justifyContent: 'center', // Center content vertically
+    padding: screenWidth * 0.05,
+    backgroundColor:"#FF47A8",
+},
   card: {
-    margin: 10,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'white',
+    padding: screenWidth * 0.043,
+    borderRadius: 15,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,
+    margin: 10,
+    backgroundColor: 'white', // Assuming you want to keep the card white
   },
   mainHeading: {
-    fontSize: 22,
+    fontSize: screenWidth * 0.055,
     fontWeight: 'bold',
     marginVertical: 20,
-  },
-  commonText: {
-    fontSize: 16,
-    marginVertical: 10,
-    paddingHorizontal: 20,
     color: colors.deepBlue,
   },
+  commonText: {
+    fontSize: screenWidth * 0.04,
+    marginVertical: 10,
+    color: colors.pink,
+  },
   heading: {
-    fontSize: 18,
+    fontSize: screenWidth * 0.045,
     fontWeight: 'bold',
     color: colors.deepBlue,
     marginBottom: 10,
   },
   text: {
-    fontSize: 16,
-    color: colors.deepBlue,
+    fontSize: screenWidth * 0.042,
+    color: colors.pink,
   },
 });
 

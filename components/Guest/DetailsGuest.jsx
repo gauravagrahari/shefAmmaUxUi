@@ -5,11 +5,12 @@ import {EnterDate} from '../commonMethods/EnterDate';
 import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { AddressContext } from '../Context/AddressContext';
+import { BackHandler } from 'react-native';
 
 const URL = config.URL;
 export default function DetailsGuest() {
@@ -33,6 +34,22 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
 
   // const [showDatePicker, setShowDatePicker] = useState(false);
   const navigation = useNavigation();
+  // Inside DetailsGuest component
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        console.log('Back button pressed in HomeGuest');
+        // Handle back action here, return true to override
+        return true;
+      };
+  
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+  
   const validateForm = () => {
     if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !pinCode || !alternateMobileNumber) {
       setMessageText("Please fill in all the fields before submitting.");
