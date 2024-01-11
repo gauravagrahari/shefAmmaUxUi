@@ -8,8 +8,8 @@ import config from '../Context/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function SignupGuest() {
   const [password, setPassword] = useState('');

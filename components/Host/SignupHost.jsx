@@ -5,8 +5,8 @@ import OtpVerification from '../commonMethods/OtpVerification';
 import { useNavigation } from '@react-navigation/native';
 import {storeInSecureStore} from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function SignupHost() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import StarRating from '../commonMethods/StarRating';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 import * as Animatable from 'react-native-animatable';
-// import * as Animatable from 'react-native-animatable';
 
   
 const ItemListCard = ({ item, host,handleHostCardClick  }) => {

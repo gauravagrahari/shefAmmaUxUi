@@ -5,8 +5,8 @@ import axios from 'axios';
 import MessageCard from '../commonMethods/MessageCard';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 const ReviewInput = ({ uuidOrder, timeStamp }) => {
   const [reviewText, setReviewText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

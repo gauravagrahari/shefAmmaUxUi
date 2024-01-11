@@ -7,8 +7,8 @@ import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Loader from '../commonMethods/Loader';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function OrderHistoryGuest() {
   const [orderList, setOrderList] = useState([]);

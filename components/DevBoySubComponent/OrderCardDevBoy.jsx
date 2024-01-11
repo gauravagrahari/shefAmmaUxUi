@@ -8,8 +8,8 @@ import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import { Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Dropdown from '../commonMethods/Dropdown';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function OrderCardDevBoy({ orderData, hostAddress, guestAddress, navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);

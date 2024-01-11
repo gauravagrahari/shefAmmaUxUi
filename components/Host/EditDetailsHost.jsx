@@ -18,8 +18,8 @@ import IndianStates from "../Context/IndianStates";
 import Dropdown from "../commonMethods/Dropdown";
 import Loader from "../commonMethods/Loader";
 import ImageDisplayer from "../commonMethods/ImageDisplayer";
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function EditDetailsHost() {
   const [uuidHost, setUuidHost] = useState("");

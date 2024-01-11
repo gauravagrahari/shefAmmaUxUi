@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
-import config from '../Context/constants';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 const CheckPincode = ({ onClose }) => {
     const [pincode, setPincode] = useState('');

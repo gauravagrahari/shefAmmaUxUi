@@ -4,9 +4,8 @@ import axios from 'axios';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getFromSecureStore } from "../Context/SensitiveDataStorage";
 import { useNavigation } from '@react-navigation/native';
-import config from '../Context/constants';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 const EditTimeSlot = () => {
   const [capacity, setCapacity] = useState('');

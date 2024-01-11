@@ -4,8 +4,8 @@ import axios from 'axios';
 import config from '../Context/constants';
 import { useNavigation } from '@react-navigation/native';
 import {storeInSecureStore} from '../Context/SensitiveDataStorage';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function LoginHost() {
   const [phoneNo, setPhoneNo] = useState('');
   const [password, setPassword] = useState('');

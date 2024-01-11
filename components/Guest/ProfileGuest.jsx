@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { EditableText } from '../commonMethods/EditableText';
 import axios from 'axios';
 import config from '../Context/constants';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function ProfileGuest() {
   const [userData, setUserData] = useState({
     name: '',

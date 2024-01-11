@@ -16,8 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import config from '../Context/constants';
 import IndianStates from "../Context/IndianStates";
 import Dropdown from "../commonMethods/Dropdown";
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function DetailsHost({ route }) {
   const [uuidHost, setUuidHost] = useState("setUuidHost");
   const [fullName, setFullName] = useState("");

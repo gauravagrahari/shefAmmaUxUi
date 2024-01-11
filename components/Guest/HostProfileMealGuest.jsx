@@ -13,9 +13,8 @@ import MessageCard from "../commonMethods/MessageCard";
 import { LinearGradient } from "expo-linear-gradient";
 import StarRating from "../commonMethods/StarRating";
 import * as Animatable from 'react-native-animatable';
-
-
-const URL = config.URL; 
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function HostProfileMealGuest({ route }) {
   const MEAL_TYPE_MAPPING = {

@@ -5,8 +5,8 @@ import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveData
 import config from '../Context/constants';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 const ChargesDisplay = () => {
     const [charges, setCharges] = useState(null);
   

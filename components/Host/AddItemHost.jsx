@@ -6,9 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import config from '../Context/constants';
 import EachItem from '../HostSubComponent/EachItem';
-
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function AddItemHost() {
   const [items, setItems] = useState([{}]);
   const navigation = useNavigation();

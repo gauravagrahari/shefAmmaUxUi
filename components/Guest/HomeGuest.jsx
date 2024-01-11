@@ -16,8 +16,11 @@ import { ScrollView, RefreshControl } from "react-native";
 import MealTypeFilter from "../commonMethods/MealTypeFilter";
 import { AddressContext } from "../Context/AddressContext";
 import { BackHandler } from 'react-native';
+import Constants from 'expo-constants';
 
-const URL = config.URL;
+// const URL = config.URL;
+const URL = Constants.expoConfig.extra.apiUrl;
+
 const windowWidth = Dimensions.get('window').width;
 
 export default function HomeGuest({ navigation, route  }) {
@@ -52,6 +55,8 @@ export default function HomeGuest({ navigation, route  }) {
   );
 
   useEffect(() => {
+    console.log('API URL----------------->>>>>>>>>>>>>>>', URL);
+
     if (!addresses) {
       console.log("HomeGuest: Addresses context is not defined yet.");
       return; // Exit the useEffect if addresses is not defined
@@ -88,7 +93,7 @@ export default function HomeGuest({ navigation, route  }) {
       navigation.navigate('LoginGuest');
       return; // Exit the useEffect if token is not present or addresses is not defined
     }
-   console.log("value of loadinf is------->"+loading);
+   
     try {
       // Fetch charges from the API
       const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {

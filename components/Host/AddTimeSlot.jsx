@@ -5,8 +5,8 @@ import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { getFromSecureStore } from "../Context/SensitiveDataStorage"; // Path might need to be adjusted
 import { useNavigation } from '@react-navigation/native';
 import config from '../Context/constants';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 const AddTimeSlot = () => {
   const [capacity, setCapacity] = useState('');
   const [duration, setDuration] = useState('');
