@@ -370,7 +370,6 @@ yesButton: {
   paddingHorizontal: 16, // Horizontal padding
   borderRadius: 5, // Rounded corners
   marginRight: 10, // Space between the Yes and No buttons
-  borderRadius: 10,
   borderColor: colors.pink,
   borderWidth: 1.5,
 },
@@ -379,7 +378,6 @@ noButton: {
   paddingVertical: 8,
   paddingHorizontal: 16,
   borderRadius: 5,
-  borderRadius: 10,
   borderColor: colors.pink,
   borderWidth: 2,
 },

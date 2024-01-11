@@ -85,7 +85,6 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
 const styles = StyleSheet.create({
     messageText: {
         fontSize: 16,
-        color: '#333',   // Dark grey color
         padding: 5,
         // backgroundColor: colors.darkBlue, // Light grey background
         borderRadius: 5,
