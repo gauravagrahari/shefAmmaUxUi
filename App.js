@@ -94,9 +94,8 @@ export default function App() {
          <AddressProvider>
     <NavigationContainer>
     <Stack.Navigator 
-    initialRouteName={initialRoute}
-    screenOptions={{ headerShown: false }} // Add this line
-  >
+            initialRouteName={initialRoute}
+            screenOptions={{ header: () => null }}>
         <Stack.Screen name="HomeGuest" component={HomeGuest}/> 
         <Stack.Screen name="WelcomeMessage" component={WelcomeMessage}/> 
         <Stack.Screen name="ChargesDisplay" component={ChargesDisplay}/>
