@@ -7,7 +7,6 @@ import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import { Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Dropdown from '../commonMethods/Dropdown';
 import Constants from 'expo-constants';
 const URL = Constants.expoConfig.extra.apiUrl;
 
