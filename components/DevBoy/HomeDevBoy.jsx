@@ -8,8 +8,9 @@ import NavBarDevBoy from '../DevBoySubComponent/NavBarDevBoy';
 import {colors} from '../commonMethods/globalStyles';
 import { BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Constants from 'expo-constants';
 
-const URL = config.URL;
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function HomeDevBoy({ navigation }) {
   const [orderList, setOrderList] = useState([]);

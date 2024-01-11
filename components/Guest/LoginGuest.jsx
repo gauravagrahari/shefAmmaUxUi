@@ -11,8 +11,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import MessageCard from '../commonMethods/MessageCard';
 import { AddressContext } from '../Context/AddressContext';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function LoginGuest() {
   const [phoneNo, setPhoneNo] = useState('');

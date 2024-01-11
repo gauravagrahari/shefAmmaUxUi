@@ -4,8 +4,8 @@ import axios from 'axios';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function ChangePassword({ visible, onClose, onPasswordChangeSuccess }) {
   const [oldPassword, setOldPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');

@@ -12,8 +12,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 import * as Animatable from 'react-native-animatable';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function HostCard({ host, meals }) {
   const itemNames = meals.map(meal => meal.nameItem);

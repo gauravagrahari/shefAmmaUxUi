@@ -1,11 +1,22 @@
 {
-    "build": {
-      "release": {
-        "distribution": "store",
-        "android": {
-          "buildType": "apk"
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "app-bundle",
+        "env": {
+          "API_URL": "http://uat-env.eba-epp52dpv.ap-south-1.elasticbeanstalk.com"
         }
       }
     }
+  },
+  "cli": {
+    "appVersionSource": "app.config.js"
   }
-  
+}

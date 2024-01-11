@@ -14,8 +14,8 @@ import Loader from '../commonMethods/Loader';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AddressContext } from '../Context/AddressContext';
-
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 export default function UpdateGuestDetails() {
 
   const [isLoading, setIsLoading] = useState(true);

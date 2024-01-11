@@ -7,7 +7,8 @@ import MessageCard from '../commonMethods/MessageCard';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import * as Animatable from 'react-native-animatable';
-const URL = config.URL;
+import Constants from 'expo-constants';
+const URL = Constants.expoConfig.extra.apiUrl;
 
 const StarRatingInput = ({ uuidOrder, timeStamp, uuidHost, geoHost }) => {
   const [currentRating, setCurrentRating] = useState(0);
