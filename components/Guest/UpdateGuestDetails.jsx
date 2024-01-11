@@ -574,7 +574,6 @@ const styles = StyleSheet.create({
   linkText:{
 borderBottomWidth:1,
 borderBottomColor: colors.pink,
-// padding: 5,
 margin:20,
   },
   isOfficeAddressEmpty: {

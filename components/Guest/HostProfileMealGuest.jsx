@@ -742,8 +742,6 @@ noOfGuest: {
         borderWidth: 2,
         borderColor: colors.primaryText,
         fontWeight: '500',
-        color: '#fff',
-        padding:10,
   },
   defaultAddressText: {
       fontSize: 16,

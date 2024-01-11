@@ -17,6 +17,6 @@
     }
   },
   "cli": {
-    "appVersionSource": "app.config.js"
+    "appVersionSource": "local"
   }
 }
