@@ -210,7 +210,7 @@ export default function OrderCard({ order,cancelCutOffTime }) {
               </TouchableOpacity>
             </View>
           ) : (<>
-            <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you at {order.delTimeAndDay}!</Text>
+            <Text style={styles.confirmationText}>Your {mealMapping[order.mealType]} will be reaching to you on {order.delTimeAndDay}!</Text>
 
             <View style={globalStyles.centralisingContainer}>
           
@@ -253,12 +253,13 @@ function responsiveFontSize(fontSize) {
   const standardScreenHeight = 680; // You can adjust this based on your target devices
   return (fontSize * screenHeight) / standardScreenHeight;
 }
-
+const responsiveWidth = (percent) => screenWidth * percent / 100;
+const responsiveHeight = (percent) => screenHeight * percent / 100;
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    padding: 12,
+    padding: responsiveHeight(1.5), // Use responsiveHeight for padding
     backgroundColor: colors.darkBlue,
     shadowColor: '#aaa',
     shadowOffset: { width: 0, height: 1 },
@@ -269,8 +270,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
   },
   orderButton: {
-    width: '50%',
-    height: screenHeight * 0.05, // 5% of screen height
+    width: responsiveWidth(50), // 50% of screen width
+    height: responsiveHeight(5), // 5% of screen height
     marginTop: 9,
     marginBottom: 8,
     borderRadius: 10,

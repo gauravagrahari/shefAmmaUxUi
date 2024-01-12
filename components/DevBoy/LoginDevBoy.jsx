@@ -12,13 +12,16 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 const URL = Constants.expoConfig.extra.apiUrl;
 
-
 export default function LoginDevBoy() {
   const [phone, setPhone] = useState('');
   const [devBoyPassword, setDevBoyPassword] = useState('');
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
   const navigation = useNavigation();
 
   const handleLogin = () => {
@@ -65,7 +68,6 @@ export default function LoginDevBoy() {
       {isLoading ? (
         <Loader/>
       ) : (
-        
         <View style={styles.innerContainer}>
                  <Text style={styles.welcomeText}>
 
@@ -86,13 +88,19 @@ export default function LoginDevBoy() {
             <TextInput
               style={styles.input}
               placeholder="Enter Password"
-              secureTextEntry
+              secureTextEntry={!passwordVisible}
               value={devBoyPassword}
               onChangeText={setDevBoyPassword}
             />
+                     <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Ionicons name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+          </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginGuest')}>
+            <Text style={styles.linkText}>Customer Login</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -106,6 +114,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+  },
+  linkText: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: '#3498db',
+    fontSize: 17,
+    fontWeight: '500',
   },
   innerContainer: {
     width: '100%',

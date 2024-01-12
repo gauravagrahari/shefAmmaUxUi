@@ -35,14 +35,8 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
         return null;
     }
     return (
-        <Animated.View style={{
-            ...styles.overlay,
-            opacity: fadeAnim // Use the existing fade animation for the overlay
-        }}>
-            <Animated.View style={{
-                ...styles.container,
-                transform: [{ translateY }]
-            }}>
+        <Animated.View style={[styles.fullScreenOverlay, { opacity: fadeAnim }]}>
+            <View style={styles.container}>
                 <AntDesign name="checkcircle" size={50} color={colors.darkBlue} />
                 <Text style={styles.successText}>Order Successful</Text>
                 <Text style={styles.thankYouText}>Thank You!</Text>
@@ -52,7 +46,7 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
                 }}>
                     <Text style={styles.closeButton}>×</Text>
                 </TouchableOpacity>
-            </Animated.View>
+            </View>
         </Animated.View>
     );
 }
@@ -73,20 +67,31 @@ const styles = {
             width: 0,
             height: 2,
         },
-
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
     },
-    overlay: {
+    fullScreenOverlay: {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(f, f, f, 0.5)', // Semi-transparent black
+        backgroundColor: 'rgba(0, 0, 0, 0.71)', // Dark overlay
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    cardContainer: {
+        width: '80%', // Maintain the width as per your requirement
+        padding: 30,
+        backgroundColor: colors.pink,
+        borderRadius: 10,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     successText: {
         fontSize: 20,

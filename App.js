@@ -142,10 +142,6 @@ export default function App() {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    paddingTop: 60,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

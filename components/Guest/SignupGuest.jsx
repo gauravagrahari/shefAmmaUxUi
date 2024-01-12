@@ -16,9 +16,18 @@ export default function SignupGuest() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneVerified, setPhoneVerified] = useState({ verified: false, value: null });
   const [errorMessage, setErrorMessage] = useState(null);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   const navigation = useNavigation();
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+  };
   const handleSignup = () => {
     if (password !== confirmPassword) {
       console.log('Password and Confirm Password do not match');
@@ -74,26 +83,32 @@ export default function SignupGuest() {
           <OtpVerification type="phone" onVerify={setPhoneVerified} />
 
           <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={24} color="black" />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Password"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
+          <Ionicons name="lock-closed-outline" size={24} color="black" />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Password"
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Ionicons name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={24} color="black" />
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-          </View>
+        <View style={styles.inputContainer}>
+          <Ionicons name="lock-closed-outline" size={24} color="black" />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            secureTextEntry={!confirmPasswordVisible}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          <TouchableOpacity onPress={toggleConfirmPasswordVisibility}>
+            <Ionicons name={confirmPasswordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
           {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
@@ -103,6 +118,9 @@ export default function SignupGuest() {
 
           <TouchableOpacity onPress={() => navigation.navigate('LoginGuest')}>
             <Text style={styles.linkText}>Already have an account? Login here</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginDevBoy')}>
+            <Text style={styles.linkText}>Partner Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -150,7 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     marginLeft: 10,
-    color: 'white',
+    color: 'black', // Updated color
     fontSize: 16,
   },
   button: {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button,Dimensions, StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
+import { Button,Dimensions, StyleSheet, Text, View,PixelRatio , ScrollView,TextInput, TouchableOpacity,Modal } from "react-native";
 import ItemCard from "../GuestSubComponent/ItemCard";
 import NavBarMeals from "../GuestSubComponent/NavBarMeals";
 import axios from "axios";
@@ -313,9 +313,7 @@ finally {
 return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-
-
-  <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
+<LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',    marginTop:10, }}>
 
         <Text style={styles.hostName}>{host.nameHost}</Text>
@@ -357,7 +355,7 @@ return (
   </Animatable.View>
 </View>
 
-<View style={styles.costsContainer}>
+  <View style={styles.costsContainer}>
 
 {capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
   <View style={styles.costRow}>
@@ -387,9 +385,11 @@ return (
       <Text style={styles.costLabelText}>Packaging, handling and platform Charges:</Text>
       <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}/-</Text>
   </View>
+  <Text style={styles.offerText}>Enjoy additional discount on packaging, handling, and platform charges for your second plate when you add it to your order!</Text>
+
   {mealCount > 0 && (
   <View style={styles.costRow}>
-      <Text style={styles.costLabelText}>Discount:</Text>
+      <Text style={styles.costLabelText}>ShefAmma's Discount:</Text>
       <Text style={styles.discountText}>{discount.toFixed(2)}</Text>
   </View>)}
   {mealCount > 0 && (
@@ -424,10 +424,10 @@ return (
 )}
 {mealCount > 0 && (
   <View style={styles.preferredTimeContainer}>
-    <Text style={styles.preferredTimeLabel}>Preferred Delivery Time:</Text>
+    <Text style={styles.preferredTimeLabel}>Add a preferred Delivery Time:</Text>
     <TextInput
       style={styles.preferredTimeInput}
-      placeholder="e.g., 6:30 PM"
+      placeholder="e.g., 06:30 PM"
       value={preferredTime}
       onChangeText={setPreferredTime}
     />
@@ -451,6 +451,8 @@ return (
 </TouchableOpacity>
 )}
       </View>
+      <OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
+
       <Modal
 transparent={true}
 animationType="slide"
@@ -474,7 +476,7 @@ onRequestClose={() => {
   </View>
 </View>
 </Modal>
-<OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
+
 
   </ScrollView>
   <MessageCard 
@@ -488,6 +490,11 @@ onRequestClose={() => {
 }
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
+const scale = screenWidth / 320;
+const normalize = (size) => {
+    const newSize = size * scale 
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) 
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -520,9 +527,9 @@ const styles = StyleSheet.create({
     color: colors.deepBlue,
   },
   descriptionHost: {
-    fontSize: screenWidth * 0.038,
-    color: colors.pink,
-    lineHeight: screenWidth * 0.045,
+    fontSize: normalize(12),
+        color: colors.pink,
+        lineHeight: normalize(14),
     marginBottom: screenHeight * 0.01,
   },
   title: {
@@ -697,6 +704,7 @@ noOfGuest: {
     fontWeight: 'bold',
   },
   costsContainer: {
+    width: '100%',
       marginVertical: 10,
       padding:10,
       backgroundColor:colors.primaryLight,
@@ -709,11 +717,21 @@ noOfGuest: {
     marginBottom: screenHeight * 0.005,
   },
   costLabelText: {
-    fontSize: screenWidth * 0.04,
+    fontSize: normalize(12),
     color: colors.deepBlue,
   },
+  offerText: {
+    marginVertical:5,
+    borderWidth: 1,
+    borderColor:colors.deepBlue,
+    borderRadius: 5,
+    padding: 7,
+    fontSize: normalize(13),
+    color: "#1AB269",
+    fontWeight: 'bold',
+  },
   costValueText: {
-    fontSize: screenWidth * 0.041,
+    fontSize: normalize(14),
     fontWeight: '500',
     color: colors.deepBlue,
     textAlign: 'right',

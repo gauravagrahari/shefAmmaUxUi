@@ -107,7 +107,7 @@ return (
               ) : (
                   <Image
                       style={styles.carouselImage}
-                      source={{ uri: 'images/ShefAmma (1).jpg' }}
+                      source={ require('../../assets/EmptyImageDefault.jpg')}
                       onError={(error) => console.error("Image Error", error)}
                   />
               )}

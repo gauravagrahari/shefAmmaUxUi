@@ -23,7 +23,11 @@ export default function LoginGuest() {
   const navigation = useNavigation();
   const [message, setMessage] = useState("");
   const { updateAddressInContext, setDefaultAddressInContext, clearAddressesInContext } = useContext(AddressContext);
-  
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
   const handleLogin = () => {
     setIsLoading(true); // Start loading when API call starts
     const data = {
@@ -124,20 +128,22 @@ export default function LoginGuest() {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={24} color="black" />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Password"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
+          <Ionicons name="lock-closed-outline" size={24} color="black" />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Password"
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Ionicons name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+          </TouchableOpacity>
+        </View>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <View >
-
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('SignupGuest')}>
             <Text style={styles.linkText}>Create a new account</Text>
