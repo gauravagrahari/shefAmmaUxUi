@@ -37,7 +37,8 @@ const fetchImage = async () => {
   console.log("item names"+item.nameItem);
   return (
     <View style={styles.container}>
-    <Image style={styles.DP} source={{ uri: imageUri }} />
+    <Image style={styles.DP}    
+     source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')}  />
     <View style={styles.details}>
       <View style={styles.nameItemContainer}>
         <Text style={styles.nameItem}>{item.nameItem}</Text>
@@ -123,13 +124,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: screenWidth * 0.037,
     paddingBottom: 4, // Space out the line from the text
-color:"#4D6664",
+    color:"#4D6664",
   },
   description: {
-    fontSize: screenWidth * 0.037,
+    fontSize: screenWidth * 0.038,
     marginBottom: 4,
     paddingBottom: 4, // Space out the line from the text
-color:colors.deepBlue,
+    color:colors.deepBlue,
   },
  
   quantityContainer: {

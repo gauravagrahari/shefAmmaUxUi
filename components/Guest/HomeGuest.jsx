@@ -30,7 +30,7 @@ export default function HomeGuest({ navigation, route  }) {
   const [showPincodeChecker, setShowPincodeChecker] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [isReLoading, setIsReLoading] = useState(false);
-
+  const [serverError, setServerError] = React.useState(false);
   const { hostList, setHostList, hasFetchedHosts, setHasFetchedHosts } = useContext(HostContext);
   const [refreshing, setRefreshing] = React.useState(false); 
   const [selectedMealTypes, setSelectedMealTypes] = React.useState({
@@ -108,8 +108,12 @@ export default function HomeGuest({ navigation, route  }) {
       if (error.response) {
         console.error("Charges error status:", error.response.status);
         console.error("Charges error data:", error.response.data);
+        if (error.response.status === 504) {
+          setServerError(true); // Set server error for 504 Gateway Timeout
+        }
       } else if (error.request) {
         console.error("No response received for charges:", error.request);
+        setServerError(true);
       } else {
         console.error("Charges error:", error.message);
       }
@@ -241,6 +245,17 @@ const onRefresh = React.useCallback(() => {
     console.log("Rendering Loader, loading:", loading);
     return <Loader />;
   }
+  if (serverError) {
+    return (
+      <View style={globalStyles.containerPrimary}>
+      {/* <View style={globalStyles.centeredContainer}> */}
+        <Text style={styles.errorMessage}>
+          We're experiencing technical difficulties. Please try again later.
+        </Text>
+      </View>
+    );
+  }
+
   return (  
       <View style={globalStyles.containerPrimary}>
      <NavBarGuest navigation={navigation} />
@@ -291,6 +306,15 @@ function responsiveFontSize(fSize) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  errorMessage: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginVertical:200,
+    color:colors.darkBlue,
+    padding:20,
+
   },
   checkPincodeButtonText:{
     fontSize: responsiveFontSize(2.25), // Example: 2.25% of the screen size

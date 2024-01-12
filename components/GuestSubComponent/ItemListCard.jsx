@@ -49,7 +49,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
     return (
         <TouchableOpacity onPress={handleHostCardClick}>
         <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={{marginBottom:4}}>
-      <View style={styles.containerVertical}>
+       <View style={styles.containerVertical}>
             <View style={styles.container}>
           <View style={styles.imageContainer}>
           <Animatable.View
@@ -61,7 +61,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
           >
             <Image
               style={styles.itemImage}
-              source={{ uri: imageUri }}
+              source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')} 
               onError={(error) => console.error("Image Error", error)}
             />
           </Animatable.View>
