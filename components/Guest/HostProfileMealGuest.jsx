@@ -376,22 +376,36 @@ return (
       <Text style={styles.costValueText}>{mealTotal.toFixed(2)}/-</Text>
   </View>
 
-  <View style={styles.costRow}>
-      <Text style={styles.costLabelText}>Delivery Charges:</Text>
-      <Text style={styles.costValueText}>{deliveryCharge.toFixed(2)}/-</Text>
-  </View>
+  {deliveryCharge === 0 ? (
+        <Text style={styles.offerText}>Yay! Free Delivery!</Text>
+    ) : (
+        <View style={styles.costRow}>
+            <Text style={styles.costLabelText}>Delivery Charges:</Text>
+            <Text style={styles.costValueText}>{deliveryCharge.toFixed(2)}/-</Text>
+        </View>
+    )}
 
-  <View style={styles.costRow}>
-      <Text style={styles.costLabelText}>Packaging, handling and platform Charges:</Text>
-      <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}/-</Text>
-  </View>
-  <Text style={styles.offerText}>Enjoy additional discount on packaging, handling, and platform charges for your second plate when you add it to your order!</Text>
+{packagingCharge === 0 ? (
+        <Text style={styles.offerText}>Yay! Free Packaging, Handling, and Platform Charges!</Text>
+    ) : (
+        <View style={styles.costRow}>
+            <Text style={styles.costLabelText}>Packaging, Handling and Platform Charges:</Text>
+            <Text style={styles.costValueText}>{packagingCharge.toFixed(2)}/-</Text>
+        </View>
+    )}
 
-  {mealCount > 0 && (
-  <View style={styles.costRow}>
-      <Text style={styles.costLabelText}>ShefAmma's Discount:</Text>
-      <Text style={styles.discountText}>{discount.toFixed(2)}</Text>
-  </View>)}
+{mealCount > 0 && packagingCharge > 0 && (
+    <Text style={styles.offerText}>
+        Enjoy additional discount on packaging, handling, and platform charges for your second plate when you add it to your order!
+    </Text>
+)}
+
+  {mealCount > 0 && discount >0 && (
+        <View style={styles.costRow}>
+            <Text style={styles.costLabelText}>ShefAmma's Discount:</Text>
+            <Text style={styles.discountText}>{discount.toFixed(2)}</Text>
+        </View>
+    )}
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Total Amount:</Text>

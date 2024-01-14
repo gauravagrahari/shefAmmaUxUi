@@ -50,8 +50,10 @@ export default function SettingsGuest() {
 
     clearAddressesInContext();
     console.log('Address context should now be cleared to:', initialState);
-  
-    navigation.navigate('SignupGuest');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'LoginGuest' }],
+    });
   };
   
   return (

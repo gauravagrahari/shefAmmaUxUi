@@ -49,7 +49,7 @@ const statusMappings = {
       statusStyle = styles.inProgress;
       break;
       case "Picked Up":
-        statusStyle = styles.inProgress;
+        statusStyle = styles.pickedUp;
         break;
     case "New":
       statusStyle = styles.newOrder;
@@ -274,6 +274,7 @@ const options = {
      {/* Conditional rendering based on status */}
      {orderData.status === "ip" && (
                 <View style={globalStyles.centralisingContainer}>
+                  <Text style={styles.pickedUp}>You need to pick up the order from cook's location.</Text>
       <TouchableOpacity style={styles.completeOrderButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.completeOrderText}>Order Picked Up</Text>
       </TouchableOpacity>
@@ -282,6 +283,7 @@ const options = {
     
     {orderData.status === "pkd" && (
                 <View style={globalStyles.centralisingContainer}>
+                  <Text style={styles.completed}>You need to deliver the order to the customer.</Text>
 
       <TouchableOpacity style={styles.completeOrderButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.completeOrderText}>Order Delivered</Text>
@@ -377,8 +379,8 @@ phoneNumber: {
   completeOrderButton: {
     width: '80%',
     height: 55,
-    marginTop: 20,
-    marginBottom: 30,
+    marginTop: 10,
+    marginBottom: 10,
     borderRadius: 10,
     borderColor: colors.pink,
     borderWidth: 2,
@@ -391,18 +393,18 @@ phoneNumber: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  cancelled: {
-    color: "red",
+  pickedUp: {
+    color: "orange",
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 17,
   },
   completed: {
     color: "green",
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 16,
   },
   inProgress: {
-    color: "green",
+    color: "red",
     fontWeight: "bold",
     fontSize: 17,
   },
@@ -426,7 +428,7 @@ paddingTop:10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom:10,
+    marginBottom:5,
   },
   modalView: {
     flex: 1,
@@ -505,7 +507,7 @@ guestDetailsContainer: {
 },
 arrowIcon: {
   alignSelf: 'center', 
-  marginVertical: 10,
+  marginVertical: 5,
 },
   clickableAddressContainer: {
     paddingVertical: 5, // Gives some space around the clickable area
@@ -517,48 +519,6 @@ arrowIcon: {
   },
   clickableAddress: {
     color: 'whitesmoke', // A common color to indicate clickable links
-    // textDecorationLine: 'underline' // Underline the text for added indication
+   
   }
 });
-// const updateOrderStatus = async (statusKey, timestampKey, statusValue) => {
-//   try {
-//     const currentTimestamp = new Date().toISOString();
-//     const token = await getFromSecureStore('token');
-    
-//     const orderEntity = {
-//       status: statusValue,
-//       uuidOrder: orderData.uuidOrder,
-//       timeStamp: orderData.timeStamp,
-//     };
-//     orderEntity[timestampKey] = currentTimestamp;
-
-//     const response = await axios.put(
-//       `${URL}/devBoy/updateOrder?attributeName=status&attributeName2=${timestampKey}`,
-//       orderEntity,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       }
-//     );
-
-//     if (response.data === "Order updated successfully") {
-//       console.log(`Order ${statusValue} successfully!`);
-//       orderData.status = statusValue;
-//       setModalVisible(false);
-//     } else {
-//       console.error("Unexpected response:", response.data);
-//     }
-//   } catch (error) {
-//     console.error(`Error updating order status to ${statusValue}:`, error);
-//   }
-// };
-
-// const handleOrderPickup = async () => {
-//   await updateOrderStatus('pickUpTime', 'pkd');
-// };
-
-// const handleOrderCompletion = async () => {
-//   await updateOrderStatus('deliverTime', 'com');
-// };
-

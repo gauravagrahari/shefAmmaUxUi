@@ -51,7 +51,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
   );
   
   const validateForm = () => {
-    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !pinCode || !alternateMobileNumber) {
+    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !pinCode) {
       setMessageText("Please fill in all the fields before submitting.");
       return false;
     }
@@ -104,7 +104,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
         await storeInSecureStore('altPhone',alternateMobileNumber);
 
         // Retrieving data
-        const getData = await getFromAsync('guestDetails');  // Typo here, it should be getFromSecureStore instead of getFromAsync
+        const getData = await getFromAsync('guestDetails');  
         console.log('Retrieved data:', getData);  // Updated the console message for clarity
 
         axios

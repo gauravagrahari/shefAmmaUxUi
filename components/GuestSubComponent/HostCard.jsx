@@ -220,7 +220,7 @@ descriptionContainer: {
 },
 descriptionHost: {
   fontSize: responsiveFontSize(12),
-  lineHeight: responsiveFontSize(15),
+  lineHeight: responsiveFontSize(15.5),
   fontFamily: 'sans-serif',
   color: colors.darkPink,
 },
@@ -235,7 +235,7 @@ readMoreContainer: {
 },
 readMoreText: {
   color: '#662549',
-  fontSize: responsiveFontSize(14),
+  fontSize: responsiveFontSize(12),
   fontWeight: 'bold',
   paddingRight: 5,
   borderBottomRightRadius: 5,

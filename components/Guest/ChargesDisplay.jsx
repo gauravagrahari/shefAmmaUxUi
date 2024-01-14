@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text,ScrollView, StyleSheet,Dimensions  } from 'react-native';
 import { getFromSecureStore, storeInSecureStore } from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
@@ -56,34 +56,43 @@ const ChargesDisplay = () => {
       );
     
       return (
-        <LinearGradient colors={[colors.darkBlue, colors.darkBlue]} style={styles.container}>
-          <Text style={globalStyles.headerText}>Meal Timings and Booking Information</Text>
-          <Text style={styles.commonText}>
-            The Delivery Window indicates the time frame during which we delightfully deliver your meal.
-            {"\n"}{"\n"}The Booking Cut-off Time helps us ensure timely delivery; orders placed before this time will be delivery today, while orders after this time are warmly scheduled for tomorrow's delivery.
-            {"\n"}{"\n"}We're gearing up to launch our Breakfast service soon. Stay tuned!
-          </Text>
-          {charges ? (
-            <>
-              {renderMealTiming('Breakfast', charges.breakfastStartTime, charges.breakfastEndTime, charges.breakfastBookTime)}
-              {renderMealTiming('Lunch', charges.lunchStartTime, charges.lunchEndTime, charges.lunchBookTime)}
-              {renderMealTiming('Dinner', charges.dinnerStartTime, charges.dinnerEndTime, charges.dinnerBookTime)}
-            </>
-          ) : (
-            <Text>Loading charges...</Text>
-          )}
-        </LinearGradient>
+        <ScrollView style={styles.scrollContainer}>
+          <LinearGradient colors={[colors.darkBlue, colors.darkBlue]} style={styles.container}>
+            <Text style={globalStyles.headerText}>Meal Timings and Booking Information</Text>
+            <Text style={styles.commonText}>
+              The Delivery Window indicates the time frame during which we delightfully deliver your meal.
+              {"\n"}{"\n"}The Booking Cut-off Time helps us ensure timely delivery; orders placed before this time will be delivered today, while orders after this time are warmly scheduled for tomorrow's delivery.
+              {"\n"}{"\n"}We're gearing up to launch our Breakfast service soon. Stay tuned!
+            </Text>
+            {charges ? (
+              <>
+                {renderMealTiming('Breakfast', charges.breakfastStartTime, charges.breakfastEndTime, charges.breakfastBookTime)}
+                {renderMealTiming('Lunch', charges.lunchStartTime, charges.lunchEndTime, charges.lunchBookTime)}
+                {renderMealTiming('Dinner', charges.dinnerStartTime, charges.dinnerEndTime, charges.dinnerBookTime)}
+              </>
+            ) : (
+              <Text>Loading charges...</Text>
+            )}
+          </LinearGradient>
+        </ScrollView>
       );
     };
-  
+    const { width } = Dimensions.get('window'); // Get the width of the device screen
+
   const styles = StyleSheet.create({
-    container: {
+    scrollContainer: {
       flex: 1,
+      backgroundColor: colors.darkBlue,
+
+    },
+    container: {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#f5f5f5',
+      padding: width * 0.05, // 5% of screen width
     },
     card: {
+      width: '100%', // Full width
       margin: 10,
       padding: 20,
       borderRadius: 10,
@@ -95,27 +104,25 @@ const ChargesDisplay = () => {
       elevation: 5,
     },
     mainHeading: {
-      fontSize: 22,
+      fontSize: width * 0.055, // Proportional to screen width
       fontWeight: 'bold',
       marginVertical: 20,
     },
     commonText: {
-        fontSize: 16,
-        marginVertical: 10,
-        paddingHorizontal: 20,
-        color: colors.deepBlue,
-
-      },
+      fontSize: width * 0.04, // Proportional to screen width
+      marginVertical: 10,
+      color: colors.deepBlue,
+      paddingHorizontal: 20,
+    },
     heading: {
-      fontSize: 18,
+      fontSize: width * 0.045, // Proportional to screen width
       fontWeight: 'bold',
       color: colors.deepBlue,
-
       marginBottom: 10,
     },
     text: {
-      fontSize: 16,
-      color:colors.pink,
+      fontSize: width * 0.04, // Proportional to screen width
+      color: colors.pink,
     },
   });
   

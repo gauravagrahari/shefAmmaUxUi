@@ -15,7 +15,7 @@ const CheckPincode = ({ onClose }) => {
             });
     
             if (response.status === 200) { // HTTP status 200 means OK
-                alert(response.data); // this will either show "Service is available in your area!" or an error message
+                alert(response.data+" Or try refreshing the Home Page."); // this will either show "Service is available in your area!" or an error message
             } else if (response.status === 404) { // HTTP status 404 means NOT FOUND
                 alert(response.data); // this will show "Sorry, service is not available in your area."
             }
