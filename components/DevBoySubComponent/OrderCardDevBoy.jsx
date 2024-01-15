@@ -170,7 +170,7 @@ const options = {
   };
   
   return (
-    <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
+    <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.card}>
       <View style={styles.hostGuestContainer}>
         <View style={styles.guestDetailsContainer}>
           {/* <TouchableOpacity onPress={() => navigation.navigate('HostProfileMealGuest')}> */}

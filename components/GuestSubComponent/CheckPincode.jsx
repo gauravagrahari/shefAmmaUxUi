@@ -7,8 +7,14 @@ const URL = Constants.expoConfig.extra.apiUrl;
 
 const CheckPincode = ({ onClose }) => {
     const [pincode, setPincode] = useState('');
-
+    const isValidPinCode = (pin) => {
+        return /^\d{6}$/.test(pin);
+    };
     const checkAvailability = async () => {
+        if (!isValidPinCode(pincode)) {
+            alert("Please enter a valid 6-digit pin code.");
+            return;
+        }
         try {
             const response = await axios.get(`${URL}/guest/checkService`, {
                 headers: { 'pinCode': pincode }

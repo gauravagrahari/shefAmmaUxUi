@@ -68,7 +68,7 @@ export default function HomeDevBoy({ navigation }) {
   }, []);
 
   useEffect(() => {
-    if (selectedHost === '') {
+    if (selectedHost === '' || selectedHost === 'All') {
       setFilteredOrderList(orderList);
     } else {
       const filteredOrders = orderList.filter(order => order.order.nameHost === selectedHost);
@@ -95,21 +95,20 @@ export default function HomeDevBoy({ navigation }) {
       </View>
     );
   }
-  const uniqueHosts = [...new Set(orderList.map(order => order.order.nameHost))];
+  const uniqueHosts = ['All', ...new Set(orderList.map(order => order.order.nameHost))];
   return (
     <ScrollView
       style={{ backgroundColor: colors.pink }}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <NavBarDevBoy navigation={navigation} />
       <Dropdown
-        items={uniqueHosts}
-        selectedValue={selectedHost}
-        onValueChange={(value) => setSelectedHost(value)}
-        placeholder="Select a host"
-      />
+  items={uniqueHosts}
+  selectedValue={selectedHost}
+  onValueChange={(value) => setSelectedHost(value)}
+  placeholder="Select a host"
+  buttonStyle={dropdownStyle}
+/>
       {filteredOrderList.length > 0 ? (
         filteredOrderList.map((eachOrderWithAddress) => (
           <OrderCardDevBoy 
@@ -128,6 +127,12 @@ export default function HomeDevBoy({ navigation }) {
     </ScrollView>
   );
 }
+const dropdownStyle = {
+  // Define your custom style for the Dropdown button here
+  backgroundColor: 'lightgray',
+  borderRadius: 10,
+  padding: 5,
+};
 const styles = StyleSheet.create({
   centered: {
     flex: 1,

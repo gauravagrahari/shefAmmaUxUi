@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const AboutUs = () => {
   return (
     <View style={styles.container}>
-      <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
+      <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
         <Text style={styles.mainHeading}>ShefAmma: Nourishing Kolkata with Homemade Meals</Text>
         <Text style={styles.commonText}>
           ShefAmma brings the essence of Kolkata's culinary tradition to your doorstep. Our mission is simple - to provide delicious, home-cooked meals in the midst of your busy life. Our chefs, the loving moms of Kolkata, cook each dish with care, infusing traditional flavors in every bite.

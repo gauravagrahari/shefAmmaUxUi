@@ -166,7 +166,7 @@ export default function OrderCard({ order,cancelCutOffTime }) {
   };
 
   return (
-    <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
+    <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.card}>
    <View style={styles.orderDetails}>
 
 <View style={styles.leftSide}>

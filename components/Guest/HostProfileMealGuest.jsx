@@ -313,7 +313,7 @@ finally {
 return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-<LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.hostInfoContainer}>
+<LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.hostInfoContainer}>
   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',    marginTop:10, }}>
 
         <Text style={styles.hostName}>{host.nameHost}</Text>
@@ -429,7 +429,7 @@ return (
                 mealType={Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)}
                 onDateAndTimeChange={handleDateAndTimeChange} />
             {defaultAddress && (
-  <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.defaultAddressContainer}>
+  <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.defaultAddressContainer}>
     <Text style={styles.defaultAddressText}>Your order will be delivered at - </Text>
     <Text style={styles.defaultAddressDetails}>
       {defaultAddress.houseName}, {defaultAddress.street}, {defaultAddress.city} - {defaultAddress.pinCode}.

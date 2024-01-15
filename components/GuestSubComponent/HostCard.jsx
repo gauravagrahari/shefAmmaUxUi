@@ -91,7 +91,7 @@ const renderItem = ({ item }) => {
 
 return (
   <TouchableOpacity onPress={handleHostCardClick}>
-  <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.container}>
+  <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.container}>
       <View style={styles.host}>
           <View style={styles.carouselContainer}>
               {imageUrl && imageUrl.length > 0 ? (
@@ -161,7 +161,7 @@ function responsiveFontSize(fontSize) {
   return (fontSize * screenHeight) / standardScreenHeight;
 }
 const itemWidth='20';
-const bgColor = '#fcfddd'; 
+const bgColor = colors.secondCardColor; 
 
 const dpDimension = screenWidth * 0.25; // Carousel image dimension
 const hostHeight = screenHeight * 0.13; // Host image height

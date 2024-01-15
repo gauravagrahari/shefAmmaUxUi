@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: "#EAF86B", // Updated color to new palette color
+    backgroundColor: colors.navBarColor, // Updated color to new palette color
     height: 51,
     paddingHorizontal: 16,
     // marginBottom:5,

@@ -25,7 +25,7 @@ const ContactPage = () => {
         <View style={styles.container}>
             <Text style={globalStyles.headerText}>Contact Us</Text>
 
-            <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
+            <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
                 <Text style={styles.contentText}>
                     If you have any complaints or issues regarding your order, 
                     please email us at 
@@ -36,7 +36,7 @@ const ContactPage = () => {
                 </Text>
             </LinearGradient>
 
-            <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={styles.card}>
+            <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
                 <Text style={styles.contentText}>
                     For general inquiries or to join us as a partner email us at 
                     <Text style={styles.emailText} onPress={() => handleEmailPress('contactus@shefamma.com')}>

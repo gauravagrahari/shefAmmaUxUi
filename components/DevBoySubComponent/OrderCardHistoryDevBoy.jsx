@@ -61,7 +61,7 @@ export default function OrderCardHistoryDevBoy({ orderData, navigation }) {
 
   
   return (
-    <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
+    <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.card}>
      <View style={styles.namesWithArrowContainer}>
         <TouchableOpacity >
           <Text style={[styles.itemName, styles.linkText]}>{orderData.nameHost}</Text>

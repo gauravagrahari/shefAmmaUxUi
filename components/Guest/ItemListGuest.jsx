@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView,Dimensions } from 'react-native';
 import HostContext from '../Context/HostContext';
 import ItemListCard from '../GuestSubComponent/ItemListCard';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
@@ -69,9 +69,11 @@ export default function ItemListGuest() {
         </ScrollView>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={{ /* your style for the text */ }}>
-          Currently, no items are available for your address. Please refresh the home page or enter your pincode to check service availability.
+           <View style={styles.emptyHostMessageContainer}>
+        <Text style={styles.emptyHostMessage}>
+          Currently, no items are available for your address. Please refresh the home page and enter your pincode to check service availability.
         </Text>  
+        </View>
          </ScrollView>
       )}
 
@@ -82,8 +84,20 @@ export default function ItemListGuest() {
     </View>
   );
 }
+const { width, height } = Dimensions.get('window');
+
+function responsiveFontSize(fSize) {
+  const tempHeight = (16 / 9) * width;
+  return Math.sqrt(tempHeight ** 2 + width ** 2) * (fSize / 100);
+}
 
 const styles = StyleSheet.create({
+  emptyHostMessageContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: height * 0.4, // Adjusted to 40% of screen height
+  },
   mealTypeFilter: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -92,6 +106,12 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     // borderColor: colors.primaryText,
   }, 
+  emptyHostMessage: {
+    fontSize: responsiveFontSize(2.25),
+    color: colors.darkestBlue,
+    textAlign: 'center',
+    paddingHorizontal: width * 0.05,
+  },
   mealTypeItem: {
     flex: 1,
     height: 40,
