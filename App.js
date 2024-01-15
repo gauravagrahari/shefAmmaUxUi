@@ -89,7 +89,7 @@ export default function App() {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 42,backgroundColor:'#EAF86B' }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 42,backgroundColor:'#fff' }}>
     <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>
          <AddressProvider>
     <NavigationContainer>

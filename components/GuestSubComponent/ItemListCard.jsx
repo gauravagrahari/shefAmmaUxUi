@@ -48,7 +48,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
   
     return (
         <TouchableOpacity onPress={handleHostCardClick}>
-        <LinearGradient colors={[colors.darkBlue, '#fcfddd']} style={{marginBottom:4}}>
+        <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={{marginBottom:4}}>
        <View style={styles.containerVertical}>
             <View style={styles.container}>
           <View style={styles.imageContainer}>

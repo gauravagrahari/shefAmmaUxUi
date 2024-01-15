@@ -33,6 +33,7 @@ export default function HomeGuest({ navigation, route  }) {
   const [serverError, setServerError] = React.useState(false);
   const { hostList, setHostList, hasFetchedHosts, setHasFetchedHosts } = useContext(HostContext);
   const [refreshing, setRefreshing] = React.useState(false); 
+  const [fetchedAddressesUsed, setFetchedAddressesUsed] = useState(false);
   const [selectedMealTypes, setSelectedMealTypes] = React.useState({
     breakfast: true,
     lunch: true, 
@@ -59,15 +60,16 @@ export default function HomeGuest({ navigation, route  }) {
 
     if (!addresses) {
       console.log("HomeGuest: Addresses context is not defined yet.");
-      return; // Exit the useEffect if addresses is not defined
+      return;
     }
-  
+
     const fetchedAddresses = route.params?.fetchedAddresses;
     console.log("-------------------------true or false", fetchedAddresses);
 
-    if (fetchedAddresses) {
+    if (fetchedAddresses && !fetchedAddressesUsed) {
       console.log("Skipping fetchUuidAndHosts as addresses were just set in SelectDefaultAddress");
-      return; // Exit the useEffect to avoid fetching data
+      setFetchedAddressesUsed(true); // Mark fetchedAddresses as used
+      return;
     }
     const defaultAddressType = addresses.default;
     const defaultAddress = addresses[defaultAddressType];
@@ -120,29 +122,24 @@ export default function HomeGuest({ navigation, route  }) {
     }
 
     try {
-      // Fetch guestDetails from cache using the provided getFromAsync method
       const guestAddress = await getFromAsync('defaultAddress');
-    let requestBody = null; // Initialize an empty request body
-
-// Check if guestDetails is not empty
-    if (guestAddress) {
-// Prepare the request body
-requestBody = {
-  address: {
-    street: guestAddress.street,
-    houseName: guestAddress.houseName,
-    city: guestAddress.city,
-    state: guestAddress.state,
-    pinCode: guestAddress.pinCode,
-    // street: guestDetails.addressGuest.street,
-    // houseName: guestDetails.addressGuest.houseName,
-    // city: guestDetails.addressGuest.city,
-    // state: guestDetails.addressGuest.state,
-    // pinCode: guestDetails.addressGuest.pinCode,
-  },
-};
-}
-
+  
+      if (!guestAddress.pinCode) {
+        console.log("No guest address");
+        console.error('No address found for guest');
+        // setShowPincodeChecker(true); // Show pincode checker if no address is found
+        return; // Exit the function here
+      }
+  
+      let requestBody = {
+        address: {
+          street: guestAddress.street,
+          houseName: guestAddress.houseName,
+          city: guestAddress.city,
+          state: guestAddress.state,
+          pinCode: guestAddress.pinCode,
+        },
+      };
 
     const response = await axios.post(`${URL}/guest/hosts`, requestBody, {
       headers: {

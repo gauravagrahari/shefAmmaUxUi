@@ -7,15 +7,21 @@ const URL = Constants.expoConfig.extra.apiUrl;
 
 const CheckPincode = ({ onClose }) => {
     const [pincode, setPincode] = useState('');
-
+    const isValidPinCode = (pin) => {
+        return /^\d{6}$/.test(pin);
+    };
     const checkAvailability = async () => {
+        if (!isValidPinCode(pincode)) {
+            alert("Please enter a valid 6-digit pin code.");
+            return;
+        }
         try {
             const response = await axios.get(`${URL}/guest/checkService`, {
                 headers: { 'pinCode': pincode }
             });
     
             if (response.status === 200) { // HTTP status 200 means OK
-                alert(response.data); // this will either show "Service is available in your area!" or an error message
+                alert(response.data+" Or try refreshing the Home Page."); // this will either show "Service is available in your area!" or an error message
             } else if (response.status === 404) { // HTTP status 404 means NOT FOUND
                 alert(response.data); // this will show "Sorry, service is not available in your area."
             }

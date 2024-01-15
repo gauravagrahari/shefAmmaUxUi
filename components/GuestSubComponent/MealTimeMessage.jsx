@@ -69,7 +69,7 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
             return <Text>Invalid meal type</Text>;
     }
     return (
-        <LinearGradient colors={[ colors.darkBlue,'#fcfddd']}>
+        <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]}>
             <Text style={styles.messageText}>
             We're delighted to prepare your 
             <Text style={styles.highlightedText}> {mealType.toUpperCase()} </Text>

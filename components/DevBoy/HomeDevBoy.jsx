@@ -9,14 +9,17 @@ import {colors} from '../commonMethods/globalStyles';
 import { BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Constants from 'expo-constants';
+import Dropdown from '../commonMethods/Dropdown';
 
 const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function HomeDevBoy({ navigation }) {
   const [orderList, setOrderList] = useState([]);
+  const [filteredOrderList, setFilteredOrderList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedHost, setSelectedHost] = useState('');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -63,6 +66,16 @@ export default function HomeDevBoy({ navigation }) {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (selectedHost === '' || selectedHost === 'All') {
+      setFilteredOrderList(orderList);
+    } else {
+      const filteredOrders = orderList.filter(order => order.order.nameHost === selectedHost);
+      setFilteredOrderList(filteredOrders);
+    }
+  }, [selectedHost, orderList]);
+
   const onRefresh = () => {
     setRefreshing(true);
     fetchOrders(); // Re-fetch the orders
@@ -82,37 +95,44 @@ export default function HomeDevBoy({ navigation }) {
       </View>
     );
   }
-
+  const uniqueHosts = ['All', ...new Set(orderList.map(order => order.order.nameHost))];
   return (
     <ScrollView
-    style={{ backgroundColor: colors.pink }} // Set the background color
-    refreshControl={
-      <RefreshControl
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-      />
-    }
-  >
+      style={{ backgroundColor: colors.pink }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
       <NavBarDevBoy navigation={navigation} />
-    {orderList.length > 0 ? (
-      orderList.sort((a, b) => new Date(b.order.timeStamp) - new Date(a.order.timeStamp)).map((eachOrderWithAddress) => (
-        <OrderCardDevBoy 
-          key={eachOrderWithAddress.order.timeStamp} 
-          orderData={eachOrderWithAddress.order}
-          hostAddress={eachOrderWithAddress.hostAddress}
-          guestAddress={eachOrderWithAddress.guestAddress}
-          isHost={false} 
-        />
-      ))
-    ) : (
-      <View style={styles.noOrdersView}>
-        <Text style={styles.noOrdersText}>No orders to deliver</Text>
-      </View>
-    )}
-  </ScrollView>
-);
+      <Dropdown
+  items={uniqueHosts}
+  selectedValue={selectedHost}
+  onValueChange={(value) => setSelectedHost(value)}
+  placeholder="Select a host"
+  buttonStyle={dropdownStyle}
+/>
+      {filteredOrderList.length > 0 ? (
+        filteredOrderList.map((eachOrderWithAddress) => (
+          <OrderCardDevBoy 
+            key={eachOrderWithAddress.order.timeStamp}
+            orderData={eachOrderWithAddress.order}
+            hostAddress={eachOrderWithAddress.hostAddress}
+            guestAddress={eachOrderWithAddress.guestAddress}
+            isHost={false} 
+          />
+        ))
+      ) : (
+        <View style={styles.noOrdersView}>
+          <Text style={styles.noOrdersText}>No orders to deliver</Text>
+        </View>
+      )}
+    </ScrollView>
+  );
 }
-
+const dropdownStyle = {
+  // Define your custom style for the Dropdown button here
+  backgroundColor: 'lightgray',
+  borderRadius: 10,
+  padding: 5,
+};
 const styles = StyleSheet.create({
   centered: {
     flex: 1,

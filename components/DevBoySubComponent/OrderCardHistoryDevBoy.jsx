@@ -42,8 +42,17 @@ export default function OrderCardHistoryDevBoy({ orderData, navigation }) {
     default:
       break;
   }
-
+  const options = {
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: undefined, // Exclude seconds
+    hour12: true // Use 12-hour time (remove this line if you want 24-hour time)
+  };
   const formattedDateTime = new Date(orderData.timeStamp).toLocaleString();
+  const formattedDateTimeDelivery = orderData.deliverTime ? new Date(orderData.deliverTime).toLocaleString('en-US', options) : null;
   const mealMapping = {
     b: "Breakfast",
     l: "Lunch",
@@ -52,9 +61,9 @@ export default function OrderCardHistoryDevBoy({ orderData, navigation }) {
 
   
   return (
-    <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
+    <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.card}>
      <View style={styles.namesWithArrowContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('HostProfileMealGuest')}>
+        <TouchableOpacity >
           <Text style={[styles.itemName, styles.linkText]}>{orderData.nameHost}</Text>
         </TouchableOpacity>
 
@@ -76,13 +85,17 @@ export default function OrderCardHistoryDevBoy({ orderData, navigation }) {
         <Text style={styles.details}>{mealMapping[orderData.mealType]}</Text>
         <Text style={styles.details}>Items : {orderData.noOfServing}</Text>
       </View>
-
-      {/* Amount and Status Row */}
+      {formattedDateTimeDelivery && (
+      <View style={styles.mealServingContainer}>
+        <Text style={styles.details}>Delivered at -</Text>
+        <Text style={styles.details}>{formattedDateTimeDelivery}</Text>
+      </View>
+    )}
       <View style={styles.amountStatusContainer}>
         <Text style={styles.amount}>{orderData.amount}</Text>
         <Text style={statusStyle}>{fullStatus}</Text>
       </View>
-{/* Modal code remains unchanged... */}
+      
     </LinearGradient>
   );
 }

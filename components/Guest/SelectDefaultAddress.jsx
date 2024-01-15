@@ -84,7 +84,7 @@ export default function SelectDefaultAddress() {
     }
   };
 
-  const handleClose = () => navigation.navigate('HomeGuest');
+  const handleClose = () =>   navigation.navigate('HomeGuest', { fetchedAddresses: true });
   const hasGuestDetails = () => Object.keys(guestDetails).length > 0;
 
   return (

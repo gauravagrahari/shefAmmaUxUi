@@ -239,13 +239,25 @@ const isOfficeAddressEmpty = () => {
   
   const handleUpdate = async () => {
     console.log("Starting update process...");
-    if (!isOfficeAddressCompleteOrEmpty()) {
-      setMessageText("Please add all the Fields of Address 2");
+    // if (!isOfficeAddressCompleteOrEmpty()) {
+    //   setMessageText("Please add all the Fields of Address 2");
+    //   setMessageCardVisible(true);
+    //   return;
+    // }
+    // if (!isPrimaryAddressComplete()) {
+    //   setMessageText("Please add all the Fields of Address 1");
+    //   setMessageCardVisible(true);
+    //   return;
+    // }
+    if (!isPrimaryAddressComplete() || !isValidPinCode(pinCode)) {
+      setMessageText("Please fill all fields of the Address 1 and ensure the Pin code is valid.");
       setMessageCardVisible(true);
       return;
     }
-    if (!isPrimaryAddressComplete()) {
-      setMessageText("Please add all the Fields of Address 1");
+    
+    // Validate office address and its pin code, if office address is provided
+    if (showSecondaryAddressForm && (!isOfficeAddressCompleteOrEmpty() || !isValidPinCode(officePinCode))) {
+      setMessageText("Please add all the Fields of Address 2 and ensure the Pin code is valid.");
       setMessageCardVisible(true);
       return;
     }
@@ -343,11 +355,14 @@ const isOfficeAddressEmpty = () => {
       console.error('Update failed:', error);
     }
   };
-
+  const isValidPinCode = (pin) => {
+    return /^\d{6}$/.test(pin); // Regular expression to check for exactly 6 digits
+  };
+  
   return (
     isLoading ? 
       <Loader /> : 
-      <LinearGradient colors={[ colors.darkBlue,'#fcfddd']}  style={styles.mainContainer}>
+      <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]}  style={styles.mainContainer}>
         <NavBarGuest navigation={navigation} />
         <ScrollView >
         {/* <LinearGradient colors={['white', colors.darkBlue]} style={styles.container}> */}
@@ -468,31 +483,31 @@ const isOfficeAddressEmpty = () => {
           </View>
           <TextInput 
             style={globalStyles.input}
-            placeholder="Office Street" 
+            placeholder="Street" 
             value={officeStreet} 
             onChangeText={setOfficeStreet} 
           />
           <TextInput 
             style={globalStyles.input}
-            placeholder="Office House name and no." 
+            placeholder="House name and no." 
             value={officeHouseName} 
             onChangeText={setOfficeHouseName} 
           />
           <TextInput 
             style={globalStyles.input}
-            placeholder="Office City" 
+            placeholder="City" 
             value={officeCity} 
             onChangeText={setOfficeCity} 
           />
           <TextInput 
             style={globalStyles.input}
-            placeholder="Office State" 
+            placeholder="State" 
             value={officeState} 
             onChangeText={setOfficeState} 
           />
           <TextInput 
             style={globalStyles.input}
-            placeholder="Office Pin Code" 
+            placeholder="Pin Code" 
             value={officePinCode} 
             onChangeText={setOfficePinCode} 
           />
@@ -508,6 +523,16 @@ const isOfficeAddressEmpty = () => {
       Please fill all fields of the Address 1.
     </Text>
   )}
+  {!isValidPinCode(pinCode) && pinCode.length > 0 && (
+  <Text style={styles.errorMessage}>
+    Please enter a valid 6-digit pin code.
+  </Text>
+)}
+  {!isValidPinCode(officePinCode) && pinCode.length > 0 && (
+  <Text style={styles.errorMessage}>
+    Please enter a valid 6-digit pin code.
+  </Text>
+)}
           <View style={globalStyles.centralisingContainer}>
             <TouchableOpacity style={styles.button} onPress={handleUpdate}>
               <Text style={styles.buttonText}>Update Details</Text>

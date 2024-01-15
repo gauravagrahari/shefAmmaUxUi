@@ -49,9 +49,12 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
   );
+  const isValidPinCode = (pin) => {
+    return /^\d{6}$/.test(pin); // Regular expression to check for exactly 6 digits
+  };
   
   const validateForm = () => {
-    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !pinCode || !alternateMobileNumber) {
+    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !isValidPinCode(pinCode)) {
       setMessageText("Please fill in all the fields before submitting.");
       return false;
     }
@@ -104,7 +107,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
         await storeInSecureStore('altPhone',alternateMobileNumber);
 
         // Retrieving data
-        const getData = await getFromAsync('guestDetails');  // Typo here, it should be getFromSecureStore instead of getFromAsync
+        const getData = await getFromAsync('guestDetails');  
         console.log('Retrieved data:', getData);  // Updated the console message for clarity
 
         axios
@@ -222,6 +225,11 @@ function renderAddressFields(street, setStreet, streetPlaceholder, houseName, se
                 <Ionicons name="location-outline" size={24} color={colors.pink} />
                 <TextInput style={styles.input} placeholder="Pin Code" value={pinCode} onChangeText={setPinCode} />
             </View>
+            {pinCode.length > 0 && !isValidPinCode(pinCode) && (
+  <Text style={styles.messageText}>
+    Please enter a valid 6-digit pin code.
+  </Text>
+)}
         </>
     );
 }}

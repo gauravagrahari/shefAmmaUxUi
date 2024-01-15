@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     // backgroundColor: colors.pink, // Updated color to new palette color
-    backgroundColor: "#EAF86B", // Updated color to new palette color
+    backgroundColor: colors.navBarColor, // Updated color to new palette color
     // backgroundColor: colors.darkBlue, // Updated color to new palette color
     height: 51,
     paddingHorizontal: 16,

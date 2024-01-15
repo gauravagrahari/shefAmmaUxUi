@@ -113,23 +113,23 @@ export default function OrderCard({ order,cancelCutOffTime }) {
   };
   const handleCancelOrderButton = async () => {
     try {
-      const currentTimestamp = new Date().toISOString(); // Assuming you want to send the current timestamp
-      const attributeName = "status"; // Assuming you're updating the 'status' attribute
-      const token = await getFromSecureStore('token');
+      const currentTimestamp = new Date().toISOString();
+      const attributeName = "status"; // Updating the 'status' attribute
       const attributeName2 = "cancelledTime";
-      
-
+      const token = await getFromSecureStore('token');
+  
       const orderEntity = {
-      status: "can", // or whatever status value you want to set
-      uuidOrder:order.uuidOrder,
-      timeStamp: order.timeStamp,
-      cancelledTime: currentTimestamp,
-      noOfServing:order.noOfServing,
-      mealType:order.mealType
+        status: "can", // Set the cancelled status
+        uuidOrder: order.uuidOrder,
+        timeStamp: order.timeStamp,
+        uuidHost: order.uuidHost,
+        cancelledTime: currentTimestamp,
+        noOfServing: order.noOfServing,
+        mealType: order.mealType
       };
   
       const response = await axios.put(
-        `${URL}/devBoy/updateOrder?attributeName=${attributeName}&attributeName2=${attributeName2}`,
+        `${URL}/guest/cancelOrder?attributeName=${attributeName}&attributeName2=${attributeName2}`,
         orderEntity,
         {
           headers: {
@@ -138,16 +138,21 @@ export default function OrderCard({ order,cancelCutOffTime }) {
         }
       );
   
-      if (response.data === "Order updated successfully") {
-        order.status='can';
-        setShowConfirmation(false); // Hide confirmation prompt after action
+      // Check response to determine action
+      if (response.data === "Order updated and capacity adjusted successfully.") {
+        order.status = 'can'; // Update the order status in the UI
+        setShowConfirmation(false); // Hide confirmation prompt after successful action
       } else {
+        // Handle unexpected successful response with wrong message
         console.error("Unexpected response:", response.data);
+        alert("Error: " + response.data); // Show alert with the response message
       }
     } catch (error) {
       console.error("Error cancelling the order:", error);
+      alert("Cancellation failed: " + error.message); // Show alert with the error message
     }
   };
+  
 
   const renderCancelCutoffTime = () => {
     const cutoffTime = getCutoffTime(order.delTimeAndDay);
@@ -161,7 +166,7 @@ export default function OrderCard({ order,cancelCutOffTime }) {
   };
 
   return (
-    <LinearGradient colors={[ colors.darkBlue,'#fcfddd']} style={styles.card}>
+    <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.card}>
    <View style={styles.orderDetails}>
 
 <View style={styles.leftSide}>
