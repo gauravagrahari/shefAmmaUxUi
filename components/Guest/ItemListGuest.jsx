@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { StyleSheet } from 'react-native';
 import MealTypeFilter from '../commonMethods/MealTypeFilter';
+import { Text } from 'react-native';
 
 export default function ItemListGuest() {
   const { hostList } = useContext(HostContext);
@@ -58,16 +59,21 @@ export default function ItemListGuest() {
         </View>
     ));
   };
-
   return (
     <View style={globalStyles.containerPrimary}>
       <NavBarGuest navigation={navigation} />
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-        {hostList.map((item, index) => renderItem({ item, index }))}
-      </ScrollView>
+      {hostList && hostList.length > 0 ? (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {hostList.map((item, index) => renderItem({ item, index }))}
+        </ScrollView>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={{ /* your style for the text */ }}>
+          Currently, no items are available for your address. Please refresh the home page or enter your pincode to check service availability.
+        </Text>  
+         </ScrollView>
+      )}
 
       <MealTypeFilter
         selectedMealTypes={selectedMealTypes}

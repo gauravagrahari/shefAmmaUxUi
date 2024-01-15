@@ -4,7 +4,7 @@ import { Modal, Button, StyleSheet, Text, View, TouchableOpacity, FlatList, Dime
 const { width, height } = Dimensions.get('window');
 const ITEM_HEIGHT = 50; // Height of one item, including padding/margin
 
-const Dropdown = ({ items, selectedValue, onValueChange, placeholder }) => {
+const Dropdown = ({ items, selectedValue, onValueChange, placeholder, buttonStyle }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleSelect = (value) => {
@@ -12,13 +12,15 @@ const Dropdown = ({ items, selectedValue, onValueChange, placeholder }) => {
     setModalVisible(false);
   }
 
-  // Calculate modal height based on items
-  const modalHeight = Math.min(Math.max(items.length, 4) * ITEM_HEIGHT, ITEM_HEIGHT * 12);
+  const modalHeight = Math.min(Math.max(items.length, 6) * ITEM_HEIGHT, ITEM_HEIGHT * 12);
+// 
 
   return (
     <View style={styles.container}>
-      <Button title={selectedValue || placeholder} onPress={() => setModalVisible(true)} />
-      <Modal
+  <TouchableOpacity style={[styles.button, buttonStyle]} onPress={() => setModalVisible(true)}>
+        <Text style={styles.buttonText}>{selectedValue || placeholder}</Text>
+      </TouchableOpacity>  
+          <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -35,7 +37,7 @@ const Dropdown = ({ items, selectedValue, onValueChange, placeholder }) => {
               keyExtractor={(item) => item}
               showsVerticalScrollIndicator={false}
             />
-            <Button title="Close" onPress={() => setModalVisible(false)} />
+            <Button style={styles.button} title="Close" onPress={() => setModalVisible(false)} />
           </View>
         </View>
       </Modal>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   button: {
-    // Add button styling if necessary
+    color: 'black',
   },
 });
 
