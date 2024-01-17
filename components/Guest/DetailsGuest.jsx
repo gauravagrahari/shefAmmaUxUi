@@ -59,7 +59,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
   
   const validateForm = () => {
     if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !isValidPinCode(pinCode) ||
-        ((alternateMobileNumber.length > 0 && !isValidMobileNumber(alternateMobileNumber)) ||alternateMobileNumber.length===0)) {
+        ((alternateMobileNumber.length > 0 && !isValidMobileNumber(alternateMobileNumber)))) {
       setMessageText("Please fill in all mandatory fields correctly before submitting.");
       return false;
     }

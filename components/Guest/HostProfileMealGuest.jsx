@@ -314,7 +314,7 @@ finally {
 return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-<LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.hostInfoContainer}>
+  <LinearGradient colors={[colors.navBarColor, colors.navBarColor]} style={styles.hostInfoContainer}>
   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',    marginTop:10, }}>
 
         <Text style={styles.hostName}>{host.nameHost}</Text>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text,StyleSheet  } from 'react-native';
+import { Text,StyleSheet,View  } from 'react-native';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -69,7 +69,7 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
             return <Text>Invalid meal type</Text>;
     }
     return (
-        <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]}>
+        <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.container}>
             <Text style={styles.messageText}>
             We're delighted to prepare your 
             <Text style={styles.highlightedText}> {mealType.toUpperCase()} </Text>
@@ -83,17 +83,18 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
 
 }
 const styles = StyleSheet.create({
-    messageText: {
-        fontSize: 16,
-        padding: 5,
-        // backgroundColor: colors.darkBlue, // Light grey background
+    container: {
         borderRadius: 5,
         textAlign: 'center',
         marginHorizontal: 10,
         marginBottom:10,
         borderWidth: 2,
         borderColor: colors.primaryText,
-        // fontWeight: '500',
+    },
+    messageText: {
+        fontSize: 16,
+        padding: 5,
+        textAlign: 'center',
         color:colors.deepBlue,
 
     },

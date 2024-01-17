@@ -528,17 +528,17 @@ const isOfficeAddressEmpty = () => {
     Please enter a valid 6-digit pin code.
   </Text>
 )}
-  {!isValidPinCode(officePinCode) && pinCode.length > 0 && (
+ {!isValidPinCode(officePinCode) && pinCode.length > 0 && pinCode.length !== 6 && (
   <Text style={styles.errorMessage}>
     Please enter a valid 6-digit pin code.
   </Text>
 )}
+
           <View style={globalStyles.centralisingContainer}>
             <TouchableOpacity style={styles.button} onPress={handleUpdate}>
               <Text style={styles.buttonText}>Update Details</Text>
             </TouchableOpacity>
           </View>
-          {/* </LinearGradient> */}
         </ScrollView>
       </LinearGradient>
   );

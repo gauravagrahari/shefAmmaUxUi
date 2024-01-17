@@ -167,7 +167,7 @@ const dpDimension = screenWidth * 0.25; // Carousel image dimension
 const hostHeight = screenHeight * 0.13; // Host image height
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 4,
+    marginBottom: 3,
     shadowColor: colors.pink,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,

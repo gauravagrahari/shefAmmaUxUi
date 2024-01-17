@@ -43,8 +43,6 @@ export default function NavBarMeals({ selectedMealType, onSelectMealType, served
   );
 }
 
-
-
 const styles = StyleSheet.create({
   navbarContainer: {
     flexDirection: 'row',
@@ -54,7 +52,9 @@ const styles = StyleSheet.create({
     // borderRadius:10,
     marginBottom:1,
     // margin:1,
-    borderRadius: 20,
+    // borderRadius: 20,
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
     borderTopWidth:3,
 borderTopColor:colors.pink,
   },
