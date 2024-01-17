@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AddressContext } from '../Context/AddressContext';
 import { BackHandler } from 'react-native';
 import Constants from 'expo-constants';
+
 const URL = Constants.expoConfig.extra.apiUrl;
 export default function DetailsGuest() {
   const [alternateMobileNumber, setAlternateMobileNumber] = useState('');
@@ -52,14 +53,19 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
   const isValidPinCode = (pin) => {
     return /^\d{6}$/.test(pin); // Regular expression to check for exactly 6 digits
   };
+  const isValidMobileNumber = (number) => {
+    return /^\d{10}$/.test(number);
+  };
   
   const validateForm = () => {
-    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !isValidPinCode(pinCode)) {
-      setMessageText("Please fill in all the fields before submitting.");
+    if (!fullName || !dob || !gender || !street || !houseName || !city || !state || !isValidPinCode(pinCode) ||
+        ((alternateMobileNumber.length > 0 && !isValidMobileNumber(alternateMobileNumber)) ||alternateMobileNumber.length===0)) {
+      setMessageText("Please fill in all mandatory fields correctly before submitting.");
       return false;
     }
     return true;
   };
+  
   const handleSubmission = async () => {
     if (!validateForm()) {
         return;
@@ -146,6 +152,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
         <Text style={styles.heading}>Add the below details</Text>
             <View style={styles.inputContainer}>
                 <Ionicons name="person-outline" size={24} color={colors.pink} />
+                <MandatoryFieldIndicator />
                 <TextInput
                     style={styles.input}
                     placeholder="Enter Full Name"
@@ -201,28 +208,39 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
         </ScrollView>
     </LinearGradient>
 );
-
+function MandatoryFieldIndicator() {
+    return (
+        <Text style={{ color: 'red', fontSize: 18, marginHorizontal: 3,marginBottom:7, alignSelf: 'center' }}>*</Text>
+        );
+  }
+  
+  
 function renderAddressFields(street, setStreet, streetPlaceholder, houseName, setHouseName, city, setCity, state, setState, pinCode, setPinCode) {
     return (
         <>
             <View style={styles.inputContainer}>
                 <Ionicons name="map-outline" size={24} color={colors.pink} />
+                <MandatoryFieldIndicator />
                 <TextInput style={styles.input} placeholder={streetPlaceholder} value={street} onChangeText={setStreet} />
             </View>
             <View style={styles.inputContainer}>
                 <Ionicons name="home-outline" size={24} color={colors.pink} />
+                <MandatoryFieldIndicator />
                 <TextInput style={styles.input} placeholder="House name and no." value={houseName} onChangeText={setHouseName} />
             </View>
             <View style={styles.inputContainer}>
                 <Ionicons name="location-outline" size={24} color={colors.pink} />
+                <MandatoryFieldIndicator />
                 <TextInput style={styles.input} placeholder="City" value={city} onChangeText={setCity} />
             </View>
             <View style={styles.inputContainer}>
                 <Ionicons name="location-outline" size={24} color={colors.pink} />
+                <MandatoryFieldIndicator />
                 <TextInput style={styles.input} placeholder="State" value={state} onChangeText={setState} />
             </View>
             <View style={styles.inputContainer}>
                 <Ionicons name="location-outline" size={24} color={colors.pink} />
+                <MandatoryFieldIndicator />
                 <TextInput style={styles.input} placeholder="Pin Code" value={pinCode} onChangeText={setPinCode} />
             </View>
             {pinCode.length > 0 && !isValidPinCode(pinCode) && (
@@ -230,6 +248,11 @@ function renderAddressFields(street, setStreet, streetPlaceholder, houseName, se
     Please enter a valid 6-digit pin code.
   </Text>
 )}
+  {alternateMobileNumber.length > 0 && !isValidMobileNumber(alternateMobileNumber) && (
+    <Text style={styles.errorMessage}>
+      Please enter a valid 10-digit mobile number.
+    </Text>
+  )}
         </>
     );
 }}

@@ -251,6 +251,7 @@ useEffect(() => {
       phoneGuest:phone,
       phoneGuestAlt:altPhone,
       phoneHost:host.phone,
+      phoneHostAlt:host.altPhone,
       geoHost:host.geocode,
       uuidHost:host.uuidHost,
       timeStampGsi:orderTimeStamp,

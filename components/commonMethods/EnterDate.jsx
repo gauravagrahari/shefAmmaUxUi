@@ -48,11 +48,16 @@ export const EnterDate = ({ onDateChange }) => {
       }
     }
   };
-
+  function MandatoryFieldIndicator() {
+    return (
+        <Text style={{ color: 'red', fontSize: 18, marginRight: 5,marginBottom:7, alignSelf: 'center' }}>*</Text>
+        );
+  }
   return (
     <View style={styles.container}>
         <View style={styles.inputContainer}>
             <Ionicons name="calendar-outline" size={24} color={colors.pink} />
+            <MandatoryFieldIndicator />
             <TextInput
                 style={styles.input}
                 placeholder="Enter DOB in format DD/MM/YYYY"

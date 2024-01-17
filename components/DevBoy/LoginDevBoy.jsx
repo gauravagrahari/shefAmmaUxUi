@@ -100,7 +100,7 @@ export default function LoginDevBoy() {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LoginGuest')}>
-            <Text style={styles.linkText}>Customer Login</Text>
+            <Text style={styles.linkText}>User Login</Text>
           </TouchableOpacity>
         </View>
       )}
