@@ -3,10 +3,18 @@ import { StyleSheet, Dimensions } from 'react-native';
 const screenWidth = Dimensions.get('window').width;
 // Define your color variables
 const colors = {
-//  navBarColor:"#EAF86B",
-//  secondCardColor:"#fcfddd",
- navBarColor:"#C0C0C0",
- secondCardColor:"whitesmoke",
+ navBarColor:"#fff",//#c7fb80
+ secondCardColor:"#eaf6f6",//#eefbdb
+ darkBlue:'#eaf6f6',//#ccfa8f
+ primaryLight: "#fff",//#ddfab5
+//  navBarColor:"#EAF86B",//#c7fb80
+//  secondCardColor:"#fcfddd",//#eefbdb
+//  darkBlue:'#ECF87F',//#ccfa8f
+//  primaryLight: "#f5faaf",//#ddfab5
+//  darkBlue:'#FAF9F6',
+//  navBarColor:"#D3D3D3",
+//  secondCardColor:"#FAF9F6",
+lightishPink:'#385170',
   tertiaryText: "#999",
   primaryBackground: "#165882FF",
   secondaryBackground: "#165882FF",
@@ -15,11 +23,9 @@ const colors = {
   inputBackground: "#165882FF",
   // -------------
   primaryText: "#DE0075",
-  primaryLight: "#f5faaf",
   secondaryText: "#FAF9F6",
   darkestBlue:'#f5f5f5',
-  darkBlue:'#D3D3D3',
-  // darkBlue:'#ECF87F',
+
   lightBlue:'#d7dee7',
 
   darkPink:'#e43781',
@@ -109,6 +115,7 @@ justifyContent: 'center',
     flex: 1,
     // backgroundColor: colors.pink,
     backgroundColor: "#d0006a",
+    // marginTop: 2,
     // backgroundColor: colors.darkestOliveGreen,
     // padding: 10,
   },

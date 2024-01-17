@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {globalStyles,colors} from '../commonMethods/globalStyles.js';
 import messages from '../commonMethods/texts.js';
@@ -33,7 +33,7 @@ const WelcomeMessage = () => {
             style={styles.button} 
             onPress={() => navigation.navigate('HomeGuest')}
           >
-            <LinearGradient colors={["#F9FFC1", "white"]} style={styles.gradientButton}>
+            <LinearGradient colors={[colors.lightishPink, colors.lightishPink]} style={styles.gradientButton}>
               <Text style={styles.buttonText}>Close</Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -41,6 +41,11 @@ const WelcomeMessage = () => {
       </Animatable.View>
     </View>
   );
+};
+const { width, height } = Dimensions.get('window');
+const responsiveSize = (size) => {
+  const baseWidth = 375; // Base screen width to scale from (e.g., iPhone X)
+  return (size / baseWidth) * width;
 };
 
 const styles = StyleSheet.create({
@@ -63,17 +68,16 @@ const styles = StyleSheet.create({
   },
   mainHeading: {
     color: colors.pink,
-    fontSize: 22,
+    fontSize: responsiveSize(22), // Responsive font size
     fontWeight: 'bold',
-    marginVertical: 20,
+    marginVertical: height * 0.02, // Responsive vertical margin
     textAlign: 'center',
-    borderBottomWidth:2,
-    paddingBottom:10,
+    borderBottomWidth: 2,
+    paddingBottom: 10,
     borderBottomColor: colors.matBlack
-    
   },
   commonText: {
-    fontSize: 17,
+    fontSize: responsiveSize(17), // Responsive font size
     marginVertical: 10,
     color: colors.deepBlue,
     textAlign: 'center',
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   buttonText: {
-    color: colors.pink,
+    color: colors.navBarColor,
     fontSize: 16,
     textAlign: 'center',
   }

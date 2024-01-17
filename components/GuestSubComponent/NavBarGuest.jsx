@@ -28,7 +28,7 @@ export default function NavBarGuest() {
         style={[styles.navbarButton, isActive(routeName) && styles.activeNavbarButton]}
         onPress={() => navigation.navigate(routeName)}>
         {/* <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.darkestBlue : colors.darkestBlue} /> */}
-        <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.pink : colors.pink} />
+        <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.lightishPink : colors.lightishPink} />
         {isActive(routeName) && <View style={styles.underline} />}
       </TouchableOpacity>
     );
@@ -40,13 +40,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    // backgroundColor: colors.pink, // Updated color to new palette color
+    // backgroundColor: colors.lightishPink, // Updated color to new palette color
     backgroundColor: colors.navBarColor, // Updated color to new palette color
     // backgroundColor: colors.darkBlue, // Updated color to new palette color
     height: 51,
     paddingHorizontal: 16,
-    // marginBottom:5,
-  },
+    elevation: 5, // for Android
+    shadowColor: 'black', // for iOS
+    shadowOffset: { width: 0, height: 1 }, // for iOS
+    shadowOpacity: 0.3, // for iOS
+    shadowRadius: 3, // for iOS
+    // marginBottom:2,
+    // borderBottomColor: colors.lightishPink,
+    // borderBottomWidth: 2,
+
+    },
   navbarButton: {
     flex: 1,
     alignItems: 'center',
@@ -56,7 +64,7 @@ const styles = StyleSheet.create({
   activeNavbarButton: {
     borderBottomWidth: 3,
     // borderBottomColor: colors.darkestBlue, // Updated color to new palette color
-    borderBottomColor: colors.pink, // Updated color to new palette color
+    borderBottomColor: colors.lightishPink, // Updated color to new palette color
   },
   underline: {
     position: 'absolute',
@@ -65,6 +73,6 @@ const styles = StyleSheet.create({
     right: '25%',
     height: 2,
     // backgroundColor:colors.darkestBlue, // Updated color to new palette color
-    backgroundColor:colors.pink, // Updated color to new palette color
+    backgroundColor:colors.lightishPink, // Updated color to new palette color
   }
 });

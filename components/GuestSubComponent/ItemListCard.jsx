@@ -48,7 +48,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
   
     return (
         <TouchableOpacity onPress={handleHostCardClick}>
-        <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={{marginBottom:4}}>
+        <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={{marginBottom:3}}>
        <View style={styles.containerVertical}>
             <View style={styles.container}>
           <View style={styles.imageContainer}>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
       },
       mealType:{
           fontSize: screenWidth * 0.035,
-  color: colors.deepBlue,
+  color: colors.matBlack,
   marginBottom: 3,
       },
     imageContainer: {
@@ -216,7 +216,8 @@ paddingTop: 5,
     detail: {
         fontSize: screenWidth * 0.034,
         marginBottom: 2,
-        color:colors.pink,
+        // color:colors.deepBlue,
+        color:colors.deepBlue,
         // Additional styling for other details
     },
     // Add other styles as needed

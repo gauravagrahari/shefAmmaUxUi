@@ -102,13 +102,17 @@ export default function HomeDevBoy({ navigation }) {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <NavBarDevBoy navigation={navigation} />
+      {/* <View style={styles.detailConatiner}> */}
+      <View style={styles.orderCountContainer}>
+      <Text style={styles.orderCountText}>Total Orders: {orderList.length}</Text>
+    {/* </View> */}
       <Dropdown
   items={uniqueHosts}
   selectedValue={selectedHost}
   onValueChange={(value) => setSelectedHost(value)}
   placeholder="Select a host"
   buttonStyle={dropdownStyle}
-/>
+/></View>
       {filteredOrderList.length > 0 ? (
         filteredOrderList.map((eachOrderWithAddress) => (
           <OrderCardDevBoy 
@@ -129,15 +133,32 @@ export default function HomeDevBoy({ navigation }) {
 }
 const dropdownStyle = {
   // Define your custom style for the Dropdown button here
-  backgroundColor: 'lightgray',
+  backgroundColor: colors.darkBlue,
+  marginHorizontal:5,
   borderRadius: 10,
-  padding: 5,
+  padding: 10,
+  color: 'white',
+  marginTop: 5
 };
 const styles = StyleSheet.create({
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  orderCountContainer: {
+    flexDirection: 'row',
+    flexWrap:'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    // Adjust these styles as needed
+  },
+  orderCountText: {
+    fontSize: 16,
+    color: 'white', // Or any color that contrasts well with pink
+    fontWeight: 'bold',
+    marginRight: 10, // Spacing between text and dropdown
   },
   noOrdersView: {
     flex: 1,
