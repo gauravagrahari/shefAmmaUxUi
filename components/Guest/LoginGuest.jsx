@@ -146,7 +146,7 @@ export default function LoginGuest() {
           <View >
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('SignupGuest')}>
-            <Text style={styles.linkText}>Create a new account</Text>
+            <Text style={styles.linkText}>New User? Create a new account</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LoginDevBoy')}>
             <Text style={styles.linkText}>Partner Login</Text>
