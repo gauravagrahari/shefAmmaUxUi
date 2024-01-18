@@ -6,7 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 import StarRating from '../commonMethods/StarRating';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 import * as Animatable from 'react-native-animatable';
-
+import { Storage } from '@aws-amplify/storage';
+import { Amplify } from 'aws-amplify';
+import awsmobile from '../../src/aws-exports.js';
+Amplify.configure(awsmobile)
   
 const ItemListCard = ({ item, host,handleHostCardClick  }) => {
     const [imageUri, setImageUri] = useState(null);

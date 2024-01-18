@@ -4,7 +4,9 @@ import { Storage } from 'aws-amplify';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { getFromAsync, storeInAsync } from '../Context/NonSensitiveDataStorage';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
-
+import { Amplify } from 'aws-amplify';
+import awsmobile from '../../src/aws-exports.js';
+Amplify.configure(awsmobile)
 function ItemCard({ item }) {
   const [imageUri, setImageUri] = useState(null);
 
