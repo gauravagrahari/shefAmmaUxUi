@@ -70,9 +70,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
   },
   DP: {
-    width: '100%',
+    width: screenWidth*1,
+    height: screenWidth*1,
     aspectRatio: 1,
     marginBottom: screenHeight * 0.01,
+    borderRadius:7,
+    borderColor: 'white',
+  borderWidth: 1,
   },
   details: {
     paddingLeft: screenWidth * 0.04, // Responsive padding

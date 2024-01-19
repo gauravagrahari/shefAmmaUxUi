@@ -171,7 +171,7 @@ const dpDimension = screenWidth * 0.25; // Carousel image dimension
 const hostHeight = screenHeight * 0.13; // Host image height
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 3,
+    marginBottom: 4,
     shadowColor: colors.pink,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
@@ -209,11 +209,20 @@ carouselItemContainer: {
   height: dpDimension,
   justifyContent: 'center',
   alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.3,
+  shadowRadius: 5,
+  elevation: 5, // This is for Android
 },
+
 carouselImage: {
   width: dpDimension,
   height: dpDimension,
   resizeMode: 'cover',
+  borderRadius:7,
+  borderColor: 'white',
+  borderWidth: 1,
 },
 descriptionContainer: {
   width: '100%',
@@ -226,7 +235,7 @@ descriptionHost: {
   fontSize: responsiveFontSize(12),
   lineHeight: responsiveFontSize(15.5),
   fontFamily: 'sans-serif',
-  color: colors.darkPink,
+  color: colors.lightishPink,
 },
 readMoreContainer: {
   position: 'absolute', 

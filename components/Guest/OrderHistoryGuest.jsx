@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
    
   },
   text:{
-    color:colors.darkBlue,
+    color:colors.pink,
+    // color:colors.secondaryText,
     fontSize: 18,
     fontWeight: 'bold',
   }

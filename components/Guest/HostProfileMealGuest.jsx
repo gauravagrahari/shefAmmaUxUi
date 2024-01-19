@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
   },
   descriptionHost: {
     fontSize: normalize(12),
-        color: colors.pink,
+        color: colors.lightishPink,
         lineHeight: normalize(14),
     marginBottom: screenHeight * 0.01,
   },
