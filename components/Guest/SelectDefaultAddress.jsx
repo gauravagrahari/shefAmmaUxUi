@@ -165,7 +165,7 @@ export default function SelectDefaultAddress() {
       marginBottom: 15,
       width: screenWidth - 40, // Ensuring the width doesn't exceed the screen width
       padding: 10,
-      borderRadius: 5,
+      borderRadius: 10,
       borderWidth: 1,
       borderColor: colors.pink,
     },

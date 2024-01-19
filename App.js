@@ -89,7 +89,7 @@ export default function App() {
 
 
   return (
-    // <SafeAreaView style={{ flex: 1, paddingTop: 42 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 35 }}>
     <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>
          <AddressProvider>
     <NavigationContainer>
@@ -137,7 +137,7 @@ export default function App() {
     </NavigationContainer>
     </AddressProvider>
     </HostProvider>
-    // </SafeAreaView>
+     </SafeAreaView>
 
   );
 }
