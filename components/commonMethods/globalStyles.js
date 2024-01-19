@@ -113,8 +113,8 @@ justifyContent: 'center',
   // Container Styles
   containerPrimary: {
     flex: 1,
-    // backgroundColor: colors.pink,
-    backgroundColor: "#d0006a",
+    // backgroundColor: colors.lightishPink,
+    backgroundColor: "#fafafa",
     // marginTop: 2,
     // backgroundColor: colors.darkestOliveGreen,
     // padding: 10,

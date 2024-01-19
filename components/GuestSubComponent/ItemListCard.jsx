@@ -179,6 +179,9 @@ const styles = StyleSheet.create({
         height: '100%',
         resizeMode: 'cover',
         marginLeft: 5,
+        borderRadius: 7,
+        borderColor: 'white',
+        borderWidth: 1,
     },
     nameAndIndicator: {
         flexDirection: 'row',

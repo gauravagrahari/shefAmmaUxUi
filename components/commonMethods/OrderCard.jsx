@@ -264,15 +264,8 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    padding: responsiveHeight(1.5), // Use responsiveHeight for padding
-    backgroundColor: colors.darkBlue,
-    shadowColor: '#aaa',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 2,
-    borderBottomColor: colors.pink,
-    borderBottomWidth: 4,
+    padding: responsiveHeight(1.5),
+    marginBottom: 4,
   },
   orderButton: {
     width: responsiveWidth(50), // 50% of screen width
@@ -327,8 +320,8 @@ const styles = StyleSheet.create({
     // backgroundColor: "#e0e0e0", // Specify the background color for new orders
   },
   detailsMealType: {
-    fontSize: 16,
-    marginBottom: 6,
+    fontSize: responsiveFontSize(14),
+    marginBottom: responsiveHeight(0.6),
     color: colors.deepBlue,
     fontWeight: 'bold',
   },
@@ -339,10 +332,10 @@ const styles = StyleSheet.create({
     // fontWeight: 'bold',
   },
   itemName: {
-    fontSize: 17,
-    marginBottom: 6,
-     fontWeight: 'bold',
-     color: colors.pink,
+    fontSize: responsiveFontSize(14), // Example of responsive font size
+    marginBottom: responsiveHeight(0.6),
+    // fontWeight: 'bold',
+    color: colors.pink,
   },
   amount: {
     fontSize: 18,

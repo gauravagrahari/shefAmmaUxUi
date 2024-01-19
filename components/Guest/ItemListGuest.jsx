@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   }, 
   emptyHostMessage: {
     fontSize: responsiveFontSize(2.25),
-    color: colors.darkestBlue,
+    color: colors.lightishPink,
     textAlign: 'center',
     paddingHorizontal: width * 0.05,
   },
