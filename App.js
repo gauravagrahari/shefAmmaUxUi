@@ -102,6 +102,7 @@ export default function App() {
     screenOptions={{ headerShown: false }} // Add this line
   >
         <Stack.Screen name="HomeGuest" component={HomeGuest}/> 
+        <Stack.Screen name="LoadingScreen" component={LoadingScreen}/> 
         <Stack.Screen name="WelcomeMessage" component={WelcomeMessage}/> 
         <Stack.Screen name="ChargesDisplay" component={ChargesDisplay}/>
         <Stack.Screen name="SelectDefaultAddress" component={SelectDefaultAddress}/>

@@ -19,7 +19,7 @@ export default function SettingsGuest() {
     setIsChangePasswordVisible(false);
   };
   const handleContactUs=()=>{
-    navigation.navigate('ContactPage');
+    navigation.navigate('WelcomeMessage');
   }
   
   const handleAboutUs=()=>{

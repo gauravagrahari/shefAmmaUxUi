@@ -63,7 +63,7 @@ export default function LoginGuest() {
               updateAddressInContext('primary', response.data.guestDetails.addressGuest);
               updateAddressInContext('secondary', response.data.guestDetails.officeAddress);
               setDefaultAddressInContext(response.data.guestDetails.defaultAddress || 'primary');
-              navigation.navigate('HomeGuest', { fetchedAddresses: true });
+              navigation.navigate('SelectDefaultAddress');
             } else {
               // Address details are missing, navigate to DetailsGuest
               setMessage("You have not added or updated your address. Please update it.");

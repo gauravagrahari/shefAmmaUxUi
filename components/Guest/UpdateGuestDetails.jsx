@@ -387,12 +387,12 @@ const isOfficeAddressEmpty = () => {
   onChangeText={setAlternateMobile} 
   keyboardType="phone-pad"/>
 </View>
-          <Text style={styles.infoText}>Choose or update your delivery Address (By default it woud be delivered to the primary address)</Text>
+          <Text style={styles.infoText}>Choose or update your delivery Address!</Text>
           <View style={styles.addressContainer}>
 
             <View style={styles.radioPair}>
 
-            {shouldDisplayRadioButtons() && (
+           
  <TouchableOpacity
  style={[
    styles.radioButton, 
@@ -404,7 +404,7 @@ const isOfficeAddressEmpty = () => {
    <View style={styles.radioButtonInner} />
  )}
 </TouchableOpacity>
-)}
+
 
 <Text style={globalStyles.textPrimary}>Address 1(Primary)</Text>
             </View>
