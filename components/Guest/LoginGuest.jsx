@@ -73,7 +73,7 @@ export default function LoginGuest() {
             }
           } else {
             // Guest details are missing, navigate to DetailsGuest
-            setMessage("Guest details are not available. Please update your profile.");
+            setMessage("User details are not available. Please update your profile.");
             setShowMessageCard(true);
             console.log("Guest details not available, navigating to DetailsGuest");
             navigation.navigate('DetailsGuest');
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: colors.pink,
     borderWidth: 2,
-    backgroundColor: 'rgba(0, 150, 136, 0.05)', // 80% opacity of #009688
+    backgroundColor: 'rgba(0, 150, 136, 0.1)', // 80% opacity of #009688
     justifyContent: 'center',
     alignItems: 'center',
   },
