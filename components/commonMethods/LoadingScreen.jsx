@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const LoadingScreen = () => {
     return (
         <LinearGradient
-            colors={['#ECF87F', '#FFF']}
+            colors={['#eaf6f6', '#FFF']}
             style={styles.loadingContainer}
         >
             <View style={styles.brandContainer}>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
     tagline: {
         fontSize: 16,
-        color: '#C84476',
+        color: '#385170',
         fontStyle: 'italic',
     },
 });

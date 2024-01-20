@@ -4,14 +4,14 @@
     "slug": "shefAmmaUI",
     "version": "3.3.3",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon3.png",
     "scheme": "myapp",
 
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash2.png",
       "resizeMode": "cover",
-      "backgroundColor": "#fff"
+      "backgroundColor": "#EAF6F6"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -24,7 +24,7 @@
       "package": "com.shefAmma.app",
       "versionCode": 3,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon2.png",
+        "foregroundImage": "./assets/icon3.png",
         "backgroundColor": "#ffffff"
       }
     },

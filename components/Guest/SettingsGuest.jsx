@@ -25,7 +25,9 @@ export default function SettingsGuest() {
   const handleAboutUs=()=>{
     navigation.navigate('AboutUs');
   }
-  
+  const handlePolicy=()=>{
+    navigation.navigate('CancellationPolicy');
+  }
   const handleTiming=()=>{
     navigation.navigate('ChargesDisplay');
   }
@@ -73,6 +75,9 @@ export default function SettingsGuest() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleAboutUs}>
           <Text style={styles.buttonText}>About Us</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handlePolicy}>
+          <Text style={styles.buttonText}>Policy</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleTiming}>
           <Text style={styles.buttonText}>Timings</Text>

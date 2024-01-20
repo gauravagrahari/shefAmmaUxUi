@@ -131,13 +131,13 @@ justifyContent: 'center',
     alignItems: 'center',
     justifyContent:'center',
     position: 'relative',
-    borderBottomColor:colors.pink,
+    borderBottomColor:colors.lightishPink,
     borderBottomWidth:2,
     
   },
   displayText:{
-    fontSize: 19,
-    color: colors.pink,
+    fontSize: 18,
+    color: colors.lightishPink,
     fontWeight: 'bold',
   },
   // Button Styles

@@ -448,6 +448,11 @@ return (
     />
   </View>
 )}
+{mealCount > 0 && (
+  <View>
+    <Text style={styles.beReady}>Please be ready to receive your order between the given time slot and have your payment prepared. Quick and efficient handovers help our delivery partners serve everyone better. Thank you!</Text>
+</View>
+)}
 <View style={globalStyles.centralisingContainer}>
 {mealCount > 0 && (
 
@@ -577,7 +582,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#2ECC71', // A green color indicating success
+    backgroundColor: '#2ECC71', 
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
@@ -744,6 +749,17 @@ noOfGuest: {
     fontSize: normalize(13),
     color: "#1AB269",
     fontWeight: 'bold',
+  },
+  beReady: {
+    margin:10,
+    borderWidth: 1,
+    // borderColor:colors.deepBlue,
+    borderColor:'gray',
+    borderRadius: 10,
+    padding: 7,
+    fontSize: normalize(11.5),
+    // color: "gray",
+    color: colors.pink,
   },
   costValueText: {
     fontSize: normalize(14),

@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { AccessibilityStatePropType } from 'deprecated-react-native-prop-types/DeprecatedViewAccessibility';
 const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function SignupGuest() {
@@ -30,7 +31,7 @@ export default function SignupGuest() {
   };
   const handleSignup = () => {
     if (password !== confirmPassword) {
-      console.log('Password and Confirm Password do not match');
+      alert('Password and Confirm Password do not match');
       return;
     }
 

@@ -9,7 +9,7 @@ import { BackHandler } from 'react-native';
 
 export default function SelectDefaultAddress() {
   const navigation = useNavigation();
-  const [selectedAddress, setSelectedAddress] = useState('primary');
+  const [selectedAddress, setSelectedAddress] = useState('');
   const [guestDetails, setGuestDetails] = useState({});
   const { updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
   const [progress, setProgress] = useState(new Animated.Value(0));
@@ -50,17 +50,17 @@ export default function SelectDefaultAddress() {
       updateAddressInContext('secondary', details.officeAddress);
       setDefaultAddressInContext(defaultAddress || 'primary');
 
-      if (isAddressEmpty(details.officeAddress)) {
-        Animated.timing(progress, {
-          toValue: 100,
-          duration: 3000,
-          useNativeDriver: false,
-        }).start();
+      // if (isAddressEmpty(details.officeAddress)) {
+      //   Animated.timing(progress, {
+      //     toValue: 100,
+      //     duration: 3000,
+      //     useNativeDriver: false,
+      //   }).start();
 
-        setTimeout(() => {
-          navigation.navigate('HomeGuest', { fetchedAddresses: true });
-        }, 3000);
-      }
+      //   setTimeout(() => {
+      //     navigation.navigate('HomeGuest', { fetchedAddresses: true });
+      //   }, 3000);
+      // }
     };
 
     fetchGuestDetails();
@@ -84,7 +84,14 @@ export default function SelectDefaultAddress() {
     }
   };
 
-  const handleClose = () =>   navigation.navigate('HomeGuest', { fetchedAddresses: true });
+  const handleClose = () => {
+    if (selectedAddress === 'primary' || selectedAddress === 'office') {
+      navigation.navigate('HomeGuest', { fetchedAddresses: true });
+    } else {
+     alert("Select the Address and then Proceed", "Please select an address to proceed.");
+    }
+  };
+  
   const hasGuestDetails = () => Object.keys(guestDetails).length > 0;
 
   return (
@@ -92,11 +99,11 @@ export default function SelectDefaultAddress() {
       {hasGuestDetails() && <>
         <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
           <Text style={styles.closeButtonText}>
-            {isAddressEmpty(guestDetails.officeAddress) ? 'X' : 'Proceed'}
+            {isAddressEmpty(guestDetails.officeAddress) ? 'Proceed' : 'Proceed'}
           </Text>
         </TouchableOpacity>
         <Text style={globalStyles.headerText}>
-          {isAddressEmpty(guestDetails.officeAddress) ? 'Your food will be delivered at...' : 'Choose Address'}
+        {isAddressEmpty(guestDetails.officeAddress) ? 'Tap the Address and Proceed' : 'Choose Address'}
         </Text>
       </>}
 
@@ -122,12 +129,12 @@ export default function SelectDefaultAddress() {
         </TouchableOpacity>
       )}
 
-      {isAddressEmpty(guestDetails.officeAddress) && hasGuestDetails() && (
+      {/* {isAddressEmpty(guestDetails.officeAddress) && hasGuestDetails() && (
         <Animated.View style={[styles.progressBar, { width: progress.interpolate({
           inputRange: [0, 100],
           outputRange: ['0%', '100%'],
         }) }]} />
-      )}
+      )} */}
     </LinearGradient>
   );
 } 
