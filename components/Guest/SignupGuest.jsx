@@ -19,6 +19,7 @@ export default function SignupGuest() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigation = useNavigation();
 
@@ -39,7 +40,7 @@ export default function SignupGuest() {
       console.log('Phone not verified');
       return;
     }
-
+    setIsSubmitting(true);
     const data = {
       password: password,
       phone: phoneVerified.value,
@@ -70,6 +71,8 @@ export default function SignupGuest() {
         } else {
           console.error('Error:', error);
         }
+      }) .finally(() => {
+        setIsSubmitting(false); 
       });
   };
 
@@ -113,8 +116,11 @@ export default function SignupGuest() {
 
           {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
-          <TouchableOpacity style={styles.button} onPress={handleSignup}>
-            <Text style={styles.buttonText}>SignUp</Text>
+         <TouchableOpacity 
+  style={[styles.button, isSubmitting && styles.disabledButton]} 
+  onPress={handleSignup}
+  disabled={isSubmitting}
+>   <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('LoginGuest')}>
@@ -187,7 +193,18 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.matBlack,
     fontSize: 17,
-   
+  },
+  disabledButton: {
+    width: '100%',
+    height: 55,
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 10,
+    borderColor: colors.pink,
+    borderWidth: 2,
+    backgroundColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   linkText: {
     marginTop: 15,
