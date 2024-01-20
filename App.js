@@ -51,6 +51,7 @@ import ContactPage from "./components/Guest/ContactPage";
 import SelectDefaultAddress from "./components/Guest/SelectDefaultAddress";
 import WelcomeMessage from "./components/Guest/WelcomeMessage";
 import AboutUs from "./components/Guest/AboutUs";
+import CancellationPolicy from "./components/Guest/CancellationPolicy";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -144,6 +145,7 @@ export default function App() {
         <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/>
         <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
         <Stack.Screen name="AboutUs" component={AboutUs} />
+        <Stack.Screen name="CancellationPolicy" component={CancellationPolicy} />
       </Stack.Navigator>
     </NavigationContainer>
     </AddressProvider>
