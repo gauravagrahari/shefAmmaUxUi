@@ -2,7 +2,7 @@
   "expo": {
     "name": "ShefAmma",
     "slug": "shefAmmaUI",
-    "version": "3.3.3",
+    "version": "4.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon3.png",
     "scheme": "myapp",
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.shefAmma.app",
-      "versionCode": 3,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon3.png",
         "backgroundColor": "#ffffff"
