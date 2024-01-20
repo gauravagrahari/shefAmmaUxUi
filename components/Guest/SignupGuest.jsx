@@ -119,8 +119,8 @@ export default function SignupGuest() {
          <TouchableOpacity 
   style={[styles.button, isSubmitting && styles.disabledButton]} 
   onPress={handleSignup}
-  disabled={isSubmitting}
->   <Text style={styles.buttonText}>SignUp</Text>
+  disabled={isSubmitting}> 
+    <Text style={styles.buttonText}>SignUp</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('LoginGuest')}>
@@ -135,12 +135,12 @@ export default function SignupGuest() {
   );
 }
 
-// Add your styles here
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center', // Aligns children vertically in the center
+    justifyContent: 'center', 
     paddingHorizontal: 20,
     paddingTop: 20, // Adjust as needed for spacing at the top
   },
