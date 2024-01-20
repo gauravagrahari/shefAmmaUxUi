@@ -37,7 +37,7 @@ export default function SignupGuest() {
     }
 
     if (!phoneVerified.verified) {
-      console.log('Phone not verified');
+      alert('Please verify your phone number');
       return;
     }
     setIsSubmitting(true);
