@@ -357,12 +357,18 @@ confirmationPrompt: {
   justifyContent: 'center', // Centers children horizontally in the main axis
   padding: 10, // Add some padding for spacing
   marginTop: 5, // Give some space from the above element
+
 },
 confirmationText: {
   flex: 1,
   marginRight: 10,
-  fontSize: responsiveFontSize(14),
+  fontSize: responsiveFontSize(13),
   color: colors.pink,
+  borderWidth:1,
+  borderColor: 'gray',
+  borderRadius: 8,
+  padding:7,
+  backgroundColor: 'rgba(0, 150, 136, 0.05)',
 },
 yesButton: {
   backgroundColor: 'rgba(0, 150, 136, 0.05)', // 80% opacity of #009688
@@ -372,6 +378,7 @@ yesButton: {
   marginRight: 10, // Space between the Yes and No buttons
   borderColor: colors.pink,
   borderWidth: 1.5,
+  
 },
 noButton: {
   backgroundColor: 'rgba(0, 150, 136, 0.15)', // 80% opacity of #009688
