@@ -328,7 +328,8 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     marginBottom: 6,
-    color: colors.pink,
+    color: colors.lightishPink,
+    // color: 'gray',
     // fontWeight: 'bold',
   },
   itemName: {
@@ -361,7 +362,7 @@ confirmationText: {
   flex: 1,
   marginRight: 10,
   fontSize: responsiveFontSize(14),
-  color: colors.deepBlue,
+  color: colors.pink,
 },
 yesButton: {
   backgroundColor: 'rgba(0, 150, 136, 0.05)', // 80% opacity of #009688
