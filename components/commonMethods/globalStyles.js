@@ -7,6 +7,7 @@ const colors = {
  secondCardColor:"#eaf6f6",//#eefbdb
  darkBlue:'#eaf6f6',//#ccfa8f
  primaryLight: "#fff",//#ddfab5
+ labelBlack: "#4D6664",
 //  navBarColor:"#EAF86B",//#c7fb80
 //  secondCardColor:"#fcfddd",//#eefbdb
 //  darkBlue:'#ECF87F',//#ccfa8f

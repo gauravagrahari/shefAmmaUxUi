@@ -174,8 +174,8 @@ export default function OrderCard({ order,cancelCutOffTime }) {
     <Text style={[styles.itemName]}>{order.nameHost}</Text>
   {/* </TouchableOpacity> */}
   <Text style={styles.detailsMealType}>{mealMapping[order.mealType]}</Text>
-  <Text style={styles.details}>Quantity - {order.noOfServing}</Text>
-  <Text style={styles.details}>Booked on - {formattedDateTime}</Text>
+  <Text style={styles.details}>Quantity- {order.noOfServing}</Text>
+  <Text style={styles.details}>Booked on- {formattedDateTime}</Text>
   <Text style={styles.details}>{order.delAddress.houseName}, {order.delAddress.street} - {order.delAddress.pinCode}</Text>
 </View>
 
@@ -265,7 +265,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     padding: responsiveHeight(1.5),
-    marginBottom: 4,
+    borderBottomColor:colors.navBarColor,
+    borderBottomWidth: 7,
+    // marginBottom: 5,
   },
   orderButton: {
     width: responsiveWidth(50), // 50% of screen width
@@ -328,19 +330,19 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     marginBottom: 6,
-    color: colors.lightishPink,
+    color: colors.labelBlack,
     // color: 'gray',
     // fontWeight: 'bold',
   },
   itemName: {
     fontSize: responsiveFontSize(14), // Example of responsive font size
     marginBottom: responsiveHeight(0.6),
-    // fontWeight: 'bold',
-    color: colors.pink,
+    fontWeight: 'bold',
+    color: colors.maroon,
   },
   amount: {
     fontSize: 18,
-    // fontWeight: 'bold',
+    fontWeight: 'bold',
     marginBottom: 10,
     // color: colors.pink,
     color: 'purple',
