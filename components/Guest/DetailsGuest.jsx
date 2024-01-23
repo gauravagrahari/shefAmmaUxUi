@@ -109,8 +109,6 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
 
         console.log(data);
 
-        await storeInAsync('guestDetails', data);
-        await storeInSecureStore('altPhone',alternateMobileNumber);
 
         // Retrieving data
         const getData = await getFromAsync('guestDetails');  
@@ -123,8 +121,14 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
                     Authorization: `Bearer ${token}`, 
                 },
             })
-            .then((response) => {
+            .then(async (response) => {
                 console.log('Server response:', response.data);
+                await storeInAsync('guestDetails', response.data);  // Use response.data if it contains the updated details
+                await storeInSecureStore('altPhone', alternateMobileNumber);
+    
+                // Retrieving data as a confirmation step (optional)
+                const getData = await getFromAsync('guestDetails');  
+                console.log('Retrieved data:', getData); 
                 updateAddressInContext('primary', data.addressGuest);
                 setDefaultAddressInContext('primary');
                 navigation.navigate('WelcomeMessage');
