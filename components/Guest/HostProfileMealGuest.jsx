@@ -430,13 +430,20 @@ return (
 <MealTimeMessage
                 mealType={Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)}
                 onDateAndTimeChange={handleDateAndTimeChange} />
-            {defaultAddress && (
-  <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.defaultAddressContainer}>
+{defaultAddress && defaultAddress.houseName && defaultAddress.street && defaultAddress.city && defaultAddress.pinCode ? (
+  <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.defaultAddressContainer}>
     <Text style={styles.defaultAddressText}>Your order will be delivered at - </Text>
     <Text style={styles.defaultAddressDetails}>
       {defaultAddress.houseName}, {defaultAddress.street}, {defaultAddress.city} - {defaultAddress.pinCode}.
     </Text>
   </LinearGradient>
+) : (
+  // Display this message if the address details are incomplete or not provided
+  <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.defaultAddressContainer}>
+  <Text style={[styles.defaultAddressDetails,{color:'red'}]}>
+    You have not selected a delivery address in the profile, select an address to be able to place Order.
+  </Text>
+   </LinearGradient>
 )}
 {mealCount > 0 && (
   <View style={styles.preferredTimeContainer}>
@@ -455,24 +462,25 @@ return (
 </View>
 )}
 <View style={globalStyles.centralisingContainer}>
-{mealCount > 0 && (
-
-  <TouchableOpacity 
-  style={styles.orderButton} 
-  onPress={handleConfirm} 
-  disabled={isOrdering}
-><Animatable.Text
-            iterationDelay={4000}
-          easing="ease-out"
-                animation="rotate"
-                useNativeDriver 
-                iterationCount='infinite'>
-  <Text style={styles.buttonText}>{isOrdering ? 'Processing...' : 'Order'}</Text>
-  </Animatable.Text>
-</TouchableOpacity>
-)}
-      </View>
-      <OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
+  {mealCount > 0 && defaultAddress && defaultAddress.houseName && defaultAddress.street && defaultAddress.city && defaultAddress.pinCode && (
+    <TouchableOpacity 
+      style={styles.orderButton} 
+      onPress={handleConfirm} 
+      disabled={isOrdering}
+    >
+      <Animatable.Text
+        iterationDelay={4000}
+        easing="ease-out"
+        animation="rotate"
+        useNativeDriver 
+        iterationCount='infinite'
+      >
+        <Text style={styles.buttonText}>{isOrdering ? 'Processing...' : 'Order'}</Text>
+      </Animatable.Text>
+    </TouchableOpacity>
+  )}
+</View>
+<OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
 
       <Modal
 transparent={true}

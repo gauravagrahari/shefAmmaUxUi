@@ -46,7 +46,7 @@ export default function OrderSuccessCard({ isVisible, onClose }) {
                 <Text style={styles.message}>Constantly working towards bringing the best service for you!</Text>
                 <TouchableOpacity onPress={() => {
                     onClose();
-                    navigation.navigate('HomeGuest');
+                    navigation.navigate('ItemListGuest');
                 }}>
                     <Text style={styles.closeButton}>×</Text>
                 </TouchableOpacity>
