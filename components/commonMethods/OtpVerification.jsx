@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextInput, View, Text, StyleSheet,Animated, TouchableOpacity  } from 'react-native';
 import axios from 'axios';
 import config from '../Context/constants';
@@ -21,7 +21,23 @@ export default function OtpVerification({ type, onVerify }) {
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity
   const [serverError, setServerError] = useState('');  // State for server error
   const [serverErrorMessage, setServerErrorMessage] = useState('');
-
+  const [resendOtpEnabled, setResendOtpEnabled] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  
+  useEffect(() => {
+    let interval = null;
+  
+    if (countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown((countdown) => countdown - 1);
+      }, 1000);
+    } else if (countdown === 0) {
+      setResendOtpEnabled(true);
+    }
+  
+    return () => clearInterval(interval);
+  }, [countdown]);
+  
   const handleVerify = async () => {
     // Reset previous errors
     setInputError('');
@@ -36,14 +52,16 @@ export default function OtpVerification({ type, onVerify }) {
     }
 
     axios.post(`${URL}/generateOtp`, { [type]: input })
-      .then(response => {
-        console.log(response.data);
-        setShowOtp(true);
-        fadeIn(); // Call the fade-in function here
-        setShowInputButton(false);
-        setShowVerifyOtpButton(true);
-        setDisableInput(true);  // Disable input after verification
-      })
+    .then(response => {
+      console.log(response.data);
+      setShowOtp(true);
+      fadeIn(); // Call the fade-in function here
+      setShowInputButton(false);
+      setShowVerifyOtpButton(true);
+      setDisableInput(true);  // Disable input after verification
+      setCountdown(75); // Start the countdown
+      setResendOtpEnabled(false); // Disable resend OTP button
+    })
       .catch(error => {
         if (error.response && error.response.data) {
           setServerErrorMessage(error.response.data);
@@ -55,6 +73,22 @@ export default function OtpVerification({ type, onVerify }) {
         }
     });
   };
+  const handleResendOtp = () => {
+    if (resendOtpEnabled) {
+      axios.post(`${URL}/generateOtp`, { [type]: input })
+        .then(response => {
+          console.log("OTP resent successfully.");
+          setCountdown(75);
+          setResendOtpEnabled(false);
+          // Optionally display a message to the user indicating the OTP has been resent
+        })
+        .catch(error => {
+          console.error("Failed to resend OTP:", error);
+          // Handle errors here
+        });
+    }
+  };
+  
   const fadeIn = () => {
     Animated.timing(
       fadeAnim,
@@ -66,26 +100,36 @@ export default function OtpVerification({ type, onVerify }) {
     ).start();
   };
   const handleOtpVerification = async () => {
-    axios.post(`${URL}/otp${type.charAt(0).toUpperCase() + type.slice(1)}`,
-     { [type]: input
-      , [`${type}Otp`]: otp 
+    axios.post(`${URL}/otp${type.charAt(0).toUpperCase() + type.slice(1)}`, {
+        [type]: input,
+        [`${type}Otp`]: otp
     })
-      .then(response => {
-        console.log(response.data);
-        setOtpSuccess(true);
-        setOtpError(false);
-        setShowVerifyOtpButton(false);
-        setShowOtpInput(false);
-        onVerify({ verified: true, value: input }); // Pass the verified value back to parent.
-      })
-      .catch(error => {
+    .then(response => {
+        // Checking if the response data is "SUCCESS"
+        if (response.data === "SUCCESS") {
+            console.log(response.data);
+            setOtpSuccess(true);
+            setOtpError(false);
+            setShowVerifyOtpButton(false);
+            setShowOtpInput(false);
+            onVerify({ verified: true, value: input }); // Pass the verified value back to parent.
+        } else {
+            // Handling unexpected successful responses (for future-proofing)
+            setOtpError(true); // Set OTP error as fallback
+            setServerError("Unexpected response received"); // Custom error message
+        }
+    })
+    .catch(error => {
         if (error.response && error.response.data) {
-            setServerError(error.response.data);  // Set server error message
+            // Handle error messages from server
+            setServerError(error.response.data); 
         } else {
             console.error(error);
         }
+        setOtpError(true); // Ensure otpError is set to true on catch
     });
-  };
+};
+
   const otpRefs = [];
 
   const handleOtpChange = (text, index) => {
@@ -116,38 +160,52 @@ export default function OtpVerification({ type, onVerify }) {
         <Text style={styles.errorMessage}>{serverErrorMessage}</Text>
       )}
 
-    {showInputButton && (
-      <TouchableOpacity style={styles.button} onPress={handleVerify}>
-        <Text style={styles.buttonText}>Verify {type}</Text>
-      </TouchableOpacity>
-    )}
-   {showOtp && showOtpInput && (
-  <Animated.View style={{ opacity: fadeAnim}}>
-    <View style={styles.otpMessageContainer}>
-      <Text style={styles.otpMessageText}>We've sent a code to {type === 'phone' ? input : "your email"}</Text>
-    </View>
-    <View style={styles.otpContainer}>
-      {[0, 1, 2, 3, 4, 5].map((index) => (
-        <TextInput
-          key={index}
-          style={styles.otpBox}
-          maxLength={1}
-          keyboardType="numeric"
-          ref={ref => otpRefs[index] = ref}
-          onChangeText={text => {
-            handleOtpChange(text, index);
-          }}
-        />
-      ))}
-    </View>
+{showInputButton && (
+        <TouchableOpacity style={styles.button} onPress={handleVerify}>
+          <Text style={styles.buttonText}>Verify {type}</Text>
+        </TouchableOpacity>
+      )}
 
-    {showVerifyOtpButton && (
-      <TouchableOpacity style={styles.otpButton} onPress={handleOtpVerification}>
-        <Text style={styles.buttonText}>Verify {type} OTP</Text>
-      </TouchableOpacity>
-    )}
-  </Animated.View>
-)}
+      {showOtp && (
+        <Animated.View style={{ opacity: fadeAnim }}>
+          {showOtpInput && (
+            <>
+              <View style={styles.otpMessageContainer}>
+                <Text style={styles.otpMessageText}>We've sent a code to {type === 'phone' ? input : "your email"}</Text>
+              </View>
+              <View style={styles.otpContainer}>
+                {[0, 1, 2, 3, 4, 5].map((index) => (
+                  <TextInput
+                    key={index}
+                    style={styles.otpBox}
+                    maxLength={1}
+                    keyboardType="numeric"
+                    ref={ref => otpRefs[index] = ref}
+                    onChangeText={text => handleOtpChange(text, index)}
+                  />
+                ))}
+              </View>
+              <View style={styles.resendOtpContainer}>
+                <Text style={styles.countdownText}>
+                  {countdown > 0 ? `Resend OTP in ${countdown}s` : "Didn't receive the code?"}
+                </Text>
+                <TouchableOpacity
+                  style={[styles.resendOtpButton, { opacity: resendOtpEnabled ? 1 : 0.5 }]}
+                  onPress={handleResendOtp}
+                  disabled={!resendOtpEnabled}
+                >
+                  <Text style={styles.buttonText}>Resend OTP</Text>
+                </TouchableOpacity>
+              </View>
+              {showVerifyOtpButton && (
+                <TouchableOpacity style={styles.otpButton} onPress={handleOtpVerification}>
+                  <Text style={styles.buttonText}>Verify {type} OTP</Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+        </Animated.View>
+      )}
 
     {otpSuccess && <Text style={styles.successMessage}>OTP verified successfully!</Text>}
     {otpError && <Text style={styles.errorMessage}>OTP verification failed. Please try again.</Text>}
@@ -189,6 +247,25 @@ margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',  // this ensures that the button is centered horizontally within its parent
+  },
+  resendOtpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  countdownText: {
+    marginRight: 10,
+    fontSize: 16,
+    color: 'black', // Adjust as per your color scheme
+  },
+  resendOtpButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: 'rgba(0, 150, 136, 0.05)', // Adjust as per your color scheme
+    borderColor: colors.pink, // Use the colors object
+    borderWidth: 2,
   },
   button: {
     width: '75%',

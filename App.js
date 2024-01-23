@@ -48,6 +48,7 @@ import SelectDefaultAddress from "./components/Guest/SelectDefaultAddress";
 import WelcomeMessage from "./components/Guest/WelcomeMessage";
 import AboutUs from "./components/Guest/AboutUs";
 import CancellationPolicy from "./components/Guest/CancellationPolicy";
+import { OrdersProvider } from "./components/Context/OrdersContext";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -93,6 +94,7 @@ export default function App() {
     <SafeAreaView style={{ flex: 1, paddingTop: 35 }}>
     <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>
          <AddressProvider>
+         <OrdersProvider>
     <NavigationContainer>
     <Stack.Navigator 
             initialRouteName={initialRoute}
@@ -138,6 +140,7 @@ export default function App() {
         <Stack.Screen name="CancellationPolicy" component={CancellationPolicy} />
       </Stack.Navigator>
     </NavigationContainer>
+    </OrdersProvider>
     </AddressProvider>
     </HostProvider>
      </SafeAreaView>

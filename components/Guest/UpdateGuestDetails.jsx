@@ -387,7 +387,7 @@ const isOfficeAddressEmpty = () => {
   onChangeText={setAlternateMobile} 
   keyboardType="phone-pad"/>
 </View>
-          <Text style={styles.infoText}>Choose or update your delivery Address here!</Text>
+          <Text style={styles.infoText}>Please Select or update your delivery Address here!</Text>
           <View style={styles.addressContainer}>
 
             <View style={styles.radioPair}>

@@ -283,8 +283,9 @@ useEffect(() => {
     if (response.status === 200) {
       // Order placed successfully
       console.log(response.data);
-      setOrderPlaced(true);
       setModalVisible(false);
+      setOrderPlaced(true);
+
     } else {
       // Handle other successful responses with different status codes if needed
     }

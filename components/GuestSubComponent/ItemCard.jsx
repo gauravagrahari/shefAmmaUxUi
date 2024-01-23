@@ -49,11 +49,12 @@ const fetchImage = async () => {
             </View>
 
       </View>
-      <Text style={styles.label}>Your 1 plate will contain below items!</Text>
+      <Text style={styles.label}>Your 1 plate will contain below items</Text>
 
       <Text style={styles.description}>{item.description}</Text>
     
       <Text style={styles.amount}>{item.amount}/-</Text>
+      <Text style={[styles.label, { textAlign: 'center' }]}>Our kitchen thrives on creativity, so dishes listed on the menu might come with special variations from our home-chefs!</Text>
     </View>
     </View >
   );
