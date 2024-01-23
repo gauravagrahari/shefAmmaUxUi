@@ -367,7 +367,7 @@ confirmationText: {
   fontSize: responsiveFontSize(13),
   color: colors.pink,
   borderWidth:1,
-  borderColor: 'gray',
+  borderColor: colors.pink,
   borderRadius: 8,
   padding:7,
   backgroundColor: 'rgba(0, 150, 136, 0.05)',
@@ -391,7 +391,7 @@ noButton: {
   borderWidth: 2,
 },
 btnText: {
-  color: colors.deepBlue,
+  color: 'gray',
   fontSize: responsiveFontSize(13),
   textAlign: 'center',
 },

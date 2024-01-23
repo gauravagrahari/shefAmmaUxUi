@@ -149,10 +149,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   amount: {
-    marginTop: 4,
+    margin: 5,
     fontWeight: '700',
-    color: colors.deepBlue,
-    fontSize: screenWidth * 0.042,
+    color: colors.pink,
+    fontSize: screenWidth * 0.046,
   },
 });
 export default memo(ItemCard);
