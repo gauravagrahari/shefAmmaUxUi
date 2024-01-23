@@ -480,9 +480,8 @@ return (
     </TouchableOpacity>
   )}
 </View>
-      <OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
-
-      <Modal
+<OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
+ <Modal
 transparent={true}
 animationType="slide"
 visible={isModalVisible}
