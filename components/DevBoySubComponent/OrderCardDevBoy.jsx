@@ -5,7 +5,9 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';  // for Ionicons set
 import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
-import { Linking } from 'react-native';
+import {  Platform } from 'react-native';
+import * as Linking from 'expo-linking';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import Dropdown from '../commonMethods/Dropdown';
 import Constants from 'expo-constants';
@@ -58,15 +60,29 @@ const statusMappings = {
       break;
   }
   const dialNumber = (phoneNumber) => {
-    const url = `tel:${phoneNumber}`;
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        console.log(`Don't know how to open this URL: ${url}`);
-      }
+    console.log(`Attempting to dial phone number: ${phoneNumber}`);
+  
+    // Check the platform (iOS or Android)
+    const url = Platform.select({
+      ios: `telprompt:${phoneNumber}`,
+      android: `tel:${phoneNumber}`,
     });
+    
+  
+    console.log(`Formatted URL for dialing: ${url}`);
+  
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        console.log(`Can open URL: ${supported}`);
+        if (!supported) {
+          console.error(`Can't handle url: ${url}`);
+        } else {
+          return Linking.openURL(url);
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
   };
+
   const openInGoogleMaps = (address) => {
     const formattedAddress = encodeURIComponent(address);
     const url = `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`;

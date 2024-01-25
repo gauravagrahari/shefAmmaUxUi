@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon3.png",
     "scheme": "myapp",
-
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash2.png",
@@ -18,14 +17,33 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shefAmma.shefAmmaUI"
+      "bundleIdentifier": "com.shefAmma.app",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["tel"]
+      }
     },
     "android": {
       "package": "com.shefAmma.shefAmmaUI",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon3.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "yourwebsite.com",
+              "pathPrefix": "/path"
+            },
+            {
+              "scheme": "tel"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

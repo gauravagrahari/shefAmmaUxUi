@@ -18,7 +18,7 @@ export default function NavBarGuest() {
       {renderIcon('UpdateGuestDetails', 'person-circle-outline', Ionicons, 25)}
 {renderIcon('OrderHistoryGuest', 'receipt-long', MaterialIcons, 25)}
 
-      {renderIcon('SettingsGuest', 'settings-outline', Ionicons, 25)}
+      {renderIcon('SettingsGuest', 'menu', Ionicons, 27)}
     </View>
   );
 
