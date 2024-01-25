@@ -4,7 +4,7 @@
     "slug": "shefAmmaUI",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon3.png",
+    "icon": "./assets/adaptive-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "light",
     "splash": {
