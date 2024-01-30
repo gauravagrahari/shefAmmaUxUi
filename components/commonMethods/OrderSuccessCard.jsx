@@ -127,9 +127,10 @@ const styles = {
         // color: '#555' // dark gray for a softer look
     },
     closeButton: {
-        fontSize: 30,
+        fontSize: 35,
         fontWeight: 'bold',
         marginTop: 15,
-        color: colors.navBarColor // dark gray to keep it subtle
+        color: colors.navBarColor, // dark gray to keep it subtle
+        padding: 10,
     }
 };

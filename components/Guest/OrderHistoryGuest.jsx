@@ -4,7 +4,7 @@ import {
   View,
   ScrollView,
   RefreshControl,
-  TouchableOpacity,
+  TouchableOpacity,Animated
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import OrderCard from "../commonMethods/OrderCard";
@@ -15,6 +15,7 @@ import { getFromSecureStore } from "../Context/SensitiveDataStorage";
 import { globalStyles, colors } from "../commonMethods/globalStyles";
 import Loader from "../commonMethods/Loader";
 import { useOrders } from "../Context/OrdersContext";
+import useHideOnScroll from '../commonMethods/useHideOnScroll';
 
 const URL = Constants.expoConfig.extra.apiUrl;
 
@@ -32,6 +33,7 @@ export default function OrderHistoryGuest() {
     setRefreshing,
   } = useOrders();
   const [showMessage, setShowMessage] = useState(true);
+  const { animatedStyle, handleScroll } = useHideOnScroll(54);
 
   const fetchOrders = useCallback(
     async (forceRefresh = false) => {
@@ -107,12 +109,17 @@ export default function OrderHistoryGuest() {
 
   return (
     <View style={styles.container}>
-      <NavBarGuest style={styles.navbar} />
+     
+    <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
+    <NavBarGuest style={styles.navbar} />
+      </Animated.View>
       <ScrollView
-        style={globalStyles.containerPrimary}
+        style={[globalStyles.containerPrimary,{ paddingTop: 54 }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
         {showMessage && (
           <View style={styles.messageContainer}>

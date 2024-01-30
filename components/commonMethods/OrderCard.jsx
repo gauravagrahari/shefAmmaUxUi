@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     marginBottom: 6,
-    color: colors.labelBlack,
+    color: colors.deepBlue,
     // color: 'gray',
     // fontWeight: 'bold',
   },

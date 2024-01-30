@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Animated } from "react-native";
 import React, { useContext, useState, useCallback, useEffect } from 'react';
 import HostCard from "../GuestSubComponent/HostCard";
 import axios from "axios";
@@ -17,6 +17,7 @@ import MealTypeFilter from "../commonMethods/MealTypeFilter";
 import { AddressContext } from "../Context/AddressContext";
 import { BackHandler } from 'react-native';
 import Constants from 'expo-constants';
+import useHideOnScroll from '../commonMethods/useHideOnScroll';
 
 // const URL = config.URL;
 const URL = Constants.expoConfig.extra.apiUrl;
@@ -39,7 +40,8 @@ export default function HomeGuest({ navigation, route  }) {
     lunch: true, 
     dinner: true,
   }); 
-  
+  const { animatedStyle, handleScroll } = useHideOnScroll(54);
+
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -255,13 +257,19 @@ const onRefresh = React.useCallback(() => {
 
   return (  
       <View style={globalStyles.containerPrimary}>
-     <NavBarGuest navigation={navigation} />
+       <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
+        <NavBarGuest navigation={navigation} />
+      </Animated.View>
     <ScrollView 
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-        />} showsVerticalScrollIndicator={false}
+        />} 
+        style={{ paddingTop: 54 }}
+        showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         >
      <View>
         {

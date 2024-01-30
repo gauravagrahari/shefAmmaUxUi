@@ -50,66 +50,52 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
     };
   
     return (
-        <TouchableOpacity onPress={handleHostCardClick}>
-        <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={{marginBottom:3}}>
-       <View style={styles.containerVertical}>
-            <View style={styles.container}>
-          <View style={styles.imageContainer}>
-          <Animatable.View
-            iterationDelay={1000}
-            easing="ease-out"
-            animation="pulse"
-            useNativeDriver
-            iterationCount='infinite'
-          >
-            <Image
-              style={styles.itemImage}
-              source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')} 
-              onError={(error) => console.error("Image Error", error)}
-            />
-          </Animatable.View>
-
-          </View>
-          <View style={styles.hostInfo}>
-          <View style={styles.nameAndIndicator}>
-            <Text style={globalStyles.textPrimary}>{item.nameItem}</Text>
-            <View style={[styles.indicatorBox, item.vegetarian==="true" ? styles.vegBox : styles.nonVegBox]}>
-            <View style={[styles.vegIndicator, item.vegetarian==="true" ? styles.veg : styles.nonVeg]} />
+      <TouchableOpacity onPress={handleHostCardClick}>
+        <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={{ marginBottom: 3 }}>
+          <View style={styles.containerVertical}>
+    
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.itemImage}
+                source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')}
+                onError={(error) => console.error("Image Error", error)}
+              />
+            </View>
+    
+            <View style={styles.detailContainer}>
+              <View style={styles.hostInfo}>
+                <View style={styles.nameAndIndicator}>
+                  <Text style={globalStyles.textPrimary}>{item.nameItem}</Text>
+                  <View style={[styles.indicatorBox, item.vegetarian === "true" ? styles.vegBox : styles.nonVegBox]}>
+                    <View style={[styles.vegIndicator, item.vegetarian === "true" ? styles.veg : styles.nonVeg]} />
+                  </View>
+                </View>
+    
+                <View style={styles.hostDetailsRow}>
+                  <Text style={globalStyles.textSecondary} numberOfLines={1}>
+                    {host.nameHost}
+                  </Text>
+                  {host.ratingHost && <StarRating style={styles.rating} rating={host.ratingHost} />}
+                </View>
+    
+                <View style={styles.mealTypeAndAmount}>
+                  <Text style={styles.mealType}>{getMealTypeFullText(item.mealType)}</Text>
+                  <Text style={styles.highlightedText}>{`${item.amount}`}/-</Text>
+                </View>
+              </View>
+    
+              <Text style={styles.detail}>{item.description}</Text>
             </View>
           </View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={globalStyles.textSecondary} numberOfLines={1}>
-                {host.nameHost}
-              </Text>
-              {host.ratingHost && <StarRating style={styles.rating} rating={host.ratingHost} />}
-            </View>
-
-          <View style={styles.mealTypeAndAmount}>
-            <Text style={styles.mealType}>{getMealTypeFullText(item.mealType)}</Text>
-            <Text style={styles.highlightedText}>{`${item.amount}`}/-</Text>
-          </View>
-          </View>
-          </View>
-
-          <View style={styles.detailConatiner}>
-          <Animatable.Text
-            iterationDelay={10000}
-          easing="ease-in-out"
-                animation="bounce"
-                useNativeDriver 
-                iterationCount='infinite'>
-         <Text style={styles.detail}>{item.description}</Text>
-         </Animatable.Text>
-           </View>
-           </View>
         </LinearGradient>
       </TouchableOpacity>
     );
+    
   };
   
 const screenWidth = Dimensions.get('window').width;
 const dpDimension = screenWidth * 0.25; 
+const imageHeight = screenWidth * 0.95;
 
 const styles = StyleSheet.create({
     container: {
@@ -140,9 +126,9 @@ const styles = StyleSheet.create({
   marginBottom: 3,
       },
     imageContainer: {
-        width: dpDimension,
-        height: dpDimension,
-        marginRight: 10,
+      width: imageHeight,
+      height: imageHeight,
+        // marginRight: 10,
     },
     indicatorBox: {
         width: 14,
@@ -177,12 +163,14 @@ const styles = StyleSheet.create({
         color: colors.darkPink,
         fontSize:17
       },
-    itemImage: {
+      itemImage: {
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
-        marginLeft: 5,
+        // Removed marginLeft and changed borderRadius to remove bottom rounded corners
         borderRadius: 7,
+        borderTopLeftRadius: 7,
+        borderTopRightRadius: 7,
         borderColor: 'white',
         borderWidth: 1,
     },
@@ -212,10 +200,9 @@ const styles = StyleSheet.create({
     },
 
     detailConatiner:{
+      padding: 10, 
         marginLeft: 15,
 margin:5,
-// borderTopColor: colors.deepBlue,
-// borderTopWidth: 1,
 paddingTop: 5,
     },
 
@@ -226,7 +213,11 @@ paddingTop: 5,
         color:colors.deepBlue,
         // Additional styling for other details
     },
-    // Add other styles as needed
+    hostDetailsRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      // Add padding or margin as needed
+  },
 });
 
 export default ItemListCard;
