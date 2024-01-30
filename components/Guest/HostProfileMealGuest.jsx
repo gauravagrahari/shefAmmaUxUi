@@ -55,11 +55,13 @@ export default function HostProfileMealGuest({ route }) {
   const [preferredTime, setPreferredTime] = useState('');
   const [servedMeals, setServedMeals] = useState([]);
   const [isOrdering, setIsOrdering] = useState(false);
-  const [maxMeal, setMaxMeal] = useState(2); 
+  const [maxMeal, setMaxMeal] = useState(3); 
+  const [isDescriptionVisible, setDescriptionVisible] = useState(false);
 
   useEffect(() => {
     setMealCount(0);
 }, [selectedMealType]);
+
 useEffect(() => {
   if (itemList && itemList.length > 0) {
     const meals = itemList.map(item => item.mealType) // Assuming mealType is the full meal name
@@ -93,7 +95,9 @@ const increaseMealCount = () => {
 
   setMealCount(prevCount => prevCount + 1);
 };
-
+const toggleDescription = () => {
+  setDescriptionVisible(!isDescriptionVisible);
+};
 
 const fetchCharges = async () => {
   try {
@@ -258,7 +262,7 @@ useEffect(() => {
       timeStampGsiDev:orderTimeStamp,
       // Adding the new properties:
       mealType: selectedMealType, 
-      itemName: selectedItem.itemNames,
+      itemName: selectedItem.nameItem ,
       itemPrice: selectedItem.amount,  // Assuming the price is stored in either 'amount' or 'price' property
       delTimeAndDay: orderDelTimeAndDay,
       delAddress:defaultAddress,
@@ -286,8 +290,12 @@ useEffect(() => {
       setModalVisible(false);
       setOrderPlaced(true);
 
-    } else {
-      // Handle other successful responses with different status codes if needed
+    } else if (orderResponse.status === 409) { // Assuming 409 Conflict for price discrepancy
+      // Fetch the latest charges in case of a price discrepancy
+      await fetchCharges();
+      alert("Charges got updated. Try again or please refresh the home page to view the latest prices of all items.");
+    }else {
+      console.error('Unexpected response:', orderResponse);
     }
   } catch (error) {
     if (error.response) {
@@ -316,7 +324,7 @@ return (
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
   <LinearGradient colors={[colors.navBarColor, colors.navBarColor]} style={styles.hostInfoContainer}>
-  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',    marginTop:10, }}>
+  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',   }}>
 
         <Text style={styles.hostName}>{host.nameHost}</Text>
         {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}
@@ -324,9 +332,8 @@ return (
         <Text style={styles.address}>
             {host.addressHost.city}, {host.addressHost.state}
           </Text>
-        <Text style={styles.descriptionHost}>{host.descriptionHost}</Text>
+        {/* <Text style={styles.descriptionHost}>{host.descriptionHost}</Text> */}
       </LinearGradient>
-
         <NavBarMeals 
           selectedMealType={selectedMealType} 
           onSelectMealType={setSelectedMealType} 
@@ -481,6 +488,18 @@ return (
   )}
 </View>
 <OrderSuccessCard isVisible={orderPlaced} onClose={closeOrderPlacedMessage} />
+<LinearGradient colors={[colors.navBarColor, colors.navBarColor]} style={styles.hostInfoContainer}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+          <TouchableOpacity onPress={toggleDescription}>
+            <Text style={styles.hostNameButton}>
+              Check what {host.nameHost} has to tell you about her cooking!
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {isDescriptionVisible && (
+          <Text style={styles.descriptionHost}>{host.descriptionHost}</Text>
+        )}
+      </LinearGradient>
 
       <Modal
 transparent={true}
@@ -533,14 +552,16 @@ const styles = StyleSheet.create({
       // backgroundColor: colors.darkestBlue,
       backgroundColor: colors.primaryLight, // Slightly off-white for a more professional look
   },
-  // descriptionHost: {
-  //   // backgroundColor: bgColor,
-  //   fontSize: 14,
-  //   padding: 10,
-  //   fontFamily: 'sans-serif', // Use a system font
-  //   color: colors.darkPink, 
-    
-  // },
+  hostNameButton: {
+    fontSize: screenWidth * 0.042,
+    fontWeight: 'bold',
+    color: 'gray', // Change as per your color theme
+    textDecorationLine: 'underline', 
+    padding: 10,
+    borderTopColor:colors.deepBlue,
+    borderTopWidth:1,
+    marginHorizontal:10,
+  },
   hostInfoContainer: {
     padding: screenWidth * 0.025,
     borderRadius: 5,
@@ -556,10 +577,10 @@ const styles = StyleSheet.create({
     color: colors.deepBlue,
   },
   descriptionHost: {
-    fontSize: normalize(12),
+    fontSize: normalize(11.5),
         color: colors.lightishPink,
         lineHeight: normalize(14),
-    marginBottom: screenHeight * 0.01,
+    marginBottom: screenHeight * 0.015,
   },
   title: {
       fontSize: 20,
@@ -581,11 +602,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryText,
     padding: screenHeight * 0.01,
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 2,
+    // elevation: 3,
   },
   orderPlacedContainer: {
     flexDirection: 'row',

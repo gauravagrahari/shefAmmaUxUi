@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     marginBottom: 6,
-    color: colors.labelBlack,
+    color: colors.deepBlue,
     // color: 'gray',
     // fontWeight: 'bold',
   },
@@ -367,7 +367,7 @@ confirmationText: {
   fontSize: responsiveFontSize(13),
   color: colors.pink,
   borderWidth:1,
-  borderColor: 'gray',
+  borderColor: colors.pink,
   borderRadius: 8,
   padding:7,
   backgroundColor: 'rgba(0, 150, 136, 0.05)',

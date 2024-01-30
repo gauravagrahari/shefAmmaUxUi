@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, ScrollView,Dimensions } from 'react-native';
+import { View, ScrollView,Dimensions,Animated  } from 'react-native';
 import HostContext from '../Context/HostContext';
 import ItemListCard from '../GuestSubComponent/ItemListCard';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
@@ -8,10 +8,12 @@ import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { StyleSheet } from 'react-native';
 import MealTypeFilter from '../commonMethods/MealTypeFilter';
 import { Text } from 'react-native';
+import useHideOnScroll from '../commonMethods/useHideOnScroll';
 
 export default function ItemListGuest() {
   const { hostList } = useContext(HostContext);
   const navigation = useNavigation();
+  const { animatedStyle, handleScroll } = useHideOnScroll(54);
   const [selectedMealTypes, setSelectedMealTypes] = useState({
     breakfast: true,
     lunch: true, 
@@ -61,10 +63,17 @@ export default function ItemListGuest() {
   };
   return (
     <View style={globalStyles.containerPrimary}>
-      <NavBarGuest navigation={navigation} />
+ <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
+  <NavBarGuest navigation={navigation} />
+</Animated.View>
 
       {hostList && hostList.length > 0 ? (
-        <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+          style={{ paddingTop: 54 }} // Adjust padding to match NavBarGuest height
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        >
           {hostList.map((item, index) => renderItem({ item, index }))}
         </ScrollView>
       ) : (

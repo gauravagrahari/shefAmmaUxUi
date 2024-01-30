@@ -110,7 +110,6 @@ export default function SelectDefaultAddress() {
       {hasGuestDetails() && (
         <TouchableOpacity onPress={() => handleRadioChange('primary')}>
           <View style={[styles.radioButton, selectedAddress === 'primary' && styles.radioButtonSelected]}>
-            <View style={[styles.radioButtonInner, selectedAddress === 'primary' && { backgroundColor: 'white' }]} />
             <Text style={styles.radioText}>
               {`${guestDetails.addressGuest?.street}, ${guestDetails.addressGuest?.houseName}, ${guestDetails.addressGuest?.city} - ${guestDetails.addressGuest?.pinCode}`}
             </Text>
@@ -121,20 +120,12 @@ export default function SelectDefaultAddress() {
       {hasGuestDetails() && !isAddressEmpty(guestDetails.officeAddress) && (
         <TouchableOpacity onPress={() => handleRadioChange('office')}>
           <View style={[styles.radioButton, selectedAddress === 'office' && styles.radioButtonSelected]}>
-            <View style={[styles.radioButtonInner, selectedAddress === 'office' && { backgroundColor: 'white' }]} />
             <Text style={styles.radioText}>
               {`${guestDetails.officeAddress?.street}, ${guestDetails.officeAddress?.houseName}, ${guestDetails.officeAddress?.city} - ${guestDetails.officeAddress?.pinCode}`}
             </Text>
           </View>
         </TouchableOpacity>
       )}
-
-      {/* {isAddressEmpty(guestDetails.officeAddress) && hasGuestDetails() && (
-        <Animated.View style={[styles.progressBar, { width: progress.interpolate({
-          inputRange: [0, 100],
-          outputRange: ['0%', '100%'],
-        }) }]} />
-      )} */}
     </LinearGradient>
   );
 } 
@@ -178,12 +169,6 @@ export default function SelectDefaultAddress() {
     },
     radioButtonSelected: {
       backgroundColor: colors.lightBlue,
-    },
-    radioButtonInner: {
-      width: 15,
-      height: 15,
-      borderRadius: 10,
-      // backgroundColor: 'white',
     },
     radioText: {
       margin:8,
