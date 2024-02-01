@@ -110,7 +110,7 @@ export default function HomeDevBoy({ navigation }) {
   items={uniqueHosts}
   selectedValue={selectedHost}
   onValueChange={(value) => setSelectedHost(value)}
-  placeholder="Select a host"
+  placeholder="Select a Cook"
   buttonStyle={dropdownStyle}
 /></View>
       {filteredOrderList.length > 0 ? (

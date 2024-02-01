@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Linking, StyleSheet,Dimensions  } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+import * as Clipboard from 'expo-clipboard';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
+import MessageCard from '../commonMethods/MessageCard';
 
 const ContactPage = () => {
+    const [messageCardVisible, setMessageCardVisible] = useState(false);
+    const [messageCardText, setMessageCardText] = useState('');
 
     const handleEmailPress = async (email) => {
         try {
@@ -13,18 +16,22 @@ const ContactPage = () => {
             const emailSubject = encodeURIComponent('');
             const emailBody = encodeURIComponent(`Mobile Number - ${userPhoneNumber}\n\nMy Concern or Query - `);
             const mailtoUrl = `mailto:${email}?subject=${emailSubject}&body=${emailBody}`;
-            Linking.openURL(mailtoUrl);
+            await Linking.openURL(mailtoUrl);
         } catch (error) {
-            console.error('Error fetching phone number:', error);
-            Clipboard.setString(email);
-            alert('Email address copied to clipboard. Please paste it in your mail app.');
+            console.error('Error fetching phone number or opening email client:', error);
+            await Clipboard.setStringAsync(email); // Use setStringAsync for Expo's Clipboard
+            showMessageCard('Email address copied to clipboard!');
         }
     };
-
+    
+    const showMessageCard = (message) => {
+        setMessageCardText(message);
+        setMessageCardVisible(true);
+        setTimeout(() => setMessageCardVisible(false), 2900); // Hide after the animation
+    };
     return (
         <View style={styles.container}>
             <Text style={globalStyles.headerText}>Contact Us</Text>
-
             <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
                 <Text style={styles.contentText}>
                     If you have any complaints or issues regarding your order, 
@@ -45,12 +52,12 @@ const ContactPage = () => {
                     with contact information and the details.
                 </Text>
             </LinearGradient>
-
+            <MessageCard message={messageCardText} isVisible={messageCardVisible} onClose={() => setMessageCardVisible(false)} />
             <Text style={styles.footerText}>
                 Thank you for choosing ShefAmma!
             </Text>
-        </View>
-    );
+        </View> 
+      );
 };
 const screenWidth = Dimensions.get('window').width;
 

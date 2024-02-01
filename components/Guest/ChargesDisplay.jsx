@@ -71,7 +71,7 @@ const ChargesDisplay = () => {
                 {renderMealTiming('Dinner', charges.dinnerStartTime, charges.dinnerEndTime, charges.dinnerBookTime)}
               </>
             ) : (
-              <Text>Loading charges...</Text>
+              <Text style={styles.heading}>Loading timings...</Text>
             )}
           </LinearGradient>
         </ScrollView>

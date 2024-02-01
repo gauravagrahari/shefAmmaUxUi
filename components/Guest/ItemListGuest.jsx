@@ -22,6 +22,7 @@ export default function ItemListGuest() {
 
   const handleHostCardClick = (selectedMeal, hostEntity) => {
     const host = hostList.find(h => h.hostEntity.uuidHost === hostEntity.uuidHost);
+    console.log('mealtype--->'+selectedMeal.mealType);
     if (host) {
       navigation.navigate('HostProfileMealGuest', {
         host: hostEntity,
