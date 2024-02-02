@@ -83,6 +83,14 @@ const globalStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal:10,
 },
+lowerText:{
+  fontSize: screenWidth * 0.045,
+    color: 'purple',
+    fontWeight: 'bold',
+    margin: screenWidth * 0.05,
+    textAlign: 'center',
+    paddingHorizontal:10,
+},
   centralisingContainer:{
 flex: 1,
 alignItems: 'center',

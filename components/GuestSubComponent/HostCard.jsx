@@ -217,7 +217,7 @@ carouselImage: {
   height: dpDimension,
   resizeMode: 'cover',
   borderRadius:7,
-  borderColor: 'white',
+  borderColor: 'lightgray',
   borderWidth: 1,
 },
 descriptionContainer: {

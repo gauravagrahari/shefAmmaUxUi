@@ -28,7 +28,7 @@ export default function NavBarGuest() {
         style={[styles.navbarButton, isActive(routeName) && styles.activeNavbarButton]}
         onPress={() => navigation.navigate(routeName)}>
         {/* <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.darkestBlue : colors.darkestBlue} /> */}
-        <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.lightishPink : colors.lightishPink} />
+        <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.pink : colors.lightishPink} />
         {isActive(routeName) && <View style={styles.underline} />}
       </TouchableOpacity>
     );
@@ -64,15 +64,15 @@ const styles = StyleSheet.create({
   activeNavbarButton: {
     borderBottomWidth: 3,
     // borderBottomColor: colors.darkestBlue, // Updated color to new palette color
-    borderBottomColor: colors.lightishPink, // Updated color to new palette color
+    borderBottomColor: colors.pink, // Updated color to new palette color
   },
   underline: {
     position: 'absolute',
     bottom: 0,
     left: '25%',
     right: '25%',
-    height: 2,
+    height: 3,
     // backgroundColor:colors.darkestBlue, // Updated color to new palette color
-    backgroundColor:colors.lightishPink, // Updated color to new palette color
+    backgroundColor:colors.pink, // Updated color to new palette color
   }
 });

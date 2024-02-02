@@ -290,8 +290,10 @@ useEffect(() => {
       // Order placed successfully
       console.log(response.data);
       setModalVisible(false);
-      setOrderPlaced(true);
-
+     
+      setTimeout(() => {
+        setOrderPlaced(true);
+      }, 150); 
     } else if (orderResponse.status === 409) { // Assuming 409 Conflict for price discrepancy
       // Fetch the latest charges in case of a price discrepancy
       await fetchCharges();
