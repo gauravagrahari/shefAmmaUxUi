@@ -88,8 +88,6 @@ export default function App() {
   if (isLoading) {
     return <LoadingScreen />;
 }
-
-
   return (
     // <SafeAreaView style={{ flex: 1, paddingTop: 35 }}>
     <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>

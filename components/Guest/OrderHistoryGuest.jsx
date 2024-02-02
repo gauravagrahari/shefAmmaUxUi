@@ -23,7 +23,7 @@ export default function OrderHistoryGuest() {
   const {
     orders,
     setOrders,
-    loading,
+    loading = true,
     setLoading,
     error,
     setError,
@@ -130,7 +130,7 @@ export default function OrderHistoryGuest() {
               <Text style={styles.dismissButtonText}>✕</Text>
             </TouchableOpacity>
             <Text style={styles.messageText}>
-            Missing your latest order? Pull down to refresh.
+            Is your latest order Missing? Pull down to refresh.
             </Text>
           </View>
         )}
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     // borderTopWidth: 1,
     // borderBottomWidth: 1,
     // borderColor: '#ccc', // Light grey border
-    marginVertical: 5,
+    marginVertical: 4,
     // width:'95%',
   },
   dismissButton: {

@@ -7,15 +7,19 @@ import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {  Platform } from 'react-native';
 import * as Linking from 'expo-linking';
-
+import * as Clipboard from 'expo-clipboard';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
+import MessageCard from '../commonMethods/MessageCard';
 const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function OrderCardDevBoy({ orderData, hostAddress, guestAddress, navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
-
+  const [dropdownItems, setDropdownItems] = useState(['Not Picked Up', 'Undelivered']);
+  const [clipboardMessage, setClipboardMessage] = useState('');
+  const [isMessageVisible, setMessageVisible] = useState(false);
+  
 console.log("order data:", JSON.stringify(orderData));
 console.log("host address:", JSON.stringify(hostAddress));
 
@@ -80,7 +84,13 @@ const statusMappings = {
       })
       .catch((err) => console.error('An error occurred', err));
   };
-
+  const copyToClipboardWithMessage = (text, message) => {
+    Clipboard.setStringAsync(text);
+    setClipboardMessage(message);
+    setMessageVisible(true);
+    setTimeout(() => setMessageVisible(false), 2500); // Hide the message after 2.5 seconds
+  };
+  
   const openInGoogleMaps = (address) => {
     const formattedAddress = encodeURIComponent(address);
     const url = `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`;
@@ -191,11 +201,11 @@ const options = {
           <TouchableOpacity>
             <Text style={[styles.itemName]}>{orderData.nameHost}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dialNumber(orderData.phoneHost)} style={styles.phoneContainer}>
+          <TouchableOpacity onLongPress={() => copyToClipboardWithMessage(orderData.phoneHost, 'Phone number copied to clipboard!')} onPress={() => dialNumber(orderData.phoneHost)} style={styles.phoneContainer}>
         <Icon name="call-outline" size={20} color={colors.primaryText} />
         <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneHost}</Text>
     </TouchableOpacity>
-    <TouchableOpacity onPress={() => dialNumber(orderData.altPhone)} style={styles.phoneContainer}>
+    <TouchableOpacity onPress={() => dialNumber(orderData.altPhone)} style={styles.phoneContainer} onLongPress={() => copyToClipboardWithMessage(orderData.phoneHostAlt, 'Phone number copied to clipboard!')}>
         <Icon name="call-outline" size={20} color={colors.primaryText} />
         <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneHostAlt}</Text>
     </TouchableOpacity>
@@ -223,12 +233,12 @@ const options = {
         {/* Guest Details */}
         <View style={styles.guestDetailsContainer}>
           <Text style={styles.itemName}>{orderData.nameGuest}</Text>
-          <TouchableOpacity onPress={() => dialNumber(orderData.phoneGuest)} style={styles.phoneContainer}>
+          <TouchableOpacity onPress={() => dialNumber(orderData.phoneGuest)} style={styles.phoneContainer} onLongPress={() => copyToClipboardWithMessage(orderData.phoneGuest, 'Phone number copied to clipboard!')}>
         <Icon name="call-outline" size={20} color={colors.primaryText} />
         <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneGuest}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => dialNumber(orderData.phoneGuestAlt)} style={styles.phoneContainer}>
+        <TouchableOpacity onPress={() => dialNumber(orderData.phoneGuestAlt)} style={styles.phoneContainer} onLongPress={() => copyToClipboardWithMessage(orderData.phoneGuestAlt, 'Phone number copied to clipboard!')}>
         <Icon name="call-outline" size={20} color={colors.primaryText} />
         <Text style={[styles.details, styles.linkText, styles.phoneNumber]}>{orderData.phoneGuestAlt}</Text>
         </TouchableOpacity>
@@ -247,17 +257,7 @@ const options = {
 </TouchableOpacity>
         </View>
       </View>
-    {/* <TouchableOpacity 
-    onPress={() => openInGoogleMaps(`${guestAddress.street},${guestAddress.houseName}, ${guestAddress.city}, ${guestAddress.state}, ${guestAddress.pinCode}`)}
-    style={styles.clickableAddressContainer}> */}
-{/* <Text style={[styles.details, styles.clickableAddress]}>
-  {guestAddress.houseName ? `${guestAddress.houseName}, ` : ''}
-  {guestAddress.street}
-</Text> */}
-{/* <Text style={[styles.details, styles.clickableAddress]}>
-  {guestAddress.city}, {guestAddress.state} {guestAddress.pinCode}
-</Text> */}
-
+      {isMessageVisible && <MessageCard message={clipboardMessage} isVisible={isMessageVisible} onClose={() => setMessageVisible(false)} />}
       {/* Name and Time Row */}
       <View style={styles.nameTimeContainer}>
         <Text style={styles.details}>Order at  - {formattedDateTime}</Text>
@@ -304,14 +304,6 @@ const options = {
       </TouchableOpacity>
       </View>
     )}
-       {/* {orderData.status === 'pkd' || orderData.status === 'undel' ? (
-        <Dropdown
-          items={dropdownItems}
-          selectedValue={selectedStatus}
-          onValueChange={onDropdownValueChange}
-          placeholder="Select Status"
-        />
-      ) : null} */}
       <Modal
     animationType="slide"
     transparent={true}

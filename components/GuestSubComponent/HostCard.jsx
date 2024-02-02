@@ -167,7 +167,7 @@ function responsiveFontSize(fontSize) {
 const itemWidth='20';
 const bgColor = colors.secondCardColor; 
 
-const dpDimension = screenWidth * 0.25; // Carousel image dimension
+const dpDimension = screenWidth * 0.28; // Carousel image dimension
 const hostHeight = screenHeight * 0.13; // Host image height
 const styles = StyleSheet.create({
   container: {

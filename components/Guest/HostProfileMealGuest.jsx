@@ -101,6 +101,7 @@ const toggleDescription = () => {
 
 const fetchCharges = async () => {
   try {
+    console.log("Making API call to fetch charges. URL:", URL);
     const token = await getFromSecureStore('token');
     const chargesResponse = await axios.get(`${URL}/guest/getCharges`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -114,6 +115,7 @@ const fetchCharges = async () => {
       setMaxMeal(chargesData.maxMeal);
     }
     await storeInSecureStore('charges', chargesData);
+    console.log("Charges response:", chargesResponse.data);
   } catch (error) {
     console.error('Failed to fetch charges:', error);
     throw error;
@@ -511,7 +513,7 @@ onRequestClose={() => {
 >
 <View style={styles.modalView}>
   <View style={styles.modalContainer}>
-    <Text style={styles.modalText}>Click confirm button to place order</Text>
+    <Text style={styles.modalText}>Click confirm button to place order for your {Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType).toUpperCase()}.</Text>
     <View style={styles.modalButtons}>
       <TouchableOpacity style={styles.confirmButton} onPress={handleOrderButton}  disabled={isOrdering}
 >
