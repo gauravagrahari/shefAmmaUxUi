@@ -126,6 +126,9 @@ export default function SelectDefaultAddress() {
           </View>
         </TouchableOpacity>
       )}
+       <Text style={[globalStyles.lowerText]}>
+        Timely, Healthy, Homely and Happy Eating!
+        </Text>
     </LinearGradient>
   );
 } 
@@ -161,7 +164,7 @@ export default function SelectDefaultAddress() {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 15,
-      width: screenWidth - 40, // Ensuring the width doesn't exceed the screen width
+      width: screenWidth - 45, // Ensuring the width doesn't exceed the screen width
       padding: 10,
       borderRadius: 10,
       borderWidth: 1,
@@ -169,6 +172,8 @@ export default function SelectDefaultAddress() {
     },
     radioButtonSelected: {
       backgroundColor: colors.lightBlue,
+      borderWidth: 2,
+      borderColor: colors.pink,
     },
     radioText: {
       margin:8,

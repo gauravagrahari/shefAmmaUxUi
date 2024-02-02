@@ -100,8 +100,8 @@ const ChargesDisplay = () => {
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.3,
-      shadowRadius: 4,
-      elevation: 5,
+      shadowRadius: 2,
+      elevation: 3,
     },
     mainHeading: {
       fontSize: width * 0.055, // Proportional to screen width

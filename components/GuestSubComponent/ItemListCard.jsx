@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
       resizeMode: 'cover',
       marginLeft: 5,
       borderRadius: 7,
-      borderColor: 'white',
+      borderColor: 'lightgray',
       borderWidth: 1,
   },
   nameAndIndicator: {

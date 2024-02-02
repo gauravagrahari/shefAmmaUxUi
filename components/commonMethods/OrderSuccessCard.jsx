@@ -6,32 +6,6 @@ import {colors} from '../commonMethods/globalStyles';
 
 export default function OrderSuccessCard({ isVisible, onClose }) {
   const navigation = useNavigation();
-
-    // useEffect(() => {
-    //     if (isVisible) {
-    //         Animated.parallel([
-    //             Animated.timing(fadeAnim, {
-    //                 toValue: 1,
-    //                 duration: 500,
-    //                 useNativeDriver: true
-    //             }),
-    //             Animated.timing(translateY, {
-    //                 toValue: 0,
-    //                 duration: 500,
-    //                 useNativeDriver: true
-    //             })
-    //         ]).start();
-    //     } else {
-    //         Animated.timing(fadeAnim, {
-    //             toValue: 0,
-    //             duration: 500,
-    //             useNativeDriver: true
-    //         }).start();
-    //     }
-    // }, [isVisible]);
-    // if (!isVisible) {
-    //     return null;
-    // }
     return (
         <Modal
       transparent={true}
