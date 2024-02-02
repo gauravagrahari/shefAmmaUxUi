@@ -16,7 +16,7 @@ export default function NavBarGuest() {
       {/* {renderIcon('SearchGuest', 'search', Ionicons, 24)} */}
       {renderIcon('ItemListGuest', 'restaurant-menu', MaterialIcons, 26)} 
       {renderIcon('UpdateGuestDetails', 'person-circle-outline', Ionicons, 25)}
-{renderIcon('OrderHistoryGuest', 'receipt-long', MaterialIcons, 25)}
+      {renderIcon('OrderHistoryGuest', 'receipt-long', MaterialIcons, 25)}
 
       {renderIcon('SettingsGuest', 'menu', Ionicons, 27)}
     </View>

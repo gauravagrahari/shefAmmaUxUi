@@ -23,7 +23,7 @@ export default function OrderHistoryGuest() {
   const {
     orders,
     setOrders,
-    loading,
+    loading = true,
     setLoading,
     error,
     setError,
