@@ -18,6 +18,7 @@ import { AddressContext } from "../Context/AddressContext";
 import { BackHandler } from 'react-native';
 import Constants from 'expo-constants';
 import useHideOnScroll from '../commonMethods/useHideOnScroll';
+import HorizontalItemList from "./HorizontalItemList";
 
 // const URL = config.URL;
 const URL = Constants.expoConfig.extra.apiUrl;
@@ -249,29 +250,29 @@ const onRefresh = React.useCallback(() => {
       <View style={globalStyles.containerPrimary}>
       {/* <View style={globalStyles.centeredContainer}> */}
         <Text style={styles.errorMessage}>
-          We're experiencing technical difficulties. Please try again later.
+          We're experiencing technical difficulties. Please try again later or start a new session.
         </Text>
       </View>
     );
   }
 
   return (  
-      <View style={globalStyles.containerPrimary}>
-       <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
+    <View style={globalStyles.containerPrimary}>
+      <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
         <NavBarGuest navigation={navigation} />
       </Animated.View>
-    <ScrollView 
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />} 
-        style={{ paddingTop: 54 }}
-        showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        >
-     <View>
+      <ScrollView 
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />} 
+          style={{ paddingTop: 54, paddingBottom:58 }}
+          contentContainerStyle={{ paddingBottom: 58 }}
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+      >
         {
         filteredHosts.length === 0 && !showPincodeChecker ? (
           <View style={styles.emptyHostMessageContainer}>
@@ -283,24 +284,22 @@ const onRefresh = React.useCallback(() => {
               </TouchableOpacity>
             </View>
         ) : (
-          filteredHosts.map((host, index) => (
-            <HostCard key={index} host={host.hostEntity} meals={host.meals} />
-          //  <Text key={index}>hey{host.nameHost}</Text>
-            ))
+          <>
+            <HorizontalItemList />
+            {filteredHosts.map((host, index) => (
+              <HostCard key={index} host={host.hostEntity} meals={host.meals} />
+            ))}
+          </>
         )}
-      </View>
-    </ScrollView>
-    {/* {!showPincodeChecker &&  <TouchableOpacity onPress={() => setShowPincodeChecker(true)} style={globalStyles.centralisingContainer}>
-      <Text style={globalStyles.button}>Check Pincode</Text></TouchableOpacity>} */}
-
-    <MealTypeFilter
-      selectedMealTypes={selectedMealTypes}
-      toggleMealType={toggleMealType}
-    />
-  {showPincodeChecker && <CheckPincode onClose={() => setShowPincodeChecker(false)} />}
-     </View>
+      </ScrollView>
+      <MealTypeFilter
+        selectedMealTypes={selectedMealTypes}
+        toggleMealType={toggleMealType}
+      />
+      {showPincodeChecker && <CheckPincode onClose={() => setShowPincodeChecker(false)} />}
+    </View>
   );
-}
+            }  
 const { width, height } = Dimensions.get('window');
 
 function responsiveFontSize(fSize) {
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginVertical:200,
-    color:colors.darkBlue,
+    color:'red',
     padding:20,
 
   },
