@@ -70,8 +70,9 @@ export default function ItemListGuest() {
 
       {hostList && hostList.length > 0 ? (
           <ScrollView
-          style={{ paddingTop: 54 }} // Adjust padding to match NavBarGuest height
-          showsVerticalScrollIndicator={false}
+          style={{ paddingTop: 54 , paddingBottom:58}}
+          contentContainerStyle={{ paddingBottom: 58 }}
+            showsVerticalScrollIndicator={false}
           onScroll={handleScroll}
           scrollEventThrottle={16}
         >
