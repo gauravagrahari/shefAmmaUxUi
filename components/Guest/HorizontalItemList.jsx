@@ -41,7 +41,7 @@ const HorizontalItemList = () => {
   };
 
   return (
-    <View style={{ alignItems: 'center' }}>
+    <View style={{ alignItems: 'center',backgroundColor:'whitesmoke' }}>
       <FlatList
         data={sortedAndLimitedMeals}
         horizontal
