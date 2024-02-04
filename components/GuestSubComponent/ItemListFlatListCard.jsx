@@ -52,7 +52,7 @@ const ItemListFlatListCard = ({ item, host, handleHostCardClick }) => {
 
     return (
         <TouchableOpacity onPress={handleHostCardClick} style={[styles.compactContainer, { width: cardWidth, height: cardHeight }]}>
-          <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.linearGradientStyle}>
+          <View  style={styles.linearGradientStyle}>
             <View
               style={[styles.imageContainer, { height: cardWidth }]} // Image height equal to card width for square shape
             >
@@ -67,7 +67,7 @@ const ItemListFlatListCard = ({ item, host, handleHostCardClick }) => {
               <Text style={[styles.mealTypeText,{color:'gray'}]}>{getMealTypeFullText(item.mealType)}</Text>
               <Text style={styles.highlightedText}>{`${item.amount}`}/-</Text>
             </View>
-          </LinearGradient>
+          </View>
         </TouchableOpacity>
     );
 };
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     linearGradientStyle: {
       flex: 1,
       justifyContent: 'space-between', // Adjusted for spacing between image and details
+      backgroundColor:colors.darkBlue,
     },
     imageContainer: {
       width: '100%',

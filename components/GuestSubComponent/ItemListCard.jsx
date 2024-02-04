@@ -90,7 +90,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
         <View style={styles.detailConatiner}>
         <Animatable.Text
           iterationDelay={10000}
-        easing="ease-in-out"
+          easing="ease-in-out"
               animation="bounce"
               useNativeDriver 
               iterationCount='infinite'>

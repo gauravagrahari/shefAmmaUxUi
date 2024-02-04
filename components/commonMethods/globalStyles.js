@@ -4,8 +4,8 @@ const screenWidth = Dimensions.get('window').width;
 // Define your color variables
 const colors = {
  navBarColor:"#fff",//#c7fb80
- secondCardColor:"#eaf6f6",//#eefbdb
- darkBlue:'#eaf6f6',//#ccfa8f
+ secondCardColor:"#e0f3f5",//#eefbdb
+ darkBlue:'#e0f3f5',//#ccfa8f
  primaryLight: "#fff",//#ddfab5
  labelBlack: "#4D6664",
 //  navBarColor:"#EAF86B",//#c7fb80
@@ -23,19 +23,22 @@ lightishPink:'#385170',
   white: "#ffffff",
   inputBackground: "#165882FF",
   // -------------
-  primaryText: "#DE0075",
+  pink:'#DE0075',
+  primaryText: '#DE0075',
+  lightOlive:'#DE0075',
+  // -----------------
   secondaryText: "#FAF9F6",
   darkestBlue:'#f5f5f5',
 
   lightBlue:'#d7dee7',
 
   darkPink:'#e43781',
-  pink:'#DE0075',
+  
   lightPink:'#f7fbba',
   darkestOliveGreen:'#3F4122',
   darkOlive:'#6e7a38',
   olive:'#879154',
-  lightOlive:'#DE0075',
+ 
   deepBlue:'#12486B',
 
   // ----------------
@@ -123,7 +126,7 @@ justifyContent: 'center',
   containerPrimary: {
     flex: 1,
     // backgroundColor: colors.lightishPink,
-    backgroundColor: "#fafafa",
+    backgroundColor: "whitesmoke",
     // marginTop: 2,
     // backgroundColor: colors.darkestOliveGreen,
     // padding: 10,

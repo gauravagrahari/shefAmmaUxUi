@@ -6,8 +6,7 @@ const LoadingScreen = () => {
     return (
         <LinearGradient
             colors={['#eaf6f6', '#FFF']}
-            style={styles.loadingContainer}
-        >
+            style={styles.loadingContainer}>
             <View style={styles.brandContainer}>
                 <Text style={styles.shef}>Shef</Text>
                 <Text style={styles.amma}>Amma</Text>
