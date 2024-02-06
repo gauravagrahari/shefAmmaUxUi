@@ -16,8 +16,9 @@ import { globalStyles, colors } from "../commonMethods/globalStyles";
 import Loader from "../commonMethods/Loader";
 import { useOrders } from "../Context/OrdersContext";
 import useHideOnScroll from '../commonMethods/useHideOnScroll';
+import config from "../Context/constants";
 
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function OrderHistoryGuest() {
   const {

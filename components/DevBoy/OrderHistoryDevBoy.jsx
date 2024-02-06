@@ -7,7 +7,7 @@ import NavBarDevBoy from '../DevBoySubComponent/NavBarDevBoy';
 import OrderCardHistoryDevBoy from '../DevBoySubComponent/OrderCardHistoryDevBoy';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function OrderHistoryDevBoy({ navigation }) {
   const [orderList, setOrderList] = useState([]);

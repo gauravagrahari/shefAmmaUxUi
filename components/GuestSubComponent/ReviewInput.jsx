@@ -6,7 +6,7 @@ import MessageCard from '../commonMethods/MessageCard';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 const ReviewInput = ({ uuidOrder, timeStamp }) => {
   const [reviewText, setReviewText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

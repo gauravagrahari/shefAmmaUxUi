@@ -17,7 +17,7 @@ import { Amplify } from 'aws-amplify';
 import awsmobile from '../../src/aws-exports.js';
 Amplify.configure(awsmobile)
 
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function HostCard({ host, meals }) {
   const itemNames = meals.map(meal => meal.nameItem);

@@ -5,7 +5,7 @@ import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import config from '../Context/constants';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 export default function ChangePassword({ visible, onClose, onPasswordChangeSuccess }) {
   const [oldPassword, setOldPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');

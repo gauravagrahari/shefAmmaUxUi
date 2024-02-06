@@ -11,7 +11,7 @@ import * as Clipboard from 'expo-clipboard';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 import MessageCard from '../commonMethods/MessageCard';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function OrderCardDevBoy({ orderData, hostAddress, guestAddress, navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);

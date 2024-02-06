@@ -13,7 +13,7 @@ import { AddressContext } from '../Context/AddressContext';
 import { BackHandler } from 'react-native';
 import Constants from 'expo-constants';
 
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 export default function DetailsGuest() {
   const [alternateMobileNumber, setAlternateMobileNumber] = useState('');
   const [fullName, setFullName] = useState('');

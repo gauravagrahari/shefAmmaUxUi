@@ -10,7 +10,7 @@ import config from '../Context/constants';
 import * as Animatable from 'react-native-animatable';
 import StarRating from './StarRating';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 export default function OrderCard({ order,cancelCutOffTime }) {
   const statusMappings = {
     new:"New",

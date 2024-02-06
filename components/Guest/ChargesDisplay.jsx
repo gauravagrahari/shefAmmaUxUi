@@ -6,7 +6,7 @@ import config from '../Context/constants';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 const ChargesDisplay = () => {
     const [charges, setCharges] = useState(null);
   
