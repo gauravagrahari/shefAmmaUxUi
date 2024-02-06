@@ -11,7 +11,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import Dropdown from '../commonMethods/Dropdown';
 
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function HomeDevBoy({ navigation }) {
   const [orderList, setOrderList] = useState([]);

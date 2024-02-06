@@ -13,7 +13,11 @@ import Carousel from 'react-native-snap-carousel';
 import { getImageUrl, storeImageUrl } from '../Context/sqLiteDB';
 import * as Animatable from 'react-native-animatable';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+import { Amplify } from 'aws-amplify';
+import awsmobile from '../../src/aws-exports.js';
+Amplify.configure(awsmobile)
+
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function HostCard({ host, meals }) {
   const itemNames = meals.map(meal => meal.nameItem);

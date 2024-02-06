@@ -21,7 +21,7 @@ import useHideOnScroll from '../commonMethods/useHideOnScroll';
 import HorizontalItemList from "./HorizontalItemList";
 
 // const URL = config.URL;
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 const windowWidth = Dimensions.get('window').width;
 

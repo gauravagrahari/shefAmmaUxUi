@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import axios from 'axios';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+import config from '../Context/constants';
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 const CheckPincode = ({ onClose }) => {
     const [pincode, setPincode] = useState('');

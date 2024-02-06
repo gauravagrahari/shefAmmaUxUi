@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 export default function OtpVerification({ type, onVerify }) {
   const [showOtp, setShowOtp] = useState(false);
   const [otpSuccess, setOtpSuccess] = useState(false);

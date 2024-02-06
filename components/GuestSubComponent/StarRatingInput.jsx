@@ -8,7 +8,7 @@ import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import * as Animatable from 'react-native-animatable';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 const StarRatingInput = ({ uuidOrder, timeStamp, uuidHost, geoHost }) => {
   const [currentRating, setCurrentRating] = useState(0);

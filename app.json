@@ -2,14 +2,14 @@
   "expo": {
     "name": "shefAmmaUI",
     "slug": "shefAmmaUI",
-    "version": "1.0.0",
+    "version": "8.1.1",
     "orientation": "portrait",
     "icon": "./assets/adaptive-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "cover",
+      "resizeMode": "contain",
       "backgroundColor": "#fff"
     },
     "assetBundlePatterns": [
@@ -23,7 +23,8 @@
       }
     },
     "android": {
-      "package": "com.shefAmma.shefAmmaUI",
+      "package": "com.shefAmma.app",
+      "versionCode": 8,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

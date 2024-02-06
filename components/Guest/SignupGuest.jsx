@@ -18,7 +18,7 @@ import { globalStyles, colors } from "../commonMethods/globalStyles";
 import { Ionicons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import { AccessibilityStatePropType } from "deprecated-react-native-prop-types/DeprecatedViewAccessibility";
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function SignupGuest() {
   const [password, setPassword] = useState("");

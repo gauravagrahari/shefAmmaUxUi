@@ -14,7 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import StarRating from "../commonMethods/StarRating";
 import * as Animatable from 'react-native-animatable';
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function HostProfileMealGuest({ route }) {
   const MEAL_TYPE_MAPPING = {

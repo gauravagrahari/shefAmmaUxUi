@@ -11,7 +11,7 @@
       "android": {
         "buildType": "app-bundle",
         "env": {
-          "API_URL": "http://uat-env.eba-epp52dpv.ap-south-1.elasticbeanstalk.com"
+          "EXPO_PUBLIC_API_URL": "http://uat-env.eba-epp52dpv.ap-south-1.elasticbeanstalk.com"
         }
       }
     }
