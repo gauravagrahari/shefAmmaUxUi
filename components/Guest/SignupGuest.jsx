@@ -245,6 +245,8 @@ const styles = StyleSheet.create({
     color: "#3498db",
     fontSize: 17,
     fontWeight: "500",
+    padding:5
+
   },
   errorMessage: {
     color: "red",
