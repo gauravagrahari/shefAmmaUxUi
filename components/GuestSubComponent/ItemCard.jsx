@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     marginBottom: screenHeight * 0.01,
     borderRadius:7,
-    borderColor: 'white',
+    borderColor: 'lightgray',
   borderWidth: 1,
   },
   details: {
