@@ -2,7 +2,7 @@
   "expo": {
     "name": "shefAmmaUI",
     "slug": "shefAmmaUI",
-    "version": "8.1.1",
+    "version": "13.1.1",
     "orientation": "portrait",
     "icon": "./assets/adaptive-icon.png",
     "scheme": "myapp",
@@ -24,10 +24,14 @@
     },
     "android": {
       "package": "com.shefAmma.app",
-      "versionCode": 8,
+      "versionCode": 13,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "androidStatusBar": {
+        "barStyle": "dark-content", 
+        "backgroundColor": "#ffffff" 
       },
       "intentFilters": [
         {
@@ -44,7 +48,8 @@
           ],
           "category": ["BROWSABLE", "DEFAULT"]
         }
-      ]
+      ],
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -53,6 +58,16 @@
       "eas": {
         "projectId": "8e888a03-2a05-4bfb-ba7e-993053c2d58c"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }

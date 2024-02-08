@@ -51,19 +51,11 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
      <View style={styles.containerVertical}>
           <View style={styles.container}>
         <View style={styles.imageContainer}>
-        <Animatable.View
-          iterationDelay={1000}
-          easing="ease-out"
-          animation="pulse"
-          useNativeDriver
-          iterationCount='infinite'
-        >
           <Image
             style={styles.itemImage}
             source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')} 
             onError={(error) => console.error("Image Error", error)}
           />
-        </Animatable.View>
         </View>
         <View style={styles.hostInfo}>
         <View style={styles.nameAndIndicator}>
@@ -88,14 +80,7 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
         </View>
 
         <View style={styles.detailConatiner}>
-        <Animatable.Text
-          iterationDelay={10000}
-          easing="ease-in-out"
-              animation="bounce"
-              useNativeDriver 
-              iterationCount='infinite'>
        <Text style={styles.detail}>{item.description}</Text>
-       </Animatable.Text>
          </View>
          </View>
       </LinearGradient>
