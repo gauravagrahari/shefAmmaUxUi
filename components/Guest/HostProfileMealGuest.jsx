@@ -356,7 +356,7 @@ return (
   </TouchableOpacity>
   <Text style={styles.noOfGuest}>{mealCount}</Text>
   <Animatable.View
-            iterationDelay={1000}
+            iterationDelay={5000}
             easing="ease-out"
             animation="rubberBand"
             useNativeDriver
@@ -427,15 +427,7 @@ return (
   {mealCount > 0 && (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Payment:</Text>
-      <Animatable.Text
-            iterationDelay={3000}
-          easing="ease-out"
-                animation="tada"
-                useNativeDriver 
-                iterationCount='infinite'>
-
       <Text style={styles.finalAmountText}>Pay On Delivery</Text>
-                </Animatable.Text>
   </View>)}
 </View>
 <MealTimeMessage
@@ -480,7 +472,7 @@ return (
       disabled={isOrdering}
     >
       <Animatable.Text
-        iterationDelay={4000}
+        iterationDelay={5000}
         easing="ease-out"
         animation="rotate"
         useNativeDriver 

@@ -123,17 +123,17 @@ return (
             </Text>
             {(host.ratingHost) && <StarRating style={styles.rating} rating={host.ratingHost} />}
           </View>
-          <Animatable.Text
+          {/* <Animatable.Text
             iterationDelay={2000}
           easing="ease-out"
                 animation="pulse"
                 useNativeDriver 
-                iterationCount='infinite'>
+                iterationCount='infinite'> */}
 
           <Text style={globalStyles.textPrimary}>
             {itemNames.join(' | ')}
           </Text>
-                </Animatable.Text>
+                {/* </Animatable.Text> */}
           <Text style={styles.address}>
             {host.addressHost.city}, {host.addressHost.state}
           </Text>
