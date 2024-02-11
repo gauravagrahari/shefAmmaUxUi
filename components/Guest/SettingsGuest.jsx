@@ -2,15 +2,27 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ChangePassword from '../commonMethods/ChangePassword';
-import { deleteInSecureStore } from '../Context/SensitiveDataStorage';
+import {
+  storeInSecureStore,
+  getFromSecureStore,
+  deleteInSecureStore,
+  updateInSecureStore
+} from '../Context/SensitiveDataStorage';
 import NavBarGuest from '../GuestSubComponent/NavBarGuest';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
-import { deleteInAsync } from '../Context/NonSensitiveDataStorage';
+import {
+  storeInAsync,
+  getFromAsync,
+  updateInAsync,
+  deleteInAsync
+} from '../Context/NonSensitiveDataStorage';
 import { AddressContext } from '../Context/AddressContext';
+import HostContext, { useHostContext } from '../Context/HostContext';
 
 const initialState = { primary: null, secondary: null, default: 'primary' };
 
 export default function SettingsGuest() {
+  const { resetHostContext } = useContext(HostContext);
   const navigation = useNavigation();
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
   const { addresses, clearAddressesInContext,setAddresses } = useContext(AddressContext); // Corrected method name and added addresses
@@ -33,25 +45,37 @@ export default function SettingsGuest() {
   }
   
   const handleLogout = async () => {
-    console.log('Current addresses in context before logout:', addresses);
+    // Log data from SecureStore before deletion
+    const secureStoreKeys = ['token', 'defaultAddress', 'uuidGuest', 'uuidDevBoy', 'timeStamp', 'altPhone', 'phone'];
+    for (const key of secureStoreKeys) {
+      const valueBefore = await getFromSecureStore(key);
+      console.log(`Before logout, ${key} in SecureStore:`, valueBefore);
+    }
   
-    // Deleting data from SecureStore
-    await deleteInSecureStore('token');
-    await deleteInSecureStore('defaultAddress');
-    await deleteInSecureStore('uuidGuest');
-    await deleteInSecureStore('uuidDevBoy');
-    await deleteInSecureStore('timeStamp');
-    await deleteInSecureStore('altPhone');
-    await deleteInSecureStore('phone');
+    // Log data from AsyncStorage before deletion
+    const asyncStoreKeys = ['guestDetails', 'addresses']; // Add other keys as necessary
+    for (const key of asyncStoreKeys) {
+      const valueBefore = await getFromAsync(key);
+      console.log(`Before logout, ${key} in AsyncStorage:`, valueBefore);
+    }
   
-    // Deleting guestDetails from AsyncStorage
-    const deleteResult = await deleteInAsync('guestDetails');
+    // Perform deletion in SecureStore
+    for (const key of secureStoreKeys) {
+      await deleteInSecureStore(key);
+      const valueAfter = await getFromSecureStore(key);
+      console.log(`After logout, ${key} should be null, actual value:`, valueAfter);
+    }
   
-    console.log('Current addresses in context before logout:', addresses);
-
-
-    clearAddressesInContext();
-    console.log('Address context should now be cleared to:', initialState);
+    // Perform deletion in AsyncStorage
+    for (const key of asyncStoreKeys) {
+      await deleteInAsync(key);
+      const valueAfter = await getFromAsync(key);
+      console.log(`After logout, ${key} should be null, actual value:`, valueAfter);
+    }
+      resetHostContext();
+      clearAddressesInContext(); // Uncomment or modify according to your actual implementation
+    console.log('All specified user data cleared from storage and context.');
+  
     navigation.reset({
       index: 0,
       routes: [{ name: 'LoginGuest' }],
