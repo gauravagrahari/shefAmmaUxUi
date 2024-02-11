@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import MessageCard from '../commonMethods/MessageCard';
 import { AddressContext } from '../Context/AddressContext';
 import Constants from 'expo-constants';
+import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
+
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function LoginGuest() {
@@ -107,6 +109,9 @@ export default function LoginGuest() {
         isVisible={showMessageCard}
         onClose={() => setShowMessageCard(false)}
     />
+     <View style={styles.iconContainer}>
+     <ChefHatIcon fill={colors.pink} width={100} height={100} stroke={colors.pink} strokeWidth="0.3" /> 
+      </View>
       <Text style={styles.welcomeText}>
         {/* Welcome back to{' '} */}
         {/* <ChefHatLogo/> */}
@@ -165,6 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+
   welcomeText: {
     fontSize: 20,
     marginBottom: 60,
