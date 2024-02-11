@@ -17,6 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { globalStyles, colors } from "../commonMethods/globalStyles";
 import { Ionicons } from "@expo/vector-icons";
 import Constants from "expo-constants";
+import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
 import { AccessibilityStatePropType } from "deprecated-react-native-prop-types/DeprecatedViewAccessibility";
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
@@ -97,6 +98,9 @@ export default function SignupGuest() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+             <View style={styles.iconContainer}>
+     <ChefHatIcon fill={colors.pink} width={100} height={100} stroke={colors.pink} strokeWidth="0.3" /> 
+      </View>
         <Text style={styles.welcomeText}>
           <Text style={styles.brand}>
             Shef<Text style={styles.boldBrand}>Amma</Text>
@@ -187,6 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 20, // Reduced margin
     color: colors.pink,
+    marginTop: 5,
   },
   brand: {
     fontSize: 26,

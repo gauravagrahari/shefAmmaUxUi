@@ -10,6 +10,7 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
 export default function LoginDevBoy() {
@@ -69,9 +70,11 @@ export default function LoginDevBoy() {
         <Loader/>
       ) : (
         <View style={styles.innerContainer}>
-                 <Text style={styles.welcomeText}>
-
-        <Text style={styles.brand}>Shef<Text style={styles.boldBrand}>Amma </Text></Text>
+                       <View style={styles.iconContainer}>
+     <ChefHatIcon fill={colors.pink} width={100} height={100} stroke={colors.pink} strokeWidth="0.3" /> 
+      </View>
+         <Text style={styles.welcomeText}>
+       <Text style={styles.brand}>Shef<Text style={styles.boldBrand}>Amma </Text></Text>
            - Partner Login
       </Text>
           <View style={styles.inputContainer}>
