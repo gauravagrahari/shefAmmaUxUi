@@ -49,6 +49,7 @@ import WelcomeMessage from "./components/Guest/WelcomeMessage";
 import AboutUs from "./components/Guest/AboutUs";
 import CancellationPolicy from "./components/Guest/CancellationPolicy";
 import { OrdersProvider } from "./components/Context/OrdersContext";
+import { StatusBar } from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -89,7 +90,10 @@ export default function App() {
     return <LoadingScreen />;
 }
   return (
-    // <SafeAreaView style={{ flex: 1, paddingTop: 38 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 38 }}>
+    {/* <SafeAreaView style={{ flex: 1}}> */}
+            <StatusBar style="dark" backgroundColor="#ffffff" />
+
     <HostProvider>
          <AddressProvider>
          <OrdersProvider>
@@ -141,7 +145,7 @@ export default function App() {
     </OrdersProvider>
     </AddressProvider>
     </HostProvider>
-    //  </SafeAreaView>
+ </SafeAreaView>
 
   );
 }

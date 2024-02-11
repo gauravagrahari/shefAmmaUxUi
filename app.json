@@ -2,7 +2,7 @@
   "expo": {
     "name": "ShefAmma",
     "slug": "shefAmmaUI",
-    "version": "13.1.1",
+    "version": "14.1.1",
     "orientation": "portrait",
     "icon": "./assets/adaptive-icon.png",
     "scheme": "myapp",
@@ -22,14 +22,10 @@
     },
     "android": {
       "package": "com.shefAmma.app",
-      "versionCode": 13,
+      "versionCode": 14,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "androidStatusBar": {
-        "barStyle": "dark-content", 
-        "backgroundColor": "#ffffff" 
       },
       "intentFilters": [
         {
