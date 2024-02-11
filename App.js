@@ -94,7 +94,7 @@ export default function App() {
 }
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 38 }}>
-    <HostProvider value={{ hostList, setHostList, hasFetchedHosts, setHasFetchedHosts }}>
+    <HostProvider>
          <AddressProvider>
          <OrdersProvider>
     <NavigationContainer>

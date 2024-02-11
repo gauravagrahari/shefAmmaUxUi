@@ -109,11 +109,6 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
 
         console.log(data);
 
-
-        // Retrieving data
-        const getData = await getFromAsync('guestDetails');  
-        console.log('Retrieved data:', getData);  // Updated the console message for clarity
-
         axios
             .post(`${URL}/guest`, data, {
                 headers: {
@@ -131,6 +126,9 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
                 console.log('Retrieved data:', getData); 
                 updateAddressInContext('primary', data.addressGuest);
                 setDefaultAddressInContext('primary');
+
+                const addressGuestFromResponse = response.data.addressGuest;
+                await addAddressAgain(addressGuestFromResponse);
                 navigation.navigate('WelcomeMessage');
             })
             .catch((error) => {
@@ -143,6 +141,26 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
         setIsSubmitting(false); // End submission regardless of the outcome
       }
    };
+   const addAddressAgain = async (addressGuest) => {
+    console.log("Re-adding addressGuest:", addressGuest);
+
+    try {
+      // Adding a small delay before storing to ensure sequence
+      await new Promise(resolve => setTimeout(resolve, 300)); // 500 ms delay
+
+      await storeInAsync('defaultAddress', addressGuest);
+      console.log("Stored in AsyncStorage successfully.");
+
+      updateAddressInContext('primary', addressGuest);
+      console.log("Updated context with addressGuest successfully.");
+
+      // Adding a small delay after storing and before proceeding
+      await new Promise(resolve => setTimeout(resolve, 200)); // 500 ms delay
+    } catch (error) {
+      console.error("Error in addAddressAgain:", error);
+    }
+};
+
   const handleDateChange = (date) => {
    setDob(date);
   };

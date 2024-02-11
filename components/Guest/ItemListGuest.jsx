@@ -21,16 +21,13 @@ export default function ItemListGuest() {
   });
 
   const handleHostCardClick = (selectedMeal, hostEntity) => {
-    const host = hostList.find(h => h.hostEntity.uuidHost === hostEntity.uuidHost);
-    console.log('mealtype--->'+selectedMeal.mealType);
-    if (host) {
-      navigation.navigate('HostProfileMealGuest', {
-        host: hostEntity,
-        itemList: host.meals,
-        initialMealType: selectedMeal.mealType
-      });
-    }
+    navigation.navigate('HostProfileMealGuest', {
+      host: hostEntity,
+      itemList: [selectedMeal], // Navigate with just the selected meal
+      initialMealType: selectedMeal.mealType
+    });
   };
+
 
   const toggleMealType = (mealTypeKey) => {
     const isOnlyOneSelected = Object.values(selectedMealTypes).filter(val => val).length === 1;
