@@ -29,10 +29,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "androidStatusBar": {
-        "barStyle": "dark-content", 
-        "backgroundColor": "#ffffff" 
-      },
       "intentFilters": [
         {
           "action": "VIEW",
