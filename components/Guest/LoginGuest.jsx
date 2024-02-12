@@ -115,7 +115,8 @@ export default function LoginGuest() {
       <Text style={styles.welcomeText}>
         {/* Welcome back to{' '} */}
         {/* <ChefHatLogo/> */}
-        <Text style={styles.brand}>Shef<Text style={styles.boldBrand}>Amma</Text></Text>
+        <Text style={styles.brand}>Shef<Text style={styles.boldBrand}>Amma </Text></Text>
+         - Login
       </Text>
 
       {isLoading ? (

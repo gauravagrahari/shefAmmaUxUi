@@ -18,9 +18,9 @@ export default function NavBarGuest() {
         style={[styles.navbarButton, isActive('HomeGuest') && styles.activeNavbarButton]}
         onPress={() => navigation.navigate('HomeGuest')}>
         {isActive('HomeGuest') ? (
-          <ChefHatIcon fill={colors.pink} width={58} height={58} stroke={colors.pink} strokeWidth="0.7" /> // Example of adding stroke
+          <ChefHatIcon fill={colors.pink} width={56} height={57} stroke={colors.pink} strokeWidth="0.6" /> // Example of adding stroke
         ) : (
-          <ChefHatIcon fill={colors.pink} width={58} height={58} stroke={colors.lightishPink} strokeWidth="0.7" />
+          <ChefHatIcon fill={colors.lightishPink} width={58} height={58} stroke={colors.lightishPink} strokeWidth="0.6" />
         )}
         {isActive('HomeGuest') && <View style={styles.underline} />}
       </TouchableOpacity>

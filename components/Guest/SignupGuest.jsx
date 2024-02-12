@@ -103,8 +103,9 @@ export default function SignupGuest() {
       </View>
         <Text style={styles.welcomeText}>
           <Text style={styles.brand}>
-            Shef<Text style={styles.boldBrand}>Amma</Text>
+            Shef<Text style={styles.boldBrand}>Amma </Text>
           </Text>
+           - Sign Up
         </Text>
 
         <View style={styles.innerContainer}>
