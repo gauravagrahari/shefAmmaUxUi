@@ -26,7 +26,7 @@ export default function HomeDevBoy({ navigation }) {
     toDeliver: 0,
     delivered: 0,
   });
-  const { animatedStyle, handleScroll } = useHideOnScroll(54);
+  const { animatedStyle, handleScroll } = useHideOnScroll(94);
   const [selectedFilter, setSelectedFilter] = useState('');
 
   useFocusEffect(
@@ -161,7 +161,15 @@ export default function HomeDevBoy({ navigation }) {
       <NavBarDevBoy navigation={navigation} />
         <View style={styles.orderCountContainer}>
   {/* <Text style={styles.orderCountText}>Total Orders: {orderList.length}</Text> */}
+  <Dropdown
+    items={uniqueHosts}
+    selectedValue={selectedHost}
+    onValueChange={(value) => setSelectedHost(value)}
+    placeholder="Select a Cook"
+    buttonStyle={dropdownStyle}
+  />
   <View style={styles.statusCountsContainer}>
+    
     <View style={styles.statusCountItem}>
       <Text style={styles.orderCountText}>Total</Text>
       <Text style={styles.statusValue}>{orderList.length}</Text>
@@ -180,18 +188,12 @@ export default function HomeDevBoy({ navigation }) {
     </View>
   
   </View>
-  <Dropdown
-    items={uniqueHosts}
-    selectedValue={selectedHost}
-    onValueChange={(value) => setSelectedHost(value)}
-    placeholder="Select a Cook"
-    buttonStyle={dropdownStyle}
-  />
+
 </View>
 </Animated.View>
 <ScrollView
       style={{ paddingTop: 170,backgroundColor: colors.seaBlue }}
-      contentContainerStyle={{ paddingBottom: 185}}
+      contentContainerStyle={{ paddingBottom: 205}}
       showsVerticalScrollIndicator={false}
       onScroll={handleScroll}
       scrollEventThrottle={16}
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
   statusCountsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 5,
+    marginBottom: 5,
   },
   statusCountItem: {
     alignItems: 'center',
