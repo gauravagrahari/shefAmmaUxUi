@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   activeNavbarButton: {
-    borderBottomWidth: 3,
+    borderBottomWidth: 4,
     borderBottomColor: colors.primaryText, // Updated color to new palette color
   },
   underline: {

@@ -40,6 +40,7 @@ export default function UpdateGuestDetails() {
   const [geocode, setGeocode] = useState('');
   const [showSecondaryAddressForm, setShowSecondaryAddressForm] = useState('');
   const [selectedAddress, setSelectedAddress] = useState('primary');
+  const [showAlternateMobileInput, setShowAlternateMobileInput] = useState(false);
   const { addresses,updateAddressInContext, setDefaultAddressInContext } = useContext(AddressContext);
 
   const navigation = useNavigation();
@@ -109,6 +110,9 @@ export default function UpdateGuestDetails() {
 
     fetchDefaultAddress();
 }, []);
+const handleAddAlternateNumber = () => {
+  setShowAlternateMobileInput(true);
+};
 
 const handleRadioChange = async (value) => {
   setSelectedAddress(value);
@@ -379,14 +383,26 @@ const isOfficeAddressEmpty = () => {
           </View>
 
           <View style={styles.addressContainer}>
+      {showAlternateMobileInput || alternateMobile ? (
+        <>
           <Text style={globalStyles.textPrimary}>Alternate Mobile Number</Text>
           <TextInput 
-  style={globalStyles.input}
-  placeholder="Alternate Phone Number" 
-  value={alternateMobile} 
-  onChangeText={setAlternateMobile} 
-  keyboardType="phone-pad"/>
-</View>
+            style={globalStyles.input}
+            placeholder="Alternate Phone Number" 
+            value={alternateMobile} 
+            onChangeText={setAlternateMobile} 
+            keyboardType="phone-pad"
+          />
+        </>
+      ) : (
+        <TouchableOpacity onPress={handleAddAlternateNumber} style={styles.linkText}>
+          <Text style={[globalStyles.textPrimary, styles.addAlternateNumberText]}>
+            Click to add an alternate number
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+
           <Text style={styles.infoText}>Please Select or update your delivery Address here! (Tap on the empty circle beside your Address to select it.)</Text>
           <View style={styles.addressContainer}>
 
@@ -563,6 +579,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
+  addAlternateNumberText: {
+    marginHorizontal:20, // Example padding for better touchability
+
+
+  },
   button: {
     width: '80%',
     height: screenHeight * 0.07, // 8% of screen height
@@ -590,7 +611,7 @@ const styles = StyleSheet.create({
   addressContainer: {
     padding: 10,
     borderRadius: 8,
-    marginBottom: 5,
+    // marginBottom: 5,
     marginTop: 10,
     paddingHorizontal: 20,
   },
@@ -612,8 +633,10 @@ margin:20,
   infoText: {
     color: colors.deepBlue,
     fontSize: responsiveFontSize(screenWidth * 0.035),
-    marginTop: 5,
+    paddingTop:5,
+    // marginTop: 5,
     padding: 15,
+  
   },
   activeAddressHint: {
     fontSize: responsiveFontSize(14),

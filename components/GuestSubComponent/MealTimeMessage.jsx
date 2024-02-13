@@ -15,17 +15,28 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            let data = await getFromSecureStore('charges');
-            setCharges(data);
+            try {
+                let data = await getFromSecureStore('charges');
+                // Attempt to parse the stored data as JSON, handling cases where the data may not be a string
+                if (data) {
+                    try {
+                        // Attempt to parse and set charges
+                        const parsedData = JSON.parse(data);
+                        setCharges(parsedData);
+                    } catch (error) {
+                        // If JSON.parse() fails, it's possible the data is already an object
+                        console.error('Error parsing charges from storage:', error);
+                        // Assuming the data might already be in the correct format if parsing fails
+                        setCharges(data);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching charges from storage:', error);
+            }
         };
         fetchData();
     }, []);
-
-   useEffect(() => {
-    if (dateMessage && timeMessage) {
-        onDateAndTimeChange(`${dateMessage},${timeMessage}`);
-    }
-}, [dateMessage, timeMessage, onDateAndTimeChange]);
+    
 
     if (!charges) return <Text>Loading...</Text>; // Display loading while the charges data is being fetched
 
@@ -33,14 +44,14 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
         const today = new Date();
         const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return `${dayNames[today.getDay()]}, ${today.getDate()} ${today.toLocaleString('default', { month: 'long' })}`;
-    }
+    };
 
     const getDeliveryDate = () => {
         const today = new Date();
         today.setDate(today.getDate() + 1);
         const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return `${dayNames[today.getDay()]}, ${today.getDate()} ${today.toLocaleString('default', { month: 'long' })}`;
-    }
+    };
 
     const isOrderForToday = (bookTime) => {
         if (!bookTime) return false; // Handle undefined bookTime
@@ -49,38 +60,44 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
         const orderTime = new Date();
         orderTime.setHours(hours, minutes);
         return currentTime <= orderTime;
-    }
-
-    let dateMessage, timeMessage;
+    };
+    const formatTime = (time) => {
+        let [hours, minutes] = time.split(':');
+        hours = parseInt(hours, 10);
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        return `${hours}:${minutes} ${ampm}`;
+      };
+    let dateMessage, timeMessage, bookTimeMessage;
     switch (mealType) {
         case MEAL_TYPE_MAPPING.Breakfast:
             dateMessage = isOrderForToday(charges.breakfastBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
-            timeMessage = ` ${charges.breakfastStartTime} and ${charges.breakfastEndTime}`;
+            timeMessage = ` ${charges.breakfastStartTime} - ${charges.breakfastEndTime}`;
+            bookTimeMessage = ` ${charges.breakfastBookTime}`;
             break;
         case MEAL_TYPE_MAPPING.Lunch:
             dateMessage = isOrderForToday(charges.lunchBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
-            timeMessage = ` ${charges.lunchStartTime} and ${charges.lunchEndTime}`;
+            timeMessage = ` ${charges.lunchStartTime} - ${charges.lunchEndTime}`;
+            bookTimeMessage = `${charges.lunchBookTime}`;
             break;
         case MEAL_TYPE_MAPPING.Dinner:
             dateMessage = isOrderForToday(charges.dinnerBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
-            timeMessage = ` ${charges.dinnerStartTime} and ${charges.dinnerEndTime}`;
+            timeMessage = ` ${charges.dinnerStartTime} - ${charges.dinnerEndTime}`;
+            bookTimeMessage = `${charges.dinnerBookTime}`;
             break;
         default:
             return <Text>Invalid meal type</Text>;
     }
     return (
-        <LinearGradient colors={[ colors.darkBlue,colors.secondCardColor]} style={styles.container}>
+        <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.container}>
             <Text style={styles.messageText}>
-            We're delighted to prepare your 
-            <Text style={styles.highlightedText}> {mealType.toUpperCase()} </Text>
-            . Kindly expect it on 
-            <Text style={styles.highlightedText}> {dateMessage} </Text>
-            between 
-            <Text style={styles.highlightedText}> {timeMessage} </Text>
+                We're delighted to prepare your <Text style={styles.highlightedText}>{mealType.toUpperCase()}</Text>. 
+                Kindly expect it on <Text style={styles.highlightedText}>{dateMessage}</Text> between 
+                <Text style={styles.highlightedText}>{timeMessage}</Text>. {mealType.toUpperCase()} can be ordered each day by
+                <Text style={styles.highlightedText}> {formatTime(bookTimeMessage)}.</Text>
             </Text>
         </LinearGradient>
-    );    
-
+    );
 }
 const styles = StyleSheet.create({
     container: {

@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const AboutUs = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
         <Text style={styles.mainHeading}>ShefAmma: Nourishing Kolkata with Homemade Meals</Text>
         <Text style={styles.commonText}>
@@ -28,7 +28,7 @@ const AboutUs = () => {
           Join us in celebrating Kolkata's heritage with every meal from ShefAmma.
         </Text>
       </LinearGradient>
-    </View>
+    </ScrollView>
   );
 };
 const screenWidth = Dimensions.get('window').width;
