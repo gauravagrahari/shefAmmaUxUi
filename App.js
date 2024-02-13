@@ -53,6 +53,7 @@ import WelcomeMessage from "./components/Guest/WelcomeMessage";
 import AboutUs from "./components/Guest/AboutUs";
 import CancellationPolicy from "./components/Guest/CancellationPolicy";
 import { OrdersProvider } from "./components/Context/OrdersContext";
+import * as SplashScreen from 'expo-splash-screen';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -88,12 +89,19 @@ export default function App() {
   
       checkCredentials();
   }, []);
-  
+  useEffect(() => {
+    const hideSplashScreen = async () => {
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Wait for 1.5 seconds
+      await SplashScreen.hideAsync(); // Hide the splash screen
+    };
+
+    hideSplashScreen();
+  }, []);
   if (isLoading) {
     return <LoadingScreen />;
 }
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 38 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 35 }}>
     <HostProvider>
          <AddressProvider>
          <OrdersProvider>

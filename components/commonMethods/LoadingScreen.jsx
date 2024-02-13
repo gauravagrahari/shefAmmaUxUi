@@ -7,11 +7,11 @@ const LoadingScreen = () => {
         <LinearGradient
             colors={['#eaf6f6', '#FFF']}
             style={styles.loadingContainer}>
-            <View style={styles.brandContainer}>
+            {/* <View style={styles.brandContainer}>
                 <Text style={styles.shef}>Shef</Text>
                 <Text style={styles.amma}>Amma</Text>
             </View>
-            <Text style={styles.tagline}>Home-Cooked Delights, Delivered to Your Doorstep</Text>
+            <Text style={styles.tagline}>Home-Cooked Delights, Delivered to Your Doorstep</Text> */}
         </LinearGradient>
     );
 };
