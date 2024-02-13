@@ -539,7 +539,8 @@ const normalize = (size) => {
     const newSize = size * scale 
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) 
 }
-
+const fontScale = PixelRatio.getFontScale();
+    const scaledFontSize = (size) => size / fontScale;
 const styles = StyleSheet.create({
   container: {
   
@@ -575,7 +576,7 @@ const styles = StyleSheet.create({
   descriptionHost: {
     fontSize: normalize(11.5),
         color: colors.lightishPink,
-        lineHeight: normalize(14),
+        lineHeight: normalize(12),
     marginBottom: screenHeight * 0.015,
   },
   title: {
@@ -585,7 +586,7 @@ const styles = StyleSheet.create({
       color: '#2C3E50', // Dark bluish-gray for better contrast
   },
  subTitle: {
-    fontSize: screenWidth * 0.04,
+  fontSize: scaledFontSize(16.5),
     fontWeight: "600",
     color: 'white',
   },     
@@ -598,6 +599,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryText,
     padding: screenHeight * 0.01,
     borderRadius: 8,
+    // noOfLines:2,
     // shadowColor: '#000',
     // shadowOffset: { width: 0, height: 2 },
     // shadowOpacity: 0.2,
@@ -642,7 +644,7 @@ closeButton: {
 },
 noOfGuest: {
   marginHorizontal: screenWidth * 0.035,
-  fontSize: screenWidth * 0.048,
+  fontSize: scaledFontSize(16),
   fontWeight: "500",
   color: 'white',
 },
@@ -727,7 +729,7 @@ noOfGuest: {
     height: screenWidth * 0.12,
   },
   counterText: {
-    fontSize: screenWidth * 0.048,
+    fontSize: scaledFontSize(16),
     color: colors.deepBlue,
     fontWeight: '600',
   },
@@ -763,7 +765,7 @@ noOfGuest: {
     marginBottom: screenHeight * 0.005,
   },
   costLabelText: {
-    fontSize: normalize(12),
+    fontSize: scaledFontSize(15.5),
     color: colors.deepBlue,
   },
   offerText: {
@@ -788,7 +790,7 @@ noOfGuest: {
     color: colors.pink,
   },
   costValueText: {
-    fontSize: normalize(14),
+    fontSize: scaledFontSize(17),
     fontWeight: '500',
     color: colors.deepBlue,
     textAlign: 'right',

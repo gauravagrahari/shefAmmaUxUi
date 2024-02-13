@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions, PixelRatio } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import { useNavigation } from '@react-navigation/native';
@@ -49,27 +49,35 @@ const ItemListFlatListCard = ({ item, host, handleHostCardClick }) => {
 
     const cardWidth = Dimensions.get('window').width * 0.38; // Width of the card
     const cardHeight = cardWidth * 1.5; // Height is double the width
-
+    const fontScale = PixelRatio.getFontScale();
+    const scaledFontSize = (size) => size / fontScale;
     return (
-        <TouchableOpacity onPress={handleHostCardClick} style={[styles.compactContainer, { width: cardWidth, height: cardHeight }]}>
-          <View  style={styles.linearGradientStyle}>
-            <View
-              style={[styles.imageContainer, { height: cardWidth }]} // Image height equal to card width for square shape
-            >
-              <Image
-                style={styles.imageStyle}
-                source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')}
-                onError={(error) => console.error("Image Error", error)}
-              />
-            </View>
-            <View style={styles.detailsContainer}>
-              <Text style={[globalStyles.textPrimary,{paddingTop:2},{color:colors.deepBlue},{fontWeight:'400'}]} numberOfLines={1}>{item.nameItem}</Text>
-              <Text style={[styles.mealTypeText,{color:'gray'}]}>{getMealTypeFullText(item.mealType)}</Text>
-              <Text style={styles.highlightedText}>{`${item.amount}`}/-</Text>
-            </View>
+      <TouchableOpacity onPress={handleHostCardClick} style={[styles.compactContainer, { width: cardWidth, minHeight: cardHeight }]}>
+        <View  style={styles.linearGradientStyle}>
+          <View
+            style={[styles.imageContainer, { height: cardWidth }]} // Image height equal to card width for square shape
+          >
+            <Image
+              style={styles.imageStyle}
+              source={imageUri ? { uri: imageUri } : require('../../assets/EmptyImageDefault.jpg')}
+              onError={(error) => console.error("Image Error", error)}
+            />
           </View>
-        </TouchableOpacity>
-    );
+          <ScrollView
+           style={styles.detailsContainer} showsVerticalScrollIndicator={false}>
+            <Text style={[globalStyles.textPrimary, {paddingTop: 2, color: colors.deepBlue, fontWeight: '400', fontSize: scaledFontSize(17.5)}]} numberOfLines={1}>
+              {item.nameItem}
+            </Text>
+            <Text style={[styles.mealTypeText, {color: 'gray', fontSize: scaledFontSize(14)}]}>
+              {getMealTypeFullText(item.mealType)}
+            </Text>
+            <Text style={[styles.highlightedText, {fontSize: scaledFontSize(16)}]}>
+              {`${item.amount}`}/-
+            </Text>
+          </ScrollView>
+        </View>
+      </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -99,14 +107,14 @@ const styles = StyleSheet.create({
       paddingHorizontal: 10, // Adjusted padding to ensure details use full width
     },
     mealTypeText: {
-      fontSize: 15,
+      // fontSize: 15,
       color: colors.labelBlack,
       fontWeight: 'bold',
     },
     highlightedText: {
       fontWeight: 'bold',
       color: colors.pink,
-      fontSize: 15,
+      // fontSize: 15,
     },
     // Other styles as previously defined
   });
