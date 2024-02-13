@@ -341,9 +341,9 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     padding: 12,
-    margin: 3,
+    margin: 4,
     backgroundColor: colors.darkBlue,
-    borderRadius: 8,
+    borderRadius: 10,
     shadowColor: '#aaa',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
