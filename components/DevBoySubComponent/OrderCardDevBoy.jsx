@@ -14,15 +14,14 @@ import Constants from 'expo-constants';
 import MessageCard from '../commonMethods/MessageCard';
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
-export default function OrderCardDevBoy({ orderData, hostAddress, guestAddress, navigation }) {
+export default function OrderCardDevBoy({ orderData, hostAddress, guestAddress, navigation,onUpdateStatus }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [dropdownItems, setDropdownItems] = useState(['Not Picked Up', 'Undelivered']);
   const [clipboardMessage, setClipboardMessage] = useState('');
   const [isMessageVisible, setMessageVisible] = useState(false);
   
-console.log("order data:", JSON.stringify(orderData));
-console.log("host address:", JSON.stringify(hostAddress));
+
 
 const statusMappings = {
   new:"New",
@@ -63,7 +62,6 @@ const statusMappings = {
       break;
   }
   const dialNumber = (phoneNumber) => {
-    console.log(`Attempting to dial phone number: ${phoneNumber}`);
   
     // Check the platform (iOS or Android)
     const url = Platform.select({
@@ -72,7 +70,6 @@ const statusMappings = {
     });
     
   
-    console.log(`Formatted URL for dialing: ${url}`);
   
     Linking.canOpenURL(url)
       .then((supported) => {
@@ -149,7 +146,8 @@ const options = {
             console.log("Order picked up successfully!");
             orderData.status='pkd';
             setModalVisible(false); 
-        } else {
+            onUpdateStatus("ip", 'pkd'); // Use the function with orderId and newStatus
+          } else {
             console.error("Unexpected response:", response.data);
         }
     } catch (error) {
@@ -185,7 +183,8 @@ const options = {
         orderData.status='com';
 
         console.log("Order updated successfully!");
-        setModalVisible(false); // Close the modal after successful operation
+        setModalVisible(false); 
+        onUpdateStatus("pkd", 'com'); // Use the function with orderId and newStatus
       } else {
         console.error("Unexpected response:", response.data);
       }
@@ -289,20 +288,22 @@ const options = {
      {/* Conditional rendering based on status */}
      {orderData.status === "ip" && (
                 <View style={globalStyles.centralisingContainer}>
-                  <Text style={styles.pickedUp}>You need to pick up the order from cook's location.</Text>
       <TouchableOpacity style={styles.completeOrderButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.completeOrderText}>Order Picked Up</Text>
       </TouchableOpacity>
+      <Text style={styles.pickedUp}>You need to pick up the order from cook's location.</Text>
+
       </View>
     )}
     
     {orderData.status === "pkd" && (
                 <View style={globalStyles.centralisingContainer}>
-                  <Text style={styles.completed}>You need to deliver the order to the customer.</Text>
 
       <TouchableOpacity style={styles.completeOrderButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.completeOrderText}>Order Delivered</Text>
       </TouchableOpacity>
+      <Text style={styles.completed}>You need to deliver the order to the customer.</Text>
+
       </View>
     )}
       <Modal
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     padding: 12,
-    marginBottom: 5,
+    margin: 3,
     backgroundColor: colors.darkBlue,
     borderRadius: 8,
     shadowColor: '#aaa',

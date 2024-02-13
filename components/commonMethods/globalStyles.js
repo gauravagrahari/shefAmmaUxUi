@@ -8,7 +8,8 @@ const colors = {
  darkBlue:'#e0f3f5',//#ccfa8f
  primaryLight: "#fff",//#ddfab5
  labelBlack: "#4D6664",
-//  navBarColor:"#EAF86B",//#c7fb80
+ seaBlue:'#2BD8D8',
+//  navBarColor:"#,EAF86B",//#c7fb80
 //  secondCardColor:"#fcfddd",//#eefbdb
 //  darkBlue:'#ECF87F',//#ccfa8f
 //  primaryLight: "#f5faaf",//#ddfab5
