@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Linking, StyleSheet,Dimensions  } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, StyleSheet,Dimensions, ScrollView  } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -30,7 +30,7 @@ const ContactPage = () => {
         setTimeout(() => setMessageCardVisible(false), 2900); // Hide after the animation
     };
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={globalStyles.headerText}>Contact Us</Text>
             <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
                 <Text style={styles.contentText}>
@@ -56,7 +56,7 @@ const ContactPage = () => {
             <Text style={styles.footerText}>
                 Thank you for choosing ShefAmma!
             </Text>
-        </View> 
+        </ScrollView> 
       );
 };
 const screenWidth = Dimensions.get('window').width;

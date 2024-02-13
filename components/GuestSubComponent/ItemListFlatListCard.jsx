@@ -63,7 +63,7 @@ const ItemListFlatListCard = ({ item, host, handleHostCardClick }) => {
               />
             </View>
             <View style={styles.detailsContainer}>
-              <Text style={[globalStyles.textPrimary,{fontSize:16},{paddingTop:2}]} numberOfLines={1}>{item.nameItem}</Text>
+              <Text style={[globalStyles.textPrimary,{paddingTop:2},{color:colors.deepBlue},{fontWeight:'400'}]} numberOfLines={1}>{item.nameItem}</Text>
               <Text style={[styles.mealTypeText,{color:'gray'}]}>{getMealTypeFullText(item.mealType)}</Text>
               <Text style={styles.highlightedText}>{`${item.amount}`}/-</Text>
             </View>
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     },
     highlightedText: {
       fontWeight: 'bold',
-      color: colors.deepBlue,
+      color: colors.pink,
       fontSize: 15,
     },
     // Other styles as previously defined

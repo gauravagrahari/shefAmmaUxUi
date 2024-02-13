@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,Dimensions  } from 'react-native';
+import { View, Text, StyleSheet,Dimensions, ScrollView  } from 'react-native';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {globalStyles,colors} from '../commonMethods/globalStyles';
 const { width } = Dimensions.get('window');
@@ -37,7 +37,7 @@ const CancellationPolicy = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Cancellation Policy</Text>
       
       <View style={styles.card}>
@@ -69,7 +69,7 @@ const CancellationPolicy = () => {
       <Text style={styles.additionalInfo}>
         We appreciate your understanding and cooperation in ensuring that we can provide the best service possible!
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 const scaleFontSize = (size) => {

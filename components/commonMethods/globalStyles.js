@@ -103,10 +103,10 @@ justifyContent: 'center',
   // Text Styles
   textPrimary: {
     color:colors.primaryText,
-    fontSize: screenWidth * 0.047,
+    fontSize: screenWidth * 0.045,
     // fontWeight: 'bold',
     marginBottom: 1,
-    marginLeft:2,
+    // marginLeft:1,
   },
   textSecondary: {
     // color:"#820000",
