@@ -43,20 +43,23 @@ export default function HomeGuest({ navigation, route  }) {
   }); 
   const { animatedStyle, handleScroll } = useHideOnScroll(54);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const onBackPress = () => {
-        console.log('Back button pressed in HomeGuest');
-        // Handle back action here, return true to override
-        return true;
-      };
-  
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [])
-  );
+useFocusEffect(
+  React.useCallback(() => {
+    const onBackPress = () => {
+      console.log('Back button pressed, exiting app');
+      BackHandler.exitApp();
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => {
+      console.log('Removing back button listener');
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    };
+  }, [])
+);
+
 
   useEffect(() => {
     console.log('API URL----------------->>>>>>>>>>>>>>>', URL);
