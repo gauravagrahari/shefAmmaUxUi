@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated,ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, Animated,ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import OrderCardDevBoy from '../DevBoySubComponent/OrderCardDevBoy';
 import axios from 'axios';
 import config from '../Context/constants';
@@ -28,7 +28,7 @@ export default function HomeDevBoy({ navigation }) {
   });
   const { animatedStyle, handleScroll } = useHideOnScroll(54);
   const [selectedFilter, setSelectedFilter] = useState('');
-  
+
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -88,13 +88,19 @@ export default function HomeDevBoy({ navigation }) {
   }, []);
 
   useEffect(() => {
-    if (selectedHost === '' || selectedHost === 'All') {
-      setFilteredOrderList(orderList);
-    } else {
-      const filteredOrders = orderList.filter(order => order.order.nameHost === selectedHost);
-      setFilteredOrderList(filteredOrders);
+    let filtered = orderList;
+    if (selectedHost !== '' && selectedHost !== 'All') {
+      filtered = filtered.filter(order => order.order.nameHost === selectedHost);
     }
-  }, [selectedHost, orderList]);
+    if (selectedFilter) {
+      filtered = filtered.filter(order => order.order.status === selectedFilter);
+    }
+    setFilteredOrderList(filtered);
+  }, [selectedHost, orderList, selectedFilter]); // Add selectedFilter as a dependency
+
+  const handleFilterTap = (status) => {
+    setSelectedFilter(prevFilter => prevFilter === status ? '' : status); // Toggle filter on/off
+  };
 
   useEffect(() => {
     console.log('Calculating status counts with current order list:', orderList);
@@ -151,9 +157,8 @@ export default function HomeDevBoy({ navigation }) {
   const uniqueHosts = ['All', ...new Set(orderList.map(order => order.order.nameHost))];
   return (
     <View style={globalStyles.containerPrimary}>
-   
-            <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
-  <NavBarDevBoy navigation={navigation} />
+     <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
+      <NavBarDevBoy navigation={navigation} />
         <View style={styles.orderCountContainer}>
   {/* <Text style={styles.orderCountText}>Total Orders: {orderList.length}</Text> */}
   <View style={styles.statusCountsContainer}>
@@ -161,15 +166,14 @@ export default function HomeDevBoy({ navigation }) {
       <Text style={styles.orderCountText}>Total</Text>
       <Text style={styles.statusValue}>{orderList.length}</Text>
     </View>
-    <View style={styles.statusCountItem}>
-      <Text style={styles.orderCountText}>To Pick Up</Text>
-      <Text style={styles.statusValue}>{statusCounts.toPickUp}</Text>
-    </View>
-    <View style={styles.statusCountItem}>
-      <Text style={styles.orderCountText}>To Deliver</Text>
-      <Text style={styles.statusValue}>{statusCounts.toDeliver}</Text>
-      
-    </View>
+    <TouchableOpacity style={[styles.statusCountItem, selectedFilter === 'ip' ? activeFilterStyle : {}]} onPress={() => handleFilterTap('ip')}>
+          <Text style={styles.orderCountText}>To Pick Up</Text>
+          <Text style={styles.statusValue}>{statusCounts.toPickUp}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.statusCountItem, selectedFilter === 'pkd' ? activeFilterStyle : {}]} onPress={() => handleFilterTap('pkd')}>
+          <Text style={styles.orderCountText}>To Deliver</Text>
+          <Text style={styles.statusValue}>{statusCounts.toDeliver}</Text>
+        </TouchableOpacity>
     <View style={styles.statusCountItem}>
       <Text style={styles.orderCountText}>Delivered</Text>
       <Text style={styles.statusValue}>{statusCounts.delivered}</Text>
@@ -186,7 +190,7 @@ export default function HomeDevBoy({ navigation }) {
 </View>
 </Animated.View>
 <ScrollView
-      style={{ paddingTop: 174,backgroundColor: colors.seaBlue }}
+      style={{ paddingTop: 170,backgroundColor: colors.seaBlue }}
       contentContainerStyle={{ paddingBottom: 185}}
       showsVerticalScrollIndicator={false}
       onScroll={handleScroll}
@@ -219,13 +223,19 @@ const dropdownStyle = {
   backgroundColor: colors.darkBlue,
   marginHorizontal:10,
   borderRadius: 10,
-  padding: 10,
+  padding: 8,
   color: 'white',
-  marginTop: 5,
+  marginTop: 3,
   borderColor: 'white',
   borderWidth:1,
   fontSize: 10,
   // numberOfRows:2,
+};
+const activeFilterStyle = {
+  backgroundColor: colors.labelBlack, // Example active color, adjust as needed
+  color: 'white',
+  paddingHorizontal:8,
+  borderRadius: 5,
 };
 const styles = StyleSheet.create({
   centered: {
