@@ -587,8 +587,8 @@ const styles = StyleSheet.create({
   button: {
     width: '80%',
     height: screenHeight * 0.07, // 8% of screen height
-    marginTop: 20,
-    marginBottom: 30,
+    marginTop: 30,
+    marginBottom: 50,
     borderRadius: 10,
     borderColor: colors.pink,
     borderWidth: 2,
