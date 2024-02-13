@@ -37,7 +37,8 @@ const CancellationPolicy = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.parent}>
+    <ScrollView contentContainerStyle={styles.container} style={{flexGrow: 1}}>
       <Text style={styles.title}>Cancellation Policy</Text>
       
       <View style={styles.card}>
@@ -70,6 +71,7 @@ const CancellationPolicy = () => {
         We appreciate your understanding and cooperation in ensuring that we can provide the best service possible!
       </Text>
     </ScrollView>
+       </View>
   );
 };
 const scaleFontSize = (size) => {
@@ -79,12 +81,19 @@ const scaleFontSize = (size) => {
   };
   
 const styles = StyleSheet.create({
-  container: {
+  parent:{
     flex: 1,
+justifyContent: 'center', // Center content vertically
+// padding: screenWidth * 0.05,
+backgroundColor:colors.darkBlue,
+alignItems:'center'
+},
+  container: {
     padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     backgroundColor:colors.darkBlue,
+    marginVertical:20,
   },
   title: {
     fontSize: scaleFontSize(20), 
@@ -108,6 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Align label and value in one line
     alignItems: 'center',
     marginBottom: 5,
+    paddingHorizontal:10,
   },
   mealTimeLabel: {
     fontSize: scaleFontSize(15), // Responsive font size

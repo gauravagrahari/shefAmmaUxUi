@@ -5,7 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const AboutUs = () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.parent}>
+    <ScrollView style={{flexGrow: 1}} contentContainerStyle={styles.container} >
       <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.card}>
         <Text style={styles.mainHeading}>ShefAmma: Nourishing Kolkata with Homemade Meals</Text>
         <Text style={styles.commonText}>
@@ -29,16 +30,25 @@ const AboutUs = () => {
         </Text>
       </LinearGradient>
     </ScrollView>
+    </View>
   );
 };
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  parent:{
+        flex: 1,
     justifyContent: 'center', // Center content vertically
+    // padding: screenWidth * 0.05,
+    backgroundColor:"#FF47A8",
+    alignItems:'center'
+  },
+  container: {
+    // flex: 1,
+    // justifyContent: 'center', // Center content vertically
     padding: screenWidth * 0.05,
     backgroundColor:"#FF47A8",
+    marginVertical: 20,
 },
   card: {
     padding: screenWidth * 0.043,
