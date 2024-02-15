@@ -7,7 +7,7 @@ import {globalStyles,colors} from '../commonMethods/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
-export default function OtpVerification({ type, onVerify }) {
+export default function OtpVerification({ type, onVerify,otpGenerationUrl }) {
   const [showOtp, setShowOtp] = useState(false);
   const [otpSuccess, setOtpSuccess] = useState(false);
   const [otpError, setOtpError] = useState(false);
@@ -17,9 +17,9 @@ export default function OtpVerification({ type, onVerify }) {
   const [showInputButton, setShowInputButton] = useState(true);
   const [showVerifyOtpButton, setShowVerifyOtpButton] = useState(false);
   const [showOtpInput, setShowOtpInput] = useState(true);
-  const [disableInput, setDisableInput] = useState(false);  // New state variable
+  const [disableInput, setDisableInput] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity
-  const [serverError, setServerError] = useState('');  // State for server error
+  const [serverError, setServerError] = useState('');
   const [serverErrorMessage, setServerErrorMessage] = useState('');
   const [resendOtpEnabled, setResendOtpEnabled] = useState(false);
   const [countdown, setCountdown] = useState(0);
@@ -37,12 +37,12 @@ export default function OtpVerification({ type, onVerify }) {
   
     return () => clearInterval(interval);
   }, [countdown]);
-  
+
+
+
   const handleVerify = async () => {
-    // Reset previous errors
     setInputError('');
     setServerErrorMessage('');
-    // Validate input based on type
     if (type === 'phone' && input.length !== 10) {
       setInputError('Phone number must be 10 digits');
       return;
@@ -51,27 +51,20 @@ export default function OtpVerification({ type, onVerify }) {
       return;
     }
 
-    axios.post(`${URL}/generateOtp`, { [type]: input })
-    .then(response => {
-      console.log(response.data);
-      setShowOtp(true);
-      fadeIn(); // Call the fade-in function here
-      setShowInputButton(false);
-      setShowVerifyOtpButton(true);
-      setDisableInput(true);  // Disable input after verification
-      setCountdown(75); // Start the countdown
-      setResendOtpEnabled(false); // Disable resend OTP button
-    })
+    axios.post(otpGenerationUrl, { [type]: input })
+      .then(response => {
+        setShowOtp(true);
+        fadeIn();
+        setShowInputButton(false);
+        setShowVerifyOtpButton(true);
+        setDisableInput(true);
+        setCountdown(75); // For example, 75 seconds until the user can resend OTP
+        setResendOtpEnabled(false);
+      })
       .catch(error => {
-        if (error.response && error.response.data) {
-          setServerErrorMessage(error.response.data);
-          setServerError(error.response.data);  // Set server error message
-        } else {
-            console.error(error);
-            setServerErrorMessage('An unexpected error occurred. Please try again.'); // Generic error message
-
-        }
-    });
+        const errorMessage = error.response && error.response.data ? error.response.data : 'An unexpected error occurred. Please try again.';
+        setServerErrorMessage(errorMessage);
+      });
   };
   const handleResendOtp = () => {
     if (resendOtpEnabled) {

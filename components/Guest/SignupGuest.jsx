@@ -109,7 +109,7 @@ export default function SignupGuest() {
         </Text>
 
         <View style={styles.innerContainer}>
-          <OtpVerification type="phone" onVerify={setPhoneVerified} />
+          <OtpVerification type="phone" onVerify={setPhoneVerified} otpGenerationUrl={`${URL}/generateOtp`}/>
 
           <View style={styles.inputContainer}>
             <Ionicons name="lock-closed-outline" size={24} color="black" />
