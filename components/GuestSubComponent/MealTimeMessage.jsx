@@ -37,6 +37,11 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
         fetchData();
     }, []);
     
+    useEffect(() => {
+        if (dateMessage && timeMessage) {
+            onDateAndTimeChange(`${dateMessage},${timeMessage}`);
+        }
+    }, [dateMessage, timeMessage, onDateAndTimeChange]);
 
     if (!charges) return <Text>Loading...</Text>; // Display loading while the charges data is being fetched
 
@@ -72,17 +77,17 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
     switch (mealType) {
         case MEAL_TYPE_MAPPING.Breakfast:
             dateMessage = isOrderForToday(charges.breakfastBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
-            timeMessage = ` ${charges.breakfastStartTime} - ${charges.breakfastEndTime}`;
+            timeMessage = ` ${charges.breakfastStartTime} and ${charges.breakfastEndTime}`;
             bookTimeMessage = ` ${charges.breakfastBookTime}`;
             break;
         case MEAL_TYPE_MAPPING.Lunch:
             dateMessage = isOrderForToday(charges.lunchBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
-            timeMessage = ` ${charges.lunchStartTime} - ${charges.lunchEndTime}`;
+            timeMessage = ` ${charges.lunchStartTime} and ${charges.lunchEndTime}`;
             bookTimeMessage = `${charges.lunchBookTime}`;
             break;
         case MEAL_TYPE_MAPPING.Dinner:
             dateMessage = isOrderForToday(charges.dinnerBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
-            timeMessage = ` ${charges.dinnerStartTime} - ${charges.dinnerEndTime}`;
+            timeMessage = ` ${charges.dinnerStartTime} and ${charges.dinnerEndTime}`;
             bookTimeMessage = `${charges.dinnerBookTime}`;
             break;
         default:
