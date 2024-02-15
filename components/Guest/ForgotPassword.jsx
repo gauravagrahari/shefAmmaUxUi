@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet,Alert, ScrollView } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,10 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import OtpVerification from '../commonMethods/OtpVerification';
 import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
+import { useNavigation } from '@react-navigation/native';
 
 const URL = Constants.expoConfig.extra.apiUrl;
 
 export default function ForgotPassword() {
+  const navigation = useNavigation();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneVerified, setPhoneVerified] = useState({ verified: false, value: null });
@@ -41,9 +43,11 @@ export default function ForgotPassword() {
     // Assuming your API endpoint for changing the password is /changePassword
     axios.post(`${URL}/changeForgottenPassword`, { phone: phoneVerified.value, newPassword })
       .then(response => {
-        alert('Password changed successfully.');
-        // Redirect to login or further actions
-        setIsSubmitting(false);
+        // navigation.navigate('LoginGuest')
+        Alert.alert('Success', 'Password changed successfully.', [
+          { text: "OK", onPress: () => navigation.navigate('LoginGuest') }
+        ]);
+         setIsSubmitting(false);
       })
       .catch(error => {
         console.error('Error changing password:', error);
