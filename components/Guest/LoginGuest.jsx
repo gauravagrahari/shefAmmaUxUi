@@ -157,7 +157,9 @@ export default function LoginGuest() {
           <TouchableOpacity onPress={() => navigation.navigate('LoginDevBoy')}>
             <Text style={styles.linkText}>Partner Login</Text>
           </TouchableOpacity>
-        
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.linkText}>Forgot Password?</Text>
+          </TouchableOpacity>
         </View>
       )}
     </LinearGradient>

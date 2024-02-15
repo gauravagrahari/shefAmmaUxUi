@@ -44,6 +44,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
 import { init } from "./components/Context/sqLiteDB";
 import ItemListGuest from "./components/Guest/ItemListGuest";   
+import ForgotPassword from "./components/Guest/ForgotPassword";   
 import ChargesDisplay from "./components/Guest/ChargesDisplay";   
 import { AddressProvider } from "./components/Context/AddressContext";
 import LoadingScreen from "./components/commonMethods/LoadingScreen";
@@ -120,6 +121,7 @@ export default function App() {
        </Stack.Screen>
         <Stack.Screen name="SearchFilterGuest" component={SearchFilterGuest}/>
         <Stack.Screen name="ContactPage" component={ContactPage}/>
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
         <Stack.Screen name="OrderHistoryGuest" component={OrderHistoryGuest}/>
         <Stack.Screen name="DetailsGuest" component={DetailsGuest}/>
         <Stack.Screen name="UpdateGuestDetails" component={UpdateGuestDetails}/>
