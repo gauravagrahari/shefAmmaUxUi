@@ -214,20 +214,21 @@ useEffect(() => {
   
     setIsOrdering(true);
    
-    if (!deliveryCharge || !packagingCharge) {
-      try {
-        await fetchCharges();
-        if (!deliveryCharge || !packagingCharge) {
-          alert("Unable to fetch delivery and packaging charges. Please try again.");
-          setIsOrdering(false);
-          return;
-        }
-      } catch (error) {
-        alert("An error occurred while fetching charges. Please try again.");
+  if (deliveryCharge === null || deliveryCharge === undefined || packagingCharge === null || packagingCharge === undefined) {
+    try {
+      await fetchCharges();
+      // Repeat the explicit checks after fetching charges
+      if (deliveryCharge === null || deliveryCharge === undefined || packagingCharge === null || packagingCharge === undefined) {
+        alert("Unable to fetch delivery and packaging charges. Please try again.");
         setIsOrdering(false);
         return;
       }
+    } catch (error) {
+      alert("An error occurred while fetching charges. Please try again.");
+      setIsOrdering(false);
+      return;
     }
+  }
     const selectedItem = getSelectedItem();
     if (!selectedItem) {
         console.error("No selected item found");
