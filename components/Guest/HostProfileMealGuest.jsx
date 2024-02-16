@@ -57,7 +57,9 @@ export default function HostProfileMealGuest({ route }) {
   const [isOrdering, setIsOrdering] = useState(false);
   const [maxMeal, setMaxMeal] = useState(3); 
   const [isDescriptionVisible, setDescriptionVisible] = useState(false);
-
+  const [cutleryCount, setCutleryCount] = useState(0);
+  const [cutleryCharge, setCutleryCharge] = useState(5);
+  
   useEffect(() => {
     setMealCount(0);
 }, [selectedMealType]);
@@ -111,6 +113,8 @@ const fetchCharges = async () => {
     console.log('fetched------------------->');
     setPackagingCharge(parseFloat(chargesData.packagingCharges) + parseFloat(chargesData.handlingCharges));
     setDiscount(parseFloat(chargesData.discount));
+    setCutleryCharge(parseFloat(chargesData.cutleryCharge));
+    console.log('------------cutlery------------------->'+ cutleryCharge);
     if (chargesData.maxMeal) {
       setMaxMeal(chargesData.maxMeal);
     }
@@ -131,6 +135,7 @@ useEffect(() => {
       setDeliveryCharge(parseFloat(charges.deliveryCharges));
       setPackagingCharge(parseFloat(charges.packagingCharges) + parseFloat(charges.handlingCharges));
       setDiscount(parseFloat(charges.discount));
+      setCutleryCharge(parseFloat(charges.cutleryCharge));
       if (charges.maxMeal) {
         setMaxMeal(charges.maxMeal);
       }
@@ -186,19 +191,17 @@ useEffect(() => {
   fetchCapacityData();
 }, []);
 
+useEffect(() => {
+  const selectedItem = getSelectedItem();
+  if (selectedItem) {
+    const newMealTotal = parseFloat(selectedItem.amount) * mealCount;
+    const cutleryTotal = cutleryCharge * cutleryCount;
 
-  useEffect(() => {
-    const selectedItem = getSelectedItem();
-    if (selectedItem) {
-      //  setMealCount(1);
-        const newMealTotal = parseFloat(selectedItem.amount) * mealCount;
-
-        setMealTotal(newMealTotal);
-
-        const overallTotal = newMealTotal + deliveryCharge + packagingCharge - discount;
-        setTotalAmount(overallTotal);
-    }
-  }, [mealCount, selectedMealType, deliveryCharge, packagingCharge, discount]);
+    setMealTotal(newMealTotal);
+    const overallTotal = newMealTotal + deliveryCharge + packagingCharge - discount + cutleryTotal;
+    setTotalAmount(overallTotal);
+  }
+}, [mealCount, cutleryCount, selectedMealType, deliveryCharge, packagingCharge, discount, cutleryCharge]);
 
   const handleConfirm = () => {
     setModalVisible(true);
@@ -273,6 +276,7 @@ useEffect(() => {
       amtDelivery:deliveryCharge,
       amtPackaging:packagingCharge,
       amtCook:mealTotal,
+      cutleryCount:cutleryCount,
   };
 
   try {
@@ -368,7 +372,19 @@ return (
   </TouchableOpacity>
   </Animatable.View>
 </View>
+{mealCount > 0 && (
+  <View style={[styles.quantityContainer,{backgroundColor: "rgba(0, 150, 136, 0.05)",borderWidth:1,borderColor:colors.pink}]}>
+  <Text style={[styles.subTitle],{color:colors.matBlack}}>Add a disposable plate n spoon:</Text>
+  <TouchableOpacity style={styles.counterButton} onPress={() => setCutleryCount(Math.max(0, cutleryCount - 1))}>
+    <Text style={styles.counterText}>-</Text>
+  </TouchableOpacity>
+  <Text style={[styles.noOfGuest,{color:colors.matBlack}]}>{cutleryCount}</Text>
+  <TouchableOpacity style={[styles.counterButton]} onPress={() => setCutleryCount(cutleryCount + 1)}>
+    <Text style={styles.counterText}>+</Text>
+  </TouchableOpacity>
 
+</View>
+)}
   <View style={styles.costsContainer}>
 
 {capacityData && capacityData[capacity] && capacityData[currentCapacity] && (
@@ -388,6 +404,11 @@ return (
   <View style={styles.costRow}>
       <Text style={styles.costLabelText}>Meal Price:</Text>
       <Text style={styles.costValueText}>{mealTotal.toFixed(2)}/-</Text>
+  </View>
+
+  <View style={styles.costRow}>
+      <Text style={styles.costLabelText}>Cutlery Charges:</Text>
+      <Text style={styles.costValueText}>{cutleryCharge.toFixed(2) * cutleryCount}/-</Text>
   </View>
 
   {deliveryCharge === 0 ? (
@@ -431,6 +452,7 @@ return (
       <Text style={styles.finalAmountText}>Pay On Delivery</Text>
   </View>)}
 </View>
+
 <MealTimeMessage
                 mealType={Object.keys(MEAL_TYPE_MAPPING).find(meal => MEAL_TYPE_MAPPING[meal] === selectedMealType)}
                 onDateAndTimeChange={handleDateAndTimeChange} />
@@ -465,6 +487,7 @@ return (
     <Text style={styles.beReady}>Please be ready to receive your order between the given time slot and have your payment prepared. Quick and efficient handovers help our delivery partners serve everyone better. Thank you!</Text>
 </View>
 )}
+
 <View style={globalStyles.centralisingContainer}>
   {mealCount > 0 && defaultAddress && defaultAddress.houseName && defaultAddress.street && defaultAddress.city && defaultAddress.pinCode && (
     <TouchableOpacity 
@@ -600,12 +623,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryText,
     padding: screenHeight * 0.01,
     borderRadius: 8,
-    // noOfLines:2,
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 2,
-    // elevation: 3,
   },
   orderPlacedContainer: {
     flexDirection: 'row',

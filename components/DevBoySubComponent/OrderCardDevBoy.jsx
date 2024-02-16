@@ -285,6 +285,10 @@ const options = {
    <View style={styles.amountStatusContainer}>
         <Text style={styles.amount}>{orderData.delTimeAndDay}</Text>
       </View>
+      {orderData.cutleryCount>0 &&
+      (<View style={[styles.amountStatusContainer]}>
+        <Text style={[styles.amount,{color:'green'}]}>Cutlery: {orderData.cutleryCount}</Text>
+      </View>)}
      {/* Conditional rendering based on status */}
      {orderData.status === "ip" && (
                 <View style={globalStyles.centralisingContainer}>
