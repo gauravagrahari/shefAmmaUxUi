@@ -194,14 +194,22 @@ useEffect(() => {
 useEffect(() => {
   const selectedItem = getSelectedItem();
   if (selectedItem) {
-    const newMealTotal = parseFloat(selectedItem.amount) * mealCount;
-    const cutleryTotal = cutleryCharge * cutleryCount;
+    // Ensure all values are numbers, defaulting to 0 if not
+    const itemAmount = Number(selectedItem.amount) || 0;
+    const parsedCutleryCharge = Number(cutleryCharge) || 0;
+    const parsedDeliveryCharge = Number(deliveryCharge) || 0;
+    const parsedPackagingCharge = Number(packagingCharge) || 0;
+    const parsedDiscount = Number(discount) || 0;
+
+    const newMealTotal = itemAmount * mealCount;
+    const cutleryTotal = parsedCutleryCharge * cutleryCount;
 
     setMealTotal(newMealTotal);
-    const overallTotal = newMealTotal + deliveryCharge + packagingCharge - discount + cutleryTotal;
+    const overallTotal = newMealTotal + parsedDeliveryCharge + parsedPackagingCharge - parsedDiscount + cutleryTotal;
     setTotalAmount(overallTotal);
   }
 }, [mealCount, cutleryCount, selectedMealType, deliveryCharge, packagingCharge, discount, cutleryCharge]);
+
 
   const handleConfirm = () => {
     setModalVisible(true);
