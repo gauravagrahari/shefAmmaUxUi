@@ -372,7 +372,7 @@ return (
   </TouchableOpacity>
   </Animatable.View>
 </View>
-{mealCount > 0 && (
+{mealCount > 0 && cutleryCharge > 0 &&(
   <View style={[styles.quantityContainer,{backgroundColor: "rgba(0, 150, 136, 0.05)",borderWidth:1,borderColor:colors.pink}]}>
   <Text style={[styles.subTitle],{color:colors.matBlack}}>Add a disposable plate n spoon:</Text>
   <TouchableOpacity style={styles.counterButton} onPress={() => setCutleryCount(Math.max(0, cutleryCount - 1))}>
@@ -406,12 +406,13 @@ return (
       <Text style={styles.costValueText}>{mealTotal.toFixed(2)}/-</Text>
   </View>
 
+  {cutleryCharge > 0 && (
   <View style={styles.costRow}>
-      <Text style={styles.costLabelText}>Cutlery Charges:</Text>
-      <Text style={styles.costValueText}>{cutleryCharge.toFixed(2) * cutleryCount}/-</Text>
+    <Text style={styles.costLabelText}>Cutlery Charges:</Text>
+    <Text style={styles.costValueText}>{(cutleryCharge.toFixed(2) * cutleryCount).toFixed(2)}/-</Text>
   </View>
-
-  {deliveryCharge === 0 ? (
+)}
+{deliveryCharge === 0 ? (
         <Text style={styles.offerText}>Yay! Free Delivery!</Text>
     ) : (
         <View style={styles.costRow}>
