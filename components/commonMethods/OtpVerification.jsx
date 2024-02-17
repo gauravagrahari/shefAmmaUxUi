@@ -68,7 +68,7 @@ export default function OtpVerification({ type, onVerify,otpGenerationUrl }) {
   };
   const handleResendOtp = () => {
     if (resendOtpEnabled) {
-      axios.post(`${URL}/generateOtp`, { [type]: input })
+      axios.post(otpGenerationUrl, { [type]: input })
         .then(response => {
           console.log("OTP resent successfully.");
           setCountdown(75);
