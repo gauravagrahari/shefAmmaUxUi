@@ -53,6 +53,7 @@ import SelectDefaultAddress from "./components/Guest/SelectDefaultAddress";
 import WelcomeMessage from "./components/Guest/WelcomeMessage";
 import AboutUs from "./components/Guest/AboutUs";
 import CancellationPolicy from "./components/Guest/CancellationPolicy";
+import ServiceAvailability from "./components/Guest/ServiceAvailability";
 import { OrdersProvider } from "./components/Context/OrdersContext";
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -156,6 +157,7 @@ export default function App() {
         <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
         <Stack.Screen name="AboutUs" component={AboutUs} />
         <Stack.Screen name="CancellationPolicy" component={CancellationPolicy} />
+        <Stack.Screen name="ServiceAvailability" component={ServiceAvailability} />
       </Stack.Navigator>
     </NavigationContainer>
     </OrdersProvider>
