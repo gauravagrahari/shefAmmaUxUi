@@ -33,7 +33,6 @@ export default function SettingsGuest() {
   const handleContactUs=()=>{
     navigation.navigate('ContactPage');
   }
-  
   const handleAboutUs=()=>{
     navigation.navigate('AboutUs');
   }
@@ -42,6 +41,10 @@ export default function SettingsGuest() {
   }
   const handleTiming=()=>{
     navigation.navigate('ChargesDisplay');
+  }
+  
+  const handleServiceAvailability=()=>{
+    navigation.navigate('ServiceAvailability');
   }
   
   const handleLogout = async () => {
@@ -105,6 +108,9 @@ export default function SettingsGuest() {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleTiming}>
           <Text style={styles.buttonText}>Timings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleServiceAvailability}>
+          <Text style={styles.buttonText}>Service Availability</Text>
         </TouchableOpacity>
         
         {!isChangePasswordVisible && 
