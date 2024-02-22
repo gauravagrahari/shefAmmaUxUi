@@ -112,6 +112,18 @@ export default function OrderCard({ order,cancelCutOffTime }) {
     return currentTime < cutoffTime;
   };
   const handleCancelOrderButton = async () => {
+    const currentTime = new Date();
+    const cutoffTime = getCutoffTime(order.delTimeAndDay);
+
+    // Check if cutoff time has passed
+    if (cutoffTime && currentTime >= cutoffTime) {
+        alert("The cancellation period for this order has passed. The order can no longer be cancelled.");
+        setShowConfirmation(false); // Optionally hide the confirmation prompt
+        console.log("Order cancelled not");
+
+        return; // Exit the function to prevent the cancellation request
+    }
+    console.log("Order cancelled proceed");
     try {
       const currentTimestamp = new Date().toISOString();
       const attributeName = "status"; // Updating the 'status' attribute
