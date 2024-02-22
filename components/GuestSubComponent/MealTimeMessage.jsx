@@ -12,6 +12,8 @@ const MEAL_TYPE_MAPPING = {
 
 function MealTimeMessage({ mealType, onDateAndTimeChange }) {
     const [charges, setCharges] = useState(null);
+    const [currentTime, setCurrentTime] = useState(new Date());
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,7 +37,14 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
             }
         };
         fetchData();
-    }, []);
+   // Interval to update the current time every minute
+   const timer = setInterval(() => {
+    setCurrentTime(new Date());
+}, 30000); 
+
+// Cleanup interval on component unmount
+return () => clearInterval(timer);
+}, []);
     
     useEffect(() => {
         if (dateMessage && timeMessage) {
@@ -81,9 +90,11 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
             bookTimeMessage = ` ${charges.breakfastBookTime}`;
             break;
         case MEAL_TYPE_MAPPING.Lunch:
-            dateMessage = isOrderForToday(charges.lunchBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
+            dateMessage = isOrderForToday("17:37") ? getCurrentDateAndDay() : getDeliveryDate();
+            // dateMessage = isOrderForToday(charges.lunchBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
             timeMessage = ` ${charges.lunchStartTime} and ${charges.lunchEndTime}`;
             bookTimeMessage = `${charges.lunchBookTime}`;
+            // bookTimeMessage = `${charges.lunchBookTime}`;
             break;
         case MEAL_TYPE_MAPPING.Dinner:
             dateMessage = isOrderForToday(charges.dinnerBookTime) ? getCurrentDateAndDay() : getDeliveryDate();
@@ -93,6 +104,19 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
         default:
             return <Text>Invalid meal type</Text>;
     }
+    const checkCutOffTimePassed = (bookTime) => {
+        const [hours, minutes] = bookTime.split(":").map(Number);
+        const cutOffTime = new Date();
+        cutOffTime.setHours(hours, minutes, 0, 0); // Setting seconds and milliseconds to 0 for precision
+        return currentTime > cutOffTime; // Returns true if current time has passed the cut-off time
+    };
+
+    // Update messaging based on cut-off time check
+    const cutOffPassed = checkCutOffTimePassed(bookTimeMessage);
+    if (cutOffPassed) {
+        dateMessage = getDeliveryDate(); // Update to next day delivery if cut-off time has passed
+        // Optionally, you can update `timeMessage` and `bookTimeMessage` if needed
+    }
     return (
         <LinearGradient colors={[colors.darkBlue, colors.secondCardColor]} style={styles.container}>
             <Text style={styles.messageText}>
@@ -100,6 +124,7 @@ function MealTimeMessage({ mealType, onDateAndTimeChange }) {
                 Kindly expect it on <Text style={styles.highlightedText}>{dateMessage}</Text> between 
                 <Text style={styles.highlightedText}>{timeMessage}</Text>. {mealType.toUpperCase()} can be ordered each day by
                 <Text style={styles.highlightedText}> {formatTime(bookTimeMessage)}.</Text>
+                {cutOffPassed && <Text style={{ color: '#FF0000',fontSize:14}}> Please note, the cut-off time for today has been reached, hence your order is being booked for tomorrow.</Text>}
             </Text>
         </LinearGradient>
     );

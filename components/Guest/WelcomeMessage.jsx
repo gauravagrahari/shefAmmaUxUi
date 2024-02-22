@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {globalStyles,colors} from '../commonMethods/globalStyles.js';
 import messages from '../commonMethods/texts.js';
@@ -24,7 +24,9 @@ const WelcomeMessage = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.parent}>
+          <ScrollView style={{flexGrow: 1}} contentContainerStyle={styles.container} >
+
       <Animatable.View animation="fadeInUp" duration={1200} style={styles.card}>
         <LinearGradient colors={['#f6f6f6', colors.darkBlue]} style={styles.gradient}>
           <Text style={styles.mainHeading}>Welcome to ShefAmma!</Text>
@@ -39,6 +41,7 @@ const WelcomeMessage = () => {
           </TouchableOpacity>
         </LinearGradient>
       </Animatable.View>
+      </ScrollView>
     </View>
   );
 };
@@ -49,10 +52,17 @@ const responsiveSize = (size) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  parent:{
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+justifyContent: 'center', // Center content vertically
+// padding: screenWidth * 0.05,
+backgroundColor:colors.darkBlue,
+alignItems:'center'
+},
+  container: {
+    // padding: screenWidth * 0.05,
+    // backgroundColor:"#FF47A8",
+    // marginVertical: 40,
     backgroundColor: colors.darkBlue,
   },
   card: {
