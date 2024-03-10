@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Button } from 'react-native';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/Ionicons';  // for Ionicons set
+import Icon from 'react-native-vector-icons/Ionicons';  
 import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {  Platform } from 'react-native';

@@ -1,53 +1,78 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { MaterialIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { globalStyles, colors } from '../commonMethods/globalStyles';
+import ChefHatIcon from '../../assets/chefHatIcon26.svg'; // Import your SVG icon
 
-// Import your screen components here
-import HomeScreen from './HomeScreen';
-import ProfileScreen from './ProfileScreen';
-import OrderHistoryScreen from './OrderHistoryScreen';
-import CurrentRatingScreen from './CurrentRatingScreen';
-import SettingsScreen from './SettingsScreen';
+export default function NavBarHost() {
+  const navigation = useNavigation();
+  const route = useRoute();
 
-const Tab = createBottomTabNavigator();
+  const isActive = (routeName) => route.name === routeName;
 
-const Navbar = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'Dashboard') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Profile') {
-              iconName = focused ? 'person' : 'person-outline';
-            } else if (route.name === 'OrderHistory') {
-              iconName = focused ? 'list' : 'list-outline';
-            } else if (route.name === 'CurrentRating') {
-              iconName = focused ? 'star' : 'star-outline';
-            } else if (route.name === 'SettingsHost') {
-              iconName = focused ? 'settings' : 'settings-outline';
-            }
-
-            return <Icon name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'blue',
-          inactiveTintColor: 'gray',
-        }}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="OrderHistory" component={OrderHistoryScreen} />
-        <Tab.Screen name="CurrentRating" component={CurrentRatingScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <View style={styles.navbar}>
+      <TouchableOpacity
+        style={[styles.navbarButton, isActive('Dashboard') && styles.activeNavbarButton]}
+        onPress={() => navigation.navigate('Dashboard')}>
+        {isActive('Dashboard') ? (
+          <ChefHatIcon fill={colors.pink} width={56} height={57} stroke={colors.pink} strokeWidth="0.6" />
+        ) : (
+          <ChefHatIcon fill={colors.lightishPink} width={58} height={58} stroke={colors.lightishPink} strokeWidth="0.6" />
+        )}
+        {isActive('Dashboard') && <View style={styles.underline} />}
+      </TouchableOpacity>
+      {/* {renderIcon('ListingsHost', 'format-list-bulleted', MaterialIcons, 26)}
+      {renderIcon('ReservationsHost', 'calendar-today', MaterialIcons, 25)}
+      {renderIcon('EarningsHost', 'attach-money', MaterialIcons, 25)}*/}
+      {renderIcon('SettingsHost', 'settings', Ionicons, 27)} 
+    </View>
   );
-};
 
-export default Navbar;
+  function renderIcon(routeName, iconName, IconComponent, size) {
+    return (
+      <TouchableOpacity
+        style={[styles.navbarButton, isActive(routeName) && styles.activeNavbarButton]}
+        onPress={() => navigation.navigate(routeName)}>
+        <IconComponent name={iconName} size={size} color={isActive(routeName) ? colors.pink : colors.lightishPink} />
+        {isActive(routeName) && <View style={styles.underline} />}
+      </TouchableOpacity>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  navbar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: colors.navBarColor,
+    height: 51,
+    paddingHorizontal: 16,
+    elevation: 5,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  navbarButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  },
+  activeNavbarButton: {
+    borderBottomWidth: 3,
+    borderBottomColor: colors.pink,
+  },
+  underline: {
+    position: 'absolute',
+    bottom: 0,
+    left: '25%',
+    right: '25%',
+    height: 3,
+    // backgroundColor:colors.darkestBlue, // Updated color to new palette color
+    backgroundColor:colors.pink, // Updated color to new palette color
+  }
+});

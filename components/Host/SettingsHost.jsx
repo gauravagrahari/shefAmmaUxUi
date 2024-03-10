@@ -1,51 +1,81 @@
-// SettingsHost.js
 import React, { useState } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ChangePassword from '../commonMethods/ChangePassword';
 import { deleteInSecureStore } from '../Context/SensitiveDataStorage';
+import NavBarHost from '../HostSubComponent/NavBarHost';
+import { globalStyles, colors } from '../commonMethods/globalStyles';
+import { deleteInAsync } from '../Context/NonSensitiveDataStorage';
 
 export default function SettingsHost() {
-  const navigation = useNavigation();
-  const [showChangePassword, setShowChangePassword] = useState(false);
-  const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
+    const navigation = useNavigation();
+    const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
+  
+    const handlePasswordChangeSuccess = () => {
+      setIsChangePasswordVisible(false);
+    };
 
-  const handlePasswordChangeSuccess = () => {
-    setIsChangePasswordVisible(false);
-  };
-  const handleLogout = async () => {
-    // Here you can call the API to invalidate the token on the server-side
-    // After that, remove the JWT from secure storage and navigate to login screen
-    await deleteInSecureStore('token');
-    navigation.navigate('LoginHost');
-  }
+    const handleLogout = async () => {
+        // Add or remove keys as per host's data
+        await deleteInSecureStore('token');
+        await deleteInSecureStore('uuidHost');
+        await deleteInSecureStore('timeStamp');
+        // Additional clean-up if necessary
+        navigation.navigate('LoginGuest'); // Ensure you have a LoginHost screen for hosts to navigate back to on logout
+    };
+    const handleTimingsPage = async () => {
+        navigation.navigate('HostCancellationPolicy'); // Ensure you have a LoginHost screen for hosts to navigate back to on logout
+    };
+
   return (
-    <View style={styles.container}>
-      <ChangePassword 
-        visible={isChangePasswordVisible} 
-        onClose={() => setIsChangePasswordVisible(false)}
-        onPasswordChangeSuccess={handlePasswordChangeSuccess} 
-      />
-      {!isChangePasswordVisible && 
-        <Button 
-          title="Change Password" 
-          onPress={() => setIsChangePasswordVisible(true)} 
+    <View style={styles.mainContainer}>
+      <NavBarHost /> 
+      <View style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={handleTimingsPage}>
+          <Text style={styles.buttonText}>Timings</Text>
+        </TouchableOpacity>
+        <ChangePassword 
+          visible={isChangePasswordVisible} 
+          onClose={() => setIsChangePasswordVisible(false)}
+          onPasswordChangeSuccess={handlePasswordChangeSuccess} 
         />
-      }
-      <Button style={styles.button} title="Logout" onPress={handleLogout} />
+        {!isChangePasswordVisible && 
+          <TouchableOpacity style={styles.button} onPress={() => setIsChangePasswordVisible(true)}>
+            <Text style={styles.buttonText}>Change Password</Text>
+          </TouchableOpacity>
+        }
+        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.darkBlue,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
   },
-  button:{
-    border:20,
+  button: {
+    marginBottom: 5,
+    padding: 16,
+    backgroundColor: colors.pink,
+    alignItems: 'center',
+    shadowColor: colors.darkGray,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "white",
+    fontWeight: 'bold'
   }
 });
-
-

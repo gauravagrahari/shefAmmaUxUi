@@ -22,8 +22,7 @@ import SlotCardTest from "./components/test/SlotCardTest";
 import TestEditableText from "./components/test/TestEditableText";
 import NavBarGuest from "./components/GuestSubComponent/NavBarGuest";
 // import NavBarHost from "./components/HostSubComponent/NavBarHost";
-import Dashboard from "./components/Host/Dashboard";
-// import SettingsHost from "./components/Host/SettingsHost";
+
 import LoginHost from "./components/Host/LoginHost";
 import LoginGuest from "./components/Guest/LoginGuest";
 import NavHost from "./components/HostSubComponent/NavHost";
@@ -56,6 +55,9 @@ import CancellationPolicy from "./components/Guest/CancellationPolicy";
 import ServiceAvailability from "./components/Guest/ServiceAvailability";
 import { OrdersProvider } from "./components/Context/OrdersContext";
 import * as SplashScreen from 'expo-splash-screen';
+import Dashboard from "./components/Host/Dashboard";
+import SettingsHost from "./components/Host/SettingsHost";
+import HostCancellationPolicy from "./components/Host/HostCancellationPolicy";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -70,26 +72,26 @@ export default function App() {
       .catch((err) => console.error('Database initialization failed:', err));
   }, []);
   useEffect(() => {
-      const checkCredentials = async () => {
-        const token = await getFromSecureStore('token');
-        const uuidGuest = await getFromSecureStore('uuidGuest');
-        const uuidDevBoy = await getFromSecureStore('uuidDevBoy');
-        const timeStamp = await getFromSecureStore('timeStamp');
-  
-        if (token !== null && uuidGuest !== null && timeStamp !== null) {
-            setInitialRoute('SelectDefaultAddress');
-        } 
-        else if (token !== null && uuidDevBoy !== null && timeStamp !== null){
-          setInitialRoute('HomeDevBoy');
+    const checkCredentials = async () => {
+      const token = await getFromSecureStore('token');
+      const uuidGuest = await getFromSecureStore('uuidGuest');
+      const uuidDevBoy = await getFromSecureStore('uuidDevBoy');
+      const uuidHost = await getFromSecureStore('uuidHost'); // New line: checking for host UUID
+      const timeStamp = await getFromSecureStore('timeStamp');
 
-        }
-        else {
-            setInitialRoute('LoginGuest');
-        }
-        setIsLoading(false);
-      };
-  
-      checkCredentials();
+      if (token !== null && uuidGuest !== null && timeStamp !== null) {
+        setInitialRoute('SelectDefaultAddress');
+      } else if (token !== null && uuidDevBoy !== null && timeStamp !== null) {
+        setInitialRoute('HomeDevBoy');
+      } else if (token !== null && uuidHost !== null && timeStamp !== null) { // New condition for host
+        setInitialRoute('SettingsHost');
+      } else {
+        setInitialRoute('LoginGuest');
+      }
+      setIsLoading(false);
+    };
+
+    checkCredentials();
   }, []);
   useEffect(() => {
     const hideSplashScreen = async () => {
@@ -145,7 +147,8 @@ export default function App() {
         <Stack.Screen name="SlotCardTest" component={SlotCardTest}/>
         <Stack.Screen name="NavBarGuest" component={NavBarGuest}/>
         <Stack.Screen name="Dashboard" component={Dashboard}/>
-        {/* <Stack.Screen name="SettingsHost" component={SettingsHost}/> */}
+        <Stack.Screen name="SettingsHost" component={SettingsHost}/>
+        <Stack.Screen name="HostCancellationPolicy" component={HostCancellationPolicy}/>
         {/* <Stack.Screen name="ProfileHost" component={ProfileHost}/> */}
         <Stack.Screen name="ProfileGuest" component={ProfileGuest}/>
         <Stack.Screen name="S3Image" component={S3Image}/>

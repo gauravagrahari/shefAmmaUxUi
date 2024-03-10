@@ -9,6 +9,7 @@ const colors = {
  primaryLight: "#fff",//#ddfab5
  labelBlack: "#4D6664",
  seaBlue:'#2BD8D8',
+ darkSeaBlue:'#009292',
 //  navBarColor:"#,EAF86B",//#c7fb80
 //  secondCardColor:"#fcfddd",//#eefbdb
 //  darkBlue:'#ECF87F',//#ccfa8f

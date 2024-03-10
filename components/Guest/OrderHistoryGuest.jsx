@@ -38,7 +38,6 @@ export default function OrderHistoryGuest() {
 
   const fetchOrders = useCallback(
     async (forceRefresh = false) => {
-      // Early return if not force refreshing and orders are already loaded
       if (!forceRefresh && orders.length > 0) {
         console.log("Skipping fetch, orders already loaded.");
         return;

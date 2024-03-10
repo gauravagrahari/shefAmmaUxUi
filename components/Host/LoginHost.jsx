@@ -1,112 +1,169 @@
-import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, TouchableOpacity, Text, Alert } from 'react-native';
-import axios from 'axios';
-import config from '../Context/constants';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert,StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import {storeInSecureStore} from '../Context/SensitiveDataStorage';
+import axios from 'axios'; // Assuming axios is used for HTTP requests
+import {globalStyles,colors} from '../commonMethods/globalStyles';
+import MessageCard from '../commonMethods/MessageCard';
+import Loader from '../commonMethods/Loader';
+import { storeInSecureStore } from '../Context/SensitiveDataStorage';
+const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 import Constants from 'expo-constants';
-const URL = Constants.expoConfig.extra.apiUrl;
+import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
+
 export default function LoginHost() {
-  const [phoneNo, setPhoneNo] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigation = useNavigation();
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
   const handleLogin = () => {
+    setIsLoading(true);
     const data = {
-      phone: phoneNo,
+      phone: phone,
       password: password,
     };
-    axios
-      .post(`${URL}/hostLogin`, data)
-      .then((response) => {
+
+    axios.post(`${URL}/hostLogin`, data)
+      .then(async response => {
+        setIsLoading(false);
         if (response.status === 200) {
-          // Handle success
+          // Assuming the response contains token, host ID, and timestamp
+          await storeInSecureStore('token', response.data.token);
+          await storeInSecureStore('uuidHost', response.data.uuidHost);
+          await storeInSecureStore('timeStamp', response.data.timeStamp);
+          // Navigate to the host's dashboard or home page
+          Alert.alert("Login done","done");
+          navigation.navigate('Dashboard');
+          console.log("Login done", response.data);
         } else {
-          // Log the entire response object for non-200 status codes
-          console.error('Response with non-200 status:', response);
-          setMessage(response.data);
-          Alert.alert("Error", message);
+          // Handle non-200 responses
+          Alert.alert("Login Failed", response.data);
         }
       })
-      .catch((error) => {
-        // Log the entire error object
-        console.error('Network request error:', error);
-        
-        // Log specific error details if available
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('Error response data:', error.response.data);
-          console.error('Error response status:', error.response.status);
-          console.error('Error response headers:', error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.error('Error request data:', error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('Error message:', error.message);
-        }
-        
-        setMessage("Request failed");
-        Alert.alert("Error", message);
+      .catch(error => {
+        setIsLoading(false);
+        const errorMessage = error.response?.data || "Unable to connect to the server. Please try again later.";
+        Alert.alert("Login Error", errorMessage);
       });
   };
-  
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Phone no."
-        value={phoneNo}
-        onChangeText={setPhoneNo}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-    </View>
+    <LinearGradient colors={[colors.lightBlue, 'white']} style={styles.container}>
+    <View style={styles.iconContainer}>
+     <ChefHatIcon fill={colors.pink} width={100} height={100} stroke={colors.pink} strokeWidth="0.3" /> 
+      </View>
+          <Text style={styles.welcomeText}>
+            <Text style={styles.brand}>Shef<Text style={styles.boldBrand}>Amma </Text></Text>
+            - Host Login
+          </Text>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <View style={styles.innerContainer}>
+               
+          <View style={styles.inputContainer}>
+            <Ionicons name="phone-portrait-outline" size={24} color="black" />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Phone"
+              value={phone}
+              onChangeText={setPhone}
+              keyboardType="phone-pad"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={24} color="black" />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Password"
+              secureTextEntry={!passwordVisible}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Ionicons name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.linkText}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
-    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    paddingHorizontal: 20,
+  },
+
+  welcomeText: {
+    fontSize: 20,
+    marginBottom: 60,
+    color: colors.pink,
+  },
+  brand: {
+    fontSize: 26,
+  },
+  boldBrand: {
+    fontWeight: 'bold',
+  },
+  innerContainer: {
+    width: '100%',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderBottomColor: colors.pink,
+    borderBottomWidth: 2,
   },
   input: {
-    width: '100%',
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 20,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    flex: 1,
+    height: 50,
+    marginLeft: 10,
+    color: colors.matBlack,
+    fontSize: 16,
   },
   button: {
     width: '100%',
-    height: 50,
+    height: 55,
+    marginTop: 20,
     marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: '#009688',
+    borderRadius: 10,
+    borderColor: colors.pink,
+    borderWidth: 2,
+    backgroundColor: 'rgba(0, 150, 136, 0.1)', // 80% opacity of #009688
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: colors.matBlack,
+    fontSize: 18,
+    
+  },
+  linkText: {
+    marginTop: 15,
+    textAlign: 'center',
+    // color: 'white',
+    color: '#3498db',
+    fontSize: 17,
+    fontWeight: '500',
   },
 });
+
