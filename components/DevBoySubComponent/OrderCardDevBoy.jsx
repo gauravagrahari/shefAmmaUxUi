@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Button } from 'react-native';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/Ionicons';  // for Ionicons set
+import Icon from 'react-native-vector-icons/Ionicons';  
 import config from '../Context/constants';
 import { getFromSecureStore } from '../Context/SensitiveDataStorage';
 import {  Platform } from 'react-native';
@@ -262,11 +262,15 @@ const options = {
         <Text style={styles.details}>Order at  - {formattedDateTime}</Text>
       </View>
   
+      <View style={styles.mealServingContainer}>
+      <Text style={[styles.amount,{color:'green'}]}>{orderData.itemName}</Text>
+      </View>
       {/* Meal Type and Number of Servings Row */}
       <View style={styles.mealServingContainer}>
         <Text style={styles.details}>{mealMapping[orderData.mealType]}</Text>
         <Text style={styles.details}>{orderData.noOfServing} servings</Text>
       </View>
+
       {
   orderData.preferredTime &&
   <View style={styles.mealServingContainer}>

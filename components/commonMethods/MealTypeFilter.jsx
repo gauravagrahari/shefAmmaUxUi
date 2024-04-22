@@ -18,7 +18,7 @@ const MealTypeFilter = ({ selectedMealTypes, toggleMealType }) => {
         >
           <View style={styles.mealTypeContent}>
             {selectedMealTypes[mealType] && (
-              <Icon name="check" size={12} color="white" style={styles.iconWrapper} />
+              <Icon name="check" size={12} color={colors.seaBlue} style={styles.iconWrapper} />
             )}
             <Text
               style={[

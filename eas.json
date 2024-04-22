@@ -9,10 +9,7 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle",
-        "env": {
-          "EXPO_PUBLIC_API_URL": "http://uat-env.eba-epp52dpv.ap-south-1.elasticbeanstalk.com"
-        }
+        "buildType": "app-bundle"
       }
     }
   },

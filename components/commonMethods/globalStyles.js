@@ -9,6 +9,7 @@ const colors = {
  primaryLight: "#fff",//#ddfab5
  labelBlack: "#4D6664",
  seaBlue:'#2BD8D8',
+ darkSeaBlue:'#009292',
 //  navBarColor:"#,EAF86B",//#c7fb80
 //  secondCardColor:"#fcfddd",//#eefbdb
 //  darkBlue:'#ECF87F',//#ccfa8f
@@ -25,8 +26,10 @@ lightishPink:'#385170',
   inputBackground: "#165882FF",
   // -------------
   pink:'#DE0075',
+  lightPink:'#e43781',
   primaryText: '#DE0075',
   lightOlive:'#DE0075',
+  green:'#00823e',
   // -----------------
   secondaryText: "#FAF9F6",
   darkestBlue:'#f5f5f5',
@@ -35,7 +38,6 @@ lightishPink:'#385170',
 
   darkPink:'#e43781',
   
-  lightPink:'#f7fbba',
   darkestOliveGreen:'#3F4122',
   darkOlive:'#6e7a38',
   olive:'#879154',

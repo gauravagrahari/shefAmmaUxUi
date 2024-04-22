@@ -9,6 +9,7 @@ import { StyleSheet } from 'react-native';
 import MealTypeFilter from '../commonMethods/MealTypeFilter';
 import { Text } from 'react-native';
 import useHideOnScroll from '../commonMethods/useHideOnScroll';
+import TiffinServiceCard from '../GuestSubComponent/TiffinServiceCard';
 
 export default function ItemListGuest() {
   const { hostList } = useContext(HostContext);
@@ -48,17 +49,62 @@ export default function ItemListGuest() {
     );
   };
 
-  const renderItem = ({ item, index }) => {
-    return item.meals.filter(filterMealsByType).map((meal, mealIndex) => (
-        <View key={`${index}-${mealIndex}`}>
-            <ItemListCard 
-                item={meal}
-                host={item.hostEntity}
-                handleHostCardClick={() => handleHostCardClick(meal, item.hostEntity)}
+  const renderItem = () => {
+    let components = [];
+    let globalMealIndex = 0; // Keep track of the meal index across all hosts
+  
+    hostList.forEach((item, index) => {
+      item.meals.filter(filterMealsByType).forEach((meal, mealIndex) => {
+        components.push(
+          <View key={`meal-${index}-${mealIndex}`}>
+            <ItemListCard
+              item={meal}
+              host={item.hostEntity}
+              handleHostCardClick={() => handleHostCardClick(meal, item.hostEntity)}
             />
-        </View>
-    ));
+          </View>
+        );
+  
+        globalMealIndex++;
+        // Insert the TiffinServiceCard after the first 5 ItemListCard components
+        if (globalMealIndex === 3) {
+          components.push(
+            <View key={`tiffin-single`}>
+              <TiffinServiceCard />
+            </View>
+          );
+        }
+      });
+    });
+  
+    return components;
   };
+  
+  
+  return (
+    <View style={globalStyles.containerPrimary}>
+      <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>
+        <NavBarGuest navigation={navigation} />
+      </Animated.View>
+  
+      <ScrollView
+        style={{ paddingTop: 54, paddingBottom: 58 }}
+        contentContainerStyle={{ paddingBottom: 58 }}
+        showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        {renderItem()}
+      </ScrollView>
+  
+      <MealTypeFilter
+        selectedMealTypes={selectedMealTypes}
+        toggleMealType={toggleMealType}
+      />
+    </View>
+  );
+  
+  
   return (
     <View style={globalStyles.containerPrimary}>
  <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }, animatedStyle]}>

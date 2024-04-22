@@ -1,14 +1,19 @@
+// App.config.js
 import 'dotenv/config';
 
 export default ({ config }) => {
+    // Use different environment variables based on the node environment
+    const apiUrl = process.env.NODE_ENV === 'production' 
+        ? process.env.EXPO_PUBLIC_API_URL_Prod 
+        : process.env.EXPO_PUBLIC_API_URL;
+
     return {
       ...config,
       extra: {
-         apiUrl:process.env.EXPO_PUBLIC_API_URL || "http://uat-env.eba-epp52dpv.ap-south-1.elasticbeanstalk.com",
-        eas: {
-          projectId: "8e888a03-2a05-4bfb-ba7e-993053c2d58c"
-        }
+        ...config.extra,
+        apiUrl: apiUrl,
       }
     };
-  };
+};
+
   

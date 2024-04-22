@@ -14,9 +14,8 @@ export default function NavBarDevBoy() {
   return (
     <View style={styles.navbar}>
       {renderIcon('HomeDevBoy', 'home-outline', Ionicons, 24)}
-      {/* {renderIcon('SearchGuest', 'search', Ionicons, 24)}
-      {renderIcon('UpdateGuestDetails', 'person-outline', Ionicons, 24)} */}
-      {renderIcon('OrderHistoryDevBoy', 'list-outline', Ionicons, 24)}
+      {/* uncommebt the history button code */}
+      {/* {renderIcon('OrderHistoryDevBoy', 'list-outline', Ionicons, 24)} */}
       {renderIcon('SettingsDevBoy', 'settings-outline', Ionicons, 24)}
     </View>
   );

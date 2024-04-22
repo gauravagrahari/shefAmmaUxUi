@@ -105,6 +105,9 @@ export default function LoginDevBoy() {
           <TouchableOpacity onPress={() => navigation.navigate('LoginGuest')}>
             <Text style={styles.linkText}>User Login</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginHost')}>
+            <Text style={styles.linkText}>Cook Login</Text>
+          </TouchableOpacity>
         </View>
       )}
     </LinearGradient>

@@ -164,7 +164,7 @@ const decreaseMealCount = () => {
 useEffect(() => {
   const fetchCapacityData = async () => {
     try {
-      const token = await getFromSecureStore('token'); // Assuming you store your token like this
+      const token = await getFromSecureStore('token'); 
       if (!token) {
         navigation.navigate('LoginGuest');
         return; 
@@ -172,15 +172,11 @@ useEffect(() => {
       const response = await axios.get(`${URL}/guest/host/capacity`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          id: host.uuidHost, // Assuming the host object has the required ID
+          id: host.uuidHost,
         },
       });
       
-      // Log the whole response data
-      console.log('Received capacity data:', response.data);
-
-      // If you're sure response.data has a capacityUuid property, log that too
-    
+      console.log('Received capacity data:', response.data);    
       setCapacityData(response.data);
 
     } catch (error) {
@@ -447,7 +443,7 @@ return (
   {mealCount > 0 && discount >0 && (
         <View style={styles.costRow}>
             <Text style={styles.costLabelText}>ShefAmma's Discount:</Text>
-            <Text style={styles.discountText}>{discount.toFixed(2)}</Text>
+            <Text style={styles.discountText}>{discount.toFixed(2)}/-</Text>
         </View>
     )}
   {mealCount > 0 && (
