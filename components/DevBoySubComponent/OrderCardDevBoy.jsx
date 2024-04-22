@@ -263,11 +263,15 @@ const options = {
         <Text style={styles.details}>Order at  - {formattedDateTime}</Text>
       </View>
   
+      <View style={styles.mealServingContainer}>
+      <Text style={[styles.amount,{color:'green'}]}>{orderData.itemName}</Text>
+      </View>
       {/* Meal Type and Number of Servings Row */}
       <View style={styles.mealServingContainer}>
         <Text style={styles.details}>{mealMapping[orderData.mealType]}</Text>
         <Text style={styles.details}>{orderData.noOfServing} servings</Text>
       </View>
+
       {
   orderData.preferredTime &&
   <View style={styles.mealServingContainer}>

@@ -53,11 +53,14 @@ import WelcomeMessage from "./components/Guest/WelcomeMessage";
 import AboutUs from "./components/Guest/AboutUs";
 import CancellationPolicy from "./components/Guest/CancellationPolicy";
 import ServiceAvailability from "./components/Guest/ServiceAvailability";
+import ReviewPage from "./components/Guest/ReviewPage";
+import CompanyInfoPage from "./components/Guest/CompanyInfoPage";
 import { OrdersProvider } from "./components/Context/OrdersContext";
 import * as SplashScreen from 'expo-splash-screen';
 import Dashboard from "./components/Host/Dashboard";
 import SettingsHost from "./components/Host/SettingsHost";
 import HostCancellationPolicy from "./components/Host/HostCancellationPolicy";
+import LandingScreen from "./components/Guest/LandingScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -86,7 +89,7 @@ export default function App() {
       } else if (token !== null && uuidHost !== null && timeStamp !== null) { // New condition for host
         setInitialRoute('SettingsHost');
       } else {
-        setInitialRoute('LoginGuest');
+        setInitialRoute('LandingScreen');
       }
       setIsLoading(false);
     };
@@ -155,12 +158,14 @@ export default function App() {
         <Stack.Screen name="TestProfileHost" component={TestProfileHost}/>
         <Stack.Screen name="TestEditableText" component={TestEditableText}/>
         <Stack.Screen name="EditTimeSlot" component={EditTimeSlot}/>
-        <Stack.Screen name="EditItemHost" component={EditItemHost}/>
         <Stack.Screen name="EditDetailsHost" component={EditDetailsHost}/>
         <Stack.Screen name="ItemListGuest" component={ItemListGuest} />
         <Stack.Screen name="AboutUs" component={AboutUs} />
         <Stack.Screen name="CancellationPolicy" component={CancellationPolicy} />
-        <Stack.Screen name="ServiceAvailability" component={ServiceAvailability} />
+        <Stack.Screen name="ServiceAvailability" component={ServiceAvailability} /> 
+        <Stack.Screen name="ReviewPage" component={ReviewPage} /> 
+        <Stack.Screen name="CompanyInfoPage" component={CompanyInfoPage} /> 
+        <Stack.Screen name="LandingScreen" component={LandingScreen} /> 
       </Stack.Navigator>
     </NavigationContainer>
     </OrdersProvider>

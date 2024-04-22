@@ -19,6 +19,10 @@ import { BackHandler } from 'react-native';
 import Constants from 'expo-constants';
 import useHideOnScroll from '../commonMethods/useHideOnScroll';
 import HorizontalItemList from "./HorizontalItemList";
+import TiffinServiceCard from "../GuestSubComponent/TiffinServiceCard";
+import GiveReviewCard from "../GuestSubComponent/GiveReviewCard";
+import FullWidthOfferCard from "../GuestSubComponent/FullWidthOfferCard";
+import OfferCard from "../GuestSubComponent/OfferCard";
 
 // const URL = config.URL;
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
@@ -33,6 +37,7 @@ export default function HomeGuest({ navigation, route  }) {
   const [loading, setLoading] = React.useState(true);
   const [isReLoading, setIsReLoading] = useState(false);
   const [serverError, setServerError] = React.useState(false);
+  const [charges, setCharges] = useState(null);
   const { hostList, setHostList, hasFetchedHosts, setHasFetchedHosts } = useContext(HostContext);
   const [refreshing, setRefreshing] = React.useState(false); 
   const [fetchedAddressesUsed, setFetchedAddressesUsed] = useState(false);
@@ -112,6 +117,7 @@ useFocusEffect(
 
       // Store the received charges data in Secure Store
       await storeInSecureStore('charges', chargesResponse.data);
+      setCharges(chargesResponse.data);
     } catch (error) {
       if (error.response) {
         console.error("Charges error status:", error.response.status);
@@ -288,7 +294,19 @@ const onRefresh = React.useCallback(() => {
             </View>
         ) : (
           <>
+
+  
             <HorizontalItemList />
+
+            {charges && charges.discount > 0 && (
+        <FullWidthOfferCard offerText={`ShefAmma Discount: Save Flat Rs. ${charges.discount} on Your Orders!`} />
+      )}
+               {charges && (parseFloat(charges.deliveryCharges)) === 0 && (
+        <FullWidthOfferCard offerText="Yay! Free Delivery on All Orders!" />
+      )}
+            <TiffinServiceCard />
+            <GiveReviewCard />
+
             {filteredHosts.map((host, index) => (
               <HostCard key={index} host={host.hostEntity} meals={host.meals} />
             ))}

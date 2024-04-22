@@ -47,6 +47,14 @@ export default function SettingsGuest() {
     navigation.navigate('ServiceAvailability');
   }
   
+  const handleReviewPage=()=>{
+    navigation.navigate('ReviewPage');
+  }
+  const handleSocials=()=>{
+    navigation.navigate('CompanyInfoPage');
+    // navigation.navigate('LandingScreen');
+  }
+  
   const handleLogout = async () => {
     // Log data from SecureStore before deletion
     const secureStoreKeys = ['token', 'defaultAddress', 'uuidGuest', 'uuidDevBoy', 'timeStamp', 'altPhone', 'phone'];
@@ -112,7 +120,12 @@ export default function SettingsGuest() {
         <TouchableOpacity style={styles.button} onPress={handleServiceAvailability}>
           <Text style={styles.buttonText}>Service Availability</Text>
         </TouchableOpacity>
-        
+        <TouchableOpacity style={styles.button} onPress={handleReviewPage}>
+          <Text style={styles.buttonText}>Review and Survey</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSocials}>
+          <Text style={styles.buttonText}>Our Socials</Text>
+        </TouchableOpacity>
         {!isChangePasswordVisible && 
           <TouchableOpacity style={styles.button} onPress={() => setIsChangePasswordVisible(true)}>
             <Text style={styles.buttonText}>Change Password</Text>
@@ -139,7 +152,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: 5,
-    padding: 16,
+    padding: 13,
     backgroundColor: colors.pink, 
     // borderRadius: 10,
     alignItems: 'center',

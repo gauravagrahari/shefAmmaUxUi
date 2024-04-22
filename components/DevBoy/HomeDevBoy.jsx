@@ -245,6 +245,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  noOrdersView:{
+flex:1,
+justifyContent:'center',
+alignItems: 'center',
+marginTop:30,
+  },
+  noOrdersText:{
+    fontSize:20,
+color: 'white',
+fontStyle: 'italic',
+fontWeight: 'bold',
+  },
   orderCountContainer: {
     padding: 2,
     backgroundColor: '#009292',
