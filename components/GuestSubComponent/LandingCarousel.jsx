@@ -11,11 +11,11 @@ export default function LandingCarousel() {
   const [imageUrls, setImageUrls] = useState([]);
 
   const imageKeys = [
-    'images/AratiLUnch-grayBG.jpg',
-    'images/PunamImageLunchGrayBG.jpg',
-    'images/sukhiMajumDinner2_squarecropped.jpeg',
-    'images/Endu_Dinner_Gray_bg_3.jpg',
-    'images/mithuRajDinnerFinal.jpeg'
+    // 'images/AratiLUnch-grayBG.jpg',
+    // 'images/PunamImageLunchGrayBG.jpg',
+    // 'images/sukhiMajumDinner2_squarecropped.jpeg',
+    // 'images/Endu_Dinner_Gray_bg_3.jpg',
+    // 'images/mithuRajDinnerFinal.jpeg'
   ];
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function LandingCarousel() {
           return await Storage.get(key, { level: 'public' }); // Assuming images are public
         } catch (error) {
           console.error('Error fetching image from S3', error);
-          return require('../../assets/EmptyImageDefault.jpg'); // Fallback image
+          return require('../../assets/LandinImage.jpg'); // Fallback image
         }
       }));
 

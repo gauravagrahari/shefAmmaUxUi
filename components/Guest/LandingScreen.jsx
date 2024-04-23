@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity,ImageBackground  } from 'react-native';
 import { globalStyles, colors } from '../commonMethods/globalStyles';
 import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
-import LandingCarousel from '../GuestSubComponent/LandingCarousel';
 import { LinearGradient } from 'expo-linear-gradient';
-import TextCarousel from '../GuestSubComponent/TextCarousel'; // Assuming this is your text carousel component
-
+import TextCarousel from '../GuestSubComponent/TextCarousel'; 
+import LandingImage from '../../assets/AppLandingBg.jpg'; 
 const LandingScreen = ({ navigation }) => {
     const introTexts = [
         "Experience the comfort of home-cooked meals delivered to your doorstep.",
@@ -14,8 +13,9 @@ const LandingScreen = ({ navigation }) => {
         "Connecting you directly with local moms who prepare delicious home-cooked meals",
     ];
     return (
-        <ScrollView style={styles.bg}>
-                <LinearGradient colors={['#eef8f1', '#95d6ab']} style={styles.container}>
+        <ImageBackground source={LandingImage} style={styles.bg}>
+
+        <View style={styles.container}>
 
             <View style={styles.iconContainer}>
                 <ChefHatIcon fill={colors.pink} width={100} height={100} stroke={colors.pink} strokeWidth="0.3" />
@@ -39,15 +39,13 @@ const LandingScreen = ({ navigation }) => {
                     <Text style={styles.exploreText}>New to ShefAmma? Sign Up here</Text>
                 </TouchableOpacity>
             </View>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('Explore')}>
-                <Text style={styles.exploreText}>Explore our meals</Text>
-            </TouchableOpacity> */}
+         
    <View style={styles.carousalContainer}>
-            <LandingCarousel /> 
             </View>
-            </LinearGradient>
 
-        </ScrollView>
+        </View>
+        </ImageBackground>
+
     );
 };
 
@@ -55,10 +53,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
-        backgroundColor: colors.pink, // Use dark pink as the background color
+    justifyContent: 'center',
+    // alignItems: 'center',
     },
-    bg:{
-        backgroundColor:'#95d6ab',
+    bg: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
     },
     iconContainer: {
         alignItems: 'center',
@@ -84,12 +85,12 @@ marginBottom:20,        // borderColor:'whitesmoke',
         textDecorationLine: 'underline',
       },
       brand: {
-        fontSize: 26,
+        fontSize: 28,
 
         fontWeight: 'normal', // Normal weight for "Shef"
       },
       boldBrand: {
-        fontSize: 26,
+        fontSize: 28,
 
         fontWeight: 'bold', // Bold weight for "Amma"
       },

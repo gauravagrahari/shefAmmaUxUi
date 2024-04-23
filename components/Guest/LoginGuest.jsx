@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MessageCard from '../commonMethods/MessageCard';
 import { AddressContext } from '../Context/AddressContext';
 import Constants from 'expo-constants';
-import ChefHatIcon from '../../assets/chefHatIcon52.svg'; // Import your SVG icon
+import ChefHatIcon from '../../assets/chefHatIcon52.svg'; 
 
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
