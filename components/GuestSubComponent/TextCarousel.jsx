@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        fontSize: 18, // Increased font size for better readability
+        fontSize: 19, // Increased font size for better readability
         fontWeight: 'bold', // Made text bold
         // color: '#860000',
         color: colors.green,

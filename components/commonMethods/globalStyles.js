@@ -29,7 +29,7 @@ lightishPink:'#385170',
   lightPink:'#e43781',
   primaryText: '#DE0075',
   lightOlive:'#DE0075',
-  green:'#00823e',
+  green:'#007734',
   // -----------------
   secondaryText: "#FAF9F6",
   darkestBlue:'#f5f5f5',
