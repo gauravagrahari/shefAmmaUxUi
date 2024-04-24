@@ -15,7 +15,7 @@ const GiveReviewCard = () => {
     <TouchableOpacity onPress={handlePress}>
       <LinearGradient colors={[colors.seaBlue, colors.lightPink]} style={styles.card}>
         <Text style={styles.heading}>We Value Your Feedback!</Text>
-        <Text style={styles.text}>Tap here to share your thoughts on our food and service.</Text>
+        <Text style={styles.text}>Nurture ShefAmma's growth from a sapling into a flourishing tree! Tap here.</Text>
         <Text style={styles.dailyMenuText}>Your insights will help us enhance your dining experience.</Text>
       </LinearGradient>
     </TouchableOpacity>

@@ -104,12 +104,11 @@ export default function SettingsGuest() {
           onClose={() => setIsChangePasswordVisible(false)}
           onPasswordChangeSuccess={handlePasswordChangeSuccess} 
         />
-
+        <TouchableOpacity style={styles.button} onPress={handleReviewPage}>
+          <Text style={styles.buttonText}>Review and Survey</Text>
+        </TouchableOpacity>
      <TouchableOpacity style={styles.button} onPress={handleContactUs}>
           <Text style={styles.buttonText}>Contact Us</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleAboutUs}>
-          <Text style={styles.buttonText}>About Us</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handlePolicy}>
           <Text style={styles.buttonText}>Policy</Text>
@@ -120,8 +119,8 @@ export default function SettingsGuest() {
         <TouchableOpacity style={styles.button} onPress={handleServiceAvailability}>
           <Text style={styles.buttonText}>Service Availability</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleReviewPage}>
-          <Text style={styles.buttonText}>Review and Survey</Text>
+        <TouchableOpacity style={styles.button} onPress={handleAboutUs}>
+          <Text style={styles.buttonText}>About Us</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleSocials}>
           <Text style={styles.buttonText}>Our Socials</Text>
