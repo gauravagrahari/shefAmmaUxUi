@@ -12,7 +12,7 @@ const TiffinServiceCard = () => {
     <TouchableOpacity onPress={handlePress}>
       <LinearGradient colors={[colors.seaBlue, colors.lightPink]} style={styles.card}>
         <Text style={styles.heading}>To avoid the hassle of daily booking, avail our monthly plan.</Text>
-        <Text style={styles.text}>Tiffin services are available. Visit our website to check the details.</Text>
+        <Text style={styles.text}>Tiffin services are available. Visit our website to check the details. Tap here.</Text>
         <Text style={styles.dailyMenuText}>Check what we're serving each day of the week!</Text>
       </LinearGradient>
     </TouchableOpacity>
