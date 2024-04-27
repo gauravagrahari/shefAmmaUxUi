@@ -12,18 +12,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#fff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.shefAmma.app",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "tel",
-          "fbapi",
-          "fb-messenger-share-api",
-          "fbauth2",
-          "fbshareextension"
-        ]
+        "LSApplicationQueriesSchemes": ["tel", "fbapi", "fb-messenger-share-api", "fbauth2", "fbshareextension"]
+      },
+      "config": {
+        "facebookScheme": "fb3667731043475529",
+        "facebookDisplayName": "Addsdk_Shefamma",
+        "facebookAppId": "3667731043475529"
       }
     },
     "android": {
@@ -33,7 +34,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "config": {
+        "facebookAppId": "3667731043475529"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
