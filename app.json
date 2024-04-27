@@ -50,13 +50,18 @@
     },
     "plugins": [
       [
-        "expo-build-properties",
+        "react-native-fbsdk-next",
         {
-          "android": {
-            "usesCleartextTraffic": true
-          }
+          "appID": "3667731043475529",
+          "clientToken": "d4d805112c9642d03dd188a5b3d8d485",
+          "displayName": "Addsdk_Shefamma",
+          "scheme": "fb3667731043475529",
+          "autoLogAppEventsEnabled": true,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
-      ]
+      ],
+      "expo-tracking-transparency"
     ]
   }
 }
