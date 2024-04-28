@@ -2,7 +2,7 @@
   "expo": {
     "name": "shefAmmaUI",
     "slug": "shefAmmaUI",
-    "version": "16.1.1",
+    "version": "30.1.1",
     "orientation": "portrait",
     "icon": "./assets/adaptive-icon.png",
     "scheme": "myapp",
@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "com.shefAmma.app",
-      "versionCode": 16,
+      "versionCode": 30,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -37,27 +37,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "8e888a03-2a05-4bfb-ba7e-993053c2d58c",
-        "facebookAppId": "3667731043475529"
-      }
-    },
-    "plugins": [
-      [
-        "react-native-fbsdk-next",
-        {
-          "appID": "3667731043475529",
-          "clientToken": "d4d805112c9642d03dd188a5b3d8d485",
-          "displayName": "Addsdk_Shefamma",
-          "scheme": "fb3667731043475529",
-          "autoLogAppEventsEnabled": true,
-          "isAutoInitEnabled": true,
-          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
-        }
-      ],
-      "expo-tracking-transparency"
-    ]
+    }
   }
 }
