@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "393311015373",
+    "project_id": "shefammanotification",
+    "storage_bucket": "shefammanotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393311015373:android:80b33896931716c0953484",
+        "android_client_info": {
+          "package_name": "com.shefAmma.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw-uAInVBu1s3QyqW-RFJ6mkAODf5Z-Is"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

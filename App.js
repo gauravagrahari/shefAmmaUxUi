@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, Text, View, Button, Platform, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupGuest from "./components/Guest/SignupGuest";
@@ -19,6 +19,10 @@ import DetailsGuest from "./components/Guest/DetailsGuest";
 // import TestEditableText from "./components/test/TestEditableText";
 import NavBarGuest from "./components/GuestSubComponent/NavBarGuest";
 // import NavBarHost from "./components/HostSubComponent/NavBarHost";
+import React, { useEffect, useState, useRef } from 'react';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 
 import LoginHost from "./components/Host/LoginHost";
 import LoginGuest from "./components/Guest/LoginGuest";
@@ -33,7 +37,6 @@ import LoginDevBoy from "./components/DevBoy/LoginDevBoy";
 import SettingsDevBoy from "./components/DevBoy/SettingsDevBoy";
 import HomeDevBoy from "./components/DevBoy/HomeDevBoy";
 import OrderHistoryDevBoy from "./components/DevBoy/OrderHistoryDevBoy";
-import React, { useEffect, useState } from 'react';
 import { getFromSecureStore } from "./components/Context/SensitiveDataStorage";
 import { LinearGradient } from 'expo-linear-gradient';
 import { HostProvider } from "./components/Context/HostContext";
@@ -58,6 +61,15 @@ import Dashboard from "./components/Host/Dashboard";
 import SettingsHost from "./components/Host/SettingsHost";
 import HostCancellationPolicy from "./components/Host/HostCancellationPolicy";
 import LandingScreen from "./components/Guest/LandingScreen";
+import { useNavigation } from '@react-navigation/native';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 
 const Stack = createNativeStackNavigator();
@@ -66,12 +78,67 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [hostList, setHostList] = React.useState([]);
   const [hasFetchedHosts, setHasFetchedHosts] = React.useState(false);
-  
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState();
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const navigationRef = useRef();
+
   useEffect(() => {
     init()
       .then(() => console.log('Database initialized'))
       .catch((err) => console.error('Database initialization failed:', err));
+  },[]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+      navigationRef.current?.navigate('HomeGuest');  // Ensure navigation ref is current and navigate
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
+
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert('Must use physical device for push notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    return token;
+  }
   useEffect(() => {
     const checkCredentials = async () => {
       const token = await getFromSecureStore('token');
@@ -112,7 +179,7 @@ export default function App() {
     <HostProvider>
          <AddressProvider>
          <OrdersProvider>
-    <NavigationContainer>
+         <NavigationContainer ref={navigationRef}>
     <Stack.Navigator 
             initialRouteName={initialRoute}
             screenOptions={{ header: () => null }}>

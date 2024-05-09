@@ -92,7 +92,36 @@ export default function SettingsGuest() {
       routes: [{ name: 'LoginGuest' }],
     });
   };
-  
+//   const handleLogout = async () => {
+//     const uuidGuest = await getFromSecureStore('uuidGuest');
+//     axios.post(`${URL}/logout`, { uuidGuest })
+//         .then(() => {
+//             // Clear user data from secure storage
+//             clearSecureStorage();
+//             // Navigate to login or landing page
+//             navigation.navigate('LoginScreen');
+//         })
+//         .catch(error => console.error('Logout failed:', error));
+// };
+
+// @PostMapping("/logout")
+// public ResponseEntity<?> logoutUser(@RequestBody String uuidGuest) {
+//     try {
+//         // Fetch the guest entity
+//         GuestEntity guest = guestRepository.getGuestUsingPk(uuidGuest);
+//         if (guest != null) {
+//             // Invalidate the push token
+//             guest.setExpoPushToken(null);
+//             guestRepository.saveGuest(guest);
+//             return ResponseEntity.ok("User logged out successfully, push token invalidated.");
+//         } else {
+//             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Guest not found.");
+//         }
+//     } catch (Exception e) {
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server error on logout");
+//     }
+// }
+
   return (
     // <View style={globalStyles.containerPrimary}>
     <View style={styles.mainContainer}>

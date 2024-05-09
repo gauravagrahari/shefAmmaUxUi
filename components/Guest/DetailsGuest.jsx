@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { AddressContext } from '../Context/AddressContext';
 import { BackHandler } from 'react-native';
 import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 export default function DetailsGuest() {
@@ -65,7 +67,29 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
     }
     return true;
   };
+  const fetchExpoPushToken = async () => {
+    if (!Device.isDevice) {
+      alert('Must use physical device for push notifications');
+      return;
+    }
   
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+  
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+  
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("Expo Push Token:", token);
+    return token;
+  };
+
   const handleSubmission = async () => {
     if (!validateForm()) {
         return;
@@ -73,6 +97,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
       setIsSubmitting(true); 
       setMessageText("");
     try {
+      const expoPushToken = await fetchExpoPushToken();
         const uuidGuest = await getFromSecureStore('uuidGuest');
         const phone = await getFromSecureStore('phone');
         console.log(uuidGuest);
@@ -104,7 +129,7 @@ const { updateAddressInContext, setDefaultAddressInContext } = useContext(Addres
                 pinCode: officePinCode,
             },
             alternateMobile: alternateMobileNumber,
-
+            expoPushToken,
         };
 
         console.log(data);

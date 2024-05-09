@@ -39,7 +39,6 @@ const ItemListCard = ({ item, host,handleHostCardClick  }) => {
       }
     }, [item.dp]);
     
-  
     const getMealTypeFullText = (type) => {
       switch (type) {
         case 'b': return 'Breakfast';
