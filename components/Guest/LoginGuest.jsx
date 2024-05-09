@@ -13,6 +13,8 @@ import MessageCard from '../commonMethods/MessageCard';
 import { AddressContext } from '../Context/AddressContext';
 import Constants from 'expo-constants';
 import ChefHatIcon from '../../assets/chefHatIcon52.svg'; 
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 const URL = Constants.expoConfig.extra.apiUrl || config.URL;
 
@@ -30,19 +32,49 @@ export default function LoginGuest() {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
-  const handleLogin = () => {
-    setIsLoading(true); // Start loading when API call starts
+  const fetchExpoPushToken = async () => {
+    if (!Device.isDevice) {
+      alert('Must use physical device for push notifications');
+      return;
+    }
+  
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+  
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+  
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("Expo Push Token:", token);
+    return token;
+  };
+  
+  const handleLogin = async () => {
+    setIsLoading(true);
+    const expoPushToken = await fetchExpoPushToken();
+    if (!expoPushToken) {
+        setIsLoading(false);
+        return; 
+    }
+
     const data = {
       phone: phoneNo,
       password: password,
     };
+
     console.log("Attempting login with:", data);
-  
-    axios.post(`${URL}/guestLogin`, data)
+
+    axios.post(`${URL}/guestLogin?expoToken=${encodeURIComponent(expoPushToken)}`, data)
       .then(async response => {
         setIsLoading(false); 
-        console.log("Received response in Login page:", response.data); // Logging the received response
-  
+        console.log("Received response in Login page:", response.data); 
+    
         if (response.status === 200) {
           console.log("Storing token and user details in secure storage");
           await storeInSecureStore('token', response.data.token);
@@ -84,7 +116,7 @@ export default function LoginGuest() {
           console.error("Login failed with response:", response.data);
           Alert.alert("Error", response.data);
         }
-      })
+      })  
       .catch(error => {
         setIsLoading(false);
         console.error("Login error:", error);
@@ -229,4 +261,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-
