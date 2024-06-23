@@ -329,7 +329,7 @@ useEffect(() => {
     }
   } 
 finally {
-  setIsOrdering(false); // Reset isOrdering after order process is complete
+  setIsOrdering(false);
 }
 };
 
