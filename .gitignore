@@ -9,7 +9,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-
+amplify\backend\auth\shefammas38cd0482c\cli-inputs.json
 # macOS
 .DS_Store
 
@@ -36,4 +36,6 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
+.env
+amplify
 #amplify-do-not-edit-end
